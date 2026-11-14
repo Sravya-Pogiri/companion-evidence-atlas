@@ -23,8 +23,7 @@ function Workspace() {
               key={item.to}
               to={item.to}
               activeOptions={{ exact: true }}
-              className="flex items-center border-b-2 border-transparent px-3 text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
-              activeProps={{ className: "border-gold text-gold hover:text-gold" }}
+              className="flex items-center border-b-2 border-transparent px-3 text-base font-medium text-muted-foreground transition-colors hover:text-foreground data-[status=active]:border-gold data-[status=active]:text-gold"
             >
               {item.label}
             </Link>
