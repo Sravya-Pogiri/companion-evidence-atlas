@@ -290,3 +290,83 @@ describe("message pipeline", () => {
     expect(hasConclusion("The signal appears to be on at about 0:45.")).toBe(false);
   });
 });
+
+describe("text notes as evidence", () => {
+  const text = "Dashcam shows the left signal coming on at 0:55";
+
+  it("treats a longer statement as a note and proposes filing it", async () => {
+    let seen = "";
+    const model = llm({
+      describe: async (i) => {
+        seen = `${i.attachmentName} | ${i.extractedText} | ${i.caption}`;
+        return {
+          description: "Dashcam: signal at 0:55",
+          lane: "dashcam",
+          start: 55,
+          end: 60,
+          confidence: 0.9,
+        };
+      },
+    });
+    const r = await send(seed(), text, model);
+    expect(seen).toBe(`Text note from the case team | ${text} | `);
+    expect(r.replies[0]?.text).toBe("File this as Dashcam: signal at 0:55? Reply Y.");
+    const item = r.state.items.find((i) => i.id === r.state.pendingId);
+    expect(item).toMatchObject({
+      status: "pending",
+      sourceLabel: "Text note from the case team",
+      sourceLink: null,
+    });
+    expect(item?.extractedText).toBe(text);
+  });
+
+  it("files the note on Y and compares it with the rest of the case", async () => {
+    const asked = await send(seed(), text, llm());
+    const r = await send(asked.state, "Y", llm());
+    expect(
+      r.state.items.find((i) => i.sourceLabel === "Text note from the case team"),
+    ).toMatchObject({
+      status: "filed",
+      flag: "conflict",
+    });
+    expect(r.replies[0]?.text).toContain("Text note from the case team");
+  });
+
+  it("does not treat short texts or questions as notes", async () => {
+    let calls = 0;
+    const model = llm({
+      describe: async () => {
+        calls += 1;
+        throw new Error("should not be called");
+      },
+    });
+    for (const t of ["hello", "ok thanks", "Is the dashcam clip filed yet?"]) {
+      const r = await send(seed(), t, model);
+      expect(r.replies[0]?.text).toContain("Send me evidence");
+    }
+    expect(calls).toBe(0);
+  });
+
+  it("says it can't tell for a note with no time and files nothing", async () => {
+    const vague = llm({
+      describe: async () => ({
+        description: "A note",
+        lane: "events",
+        start: null,
+        end: null,
+        confidence: 0.9,
+      }),
+    });
+    const r = await send(seed(), "I think we should look at this again soon", vague);
+    expect(r.replies[0]?.text).toContain("can't tell");
+    expect(r.state.items).toEqual(ITEMS);
+  });
+
+  it("reminds about a pending item on a short reply, but a new note replaces it", async () => {
+    const asked = await send(seed(), text, llm());
+    expect((await send(asked.state, "maybe", llm())).replies[0]?.text).toContain("still waiting");
+    const again = await send(asked.state, "Bodycam shows the officer walking up at 1:10", llm());
+    expect(again.state.items.filter((i) => i.status === "pending")).toHaveLength(1);
+    expect(again.state.pendingId).not.toBe(asked.state.pendingId);
+  });
+});

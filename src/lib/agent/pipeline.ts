@@ -161,6 +161,19 @@ export async function handleMessage(
   if (/\bwhat(?:'s| has| have)?\s+changed\b/.test(t))
     return say(state, { text: whatsChanged(state.items, now) });
 
+  // A longer statement (not a question) is evidence in its own right: a note from the case
+  // team, filed through the same propose-then-Y flow as an attachment. Over a text-only
+  // channel this is the way to get evidence in.
+  if (isNote(message.text)) {
+    const note: Attachment = {
+      id: `note-${now.getTime().toString(36)}-${shortHash(message.text)}`,
+      kind: "document",
+      name: "Text note from the case team",
+      extractedText: message.text.trim(),
+    };
+    return proposeFiling(state, { text: "", attachments: [note] }, note, llm);
+  }
+
   const pending = state.items.find((i) => i.id === state.pendingId);
   if (pending) {
     return say(state, {
@@ -169,8 +182,22 @@ export async function handleMessage(
     });
   }
   return say(state, {
-    text: `Send me evidence and I'll suggest where it goes on the timeline. You can also ask "What's missing?" or "What changed since yesterday?"`,
+    text: `Send me evidence, or a short note with a time like "dashcam shows the signal at 0:55", and I'll suggest where it goes on the timeline. You can also ask "What's missing?" or "What changed since yesterday?"`,
   });
+}
+
+const NOTE_MIN_WORDS = 4;
+
+/** A short, stable fingerprint of a text, so two notes never share an id. */
+function shortHash(text: string): string {
+  let h = 5381;
+  for (let i = 0; i < text.length; i++) h = ((h * 33) ^ text.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+
+function isNote(text: string): boolean {
+  const t = text.trim();
+  return !t.endsWith("?") && t.split(/\s+/).length >= NOTE_MIN_WORDS;
 }
 
 // ---------- attachment in: describe and propose ----------
