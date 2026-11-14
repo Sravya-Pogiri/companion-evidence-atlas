@@ -398,7 +398,6 @@
 @media(max-width:950px){.triage-cards {grid-template-columns:1fr}.triage-card {display:grid;grid-template-columns:1fr 1fr;column-gap:18px;}.triage-card h3 {margin:15px 0 5px}.triage-card h4,.triage-card ul {grid-column:2;grid-row:auto;}.triage-card h4 {grid-row:2;margin:15px 0 5px}.triage-card ul {grid-row:3/6;margin:0}.triage-card > a {margin-top:15px}.triage-card > div {grid-column:1/-1}.notebook-layout {grid-template-columns:1fr}.notebook-outline {position:static}.notebook-outline nav {display:flex;overflow:auto;border-bottom:1px solid var(--border);}.outline-title,.notebook-sources {display:none}.outline-link {min-width:170px;border-left:0;border-bottom:2px solid transparent}.notebook-paper {padding:25px 35px}.notebook-header {align-items:start}.notebook-header p span {display:none}}
 @media(max-width:600px){.triage-heading {align-items:start}.triage-heading h1,.notebook-header h1 {font-size:29px}.triage-heading > span {font-size:10px}.triage-heading p {font-size:12px;max-width:180px}.triage-card {display:flex}.triage-card h4 {margin-top:20px}.triage-card ul {margin-bottom:20px}.calendar-legend {font-size:9px;gap:4px}.week-day {padding:12px 4px}.week-day strong {font-size:18px}.week-day > span {font-size:10px}.triage-table-heading {flex-direction:column;align-items:start}.notebook-header {flex-direction:column;gap:16px}.notebook-header > div:last-child {align-self:stretch;justify-content:space-between}.notebook-paper {padding:20px 18px}.document-title {gap:10px}.notebook-paper h2 {font-size:25px}.document-running-head {font-size:9px}.question-card {padding:12px}.notebook-command {padding-top:8px}.quick-drafts {flex-wrap:nowrap;overflow:auto}.quick-drafts button {flex-shrink:0}.notebook-command input {font-size:12px}.notebook-source-dialog {max-width:calc(100vw - 24px)}}
 @media(prefers-reduced-motion:reduce){.question-card {transform:none!important;transition:none!important}}
-@media print {body * {visibility:hidden}.notebook-print,.notebook-print * {visibility:visible}.notebook-print {display:block;position:absolute;left:0;top:0;width:100%;white-space:pre-wrap;font:12px/1.6 Georgia,serif;color:var(--notebook-ink);background:var(--notebook-paper);padding:25px}.notebook-command {display:none}}
 
 .notebook-outline,.notebook-layout,.defense-notebook { min-width:0; max-width:100%; }.notebook-paper {position:relative;isolation:isolate;}.notebook-paper::before {content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:var(--workspace-grain);filter:grayscale(1);opacity:.035;}.notebook-source-popover {filter:none;}
 /* Evidence review upgrade: sequence compare, editor timeline, connections, find in footage */
@@ -468,3 +467,14 @@
 .react-flow__edge-text { font-size: 8px; fill: var(--muted-foreground); }
 @media(max-width:1023px){ .connections-body { grid-template-columns: 1fr; } .layers-toggle { display: none; } }
 @media(max-width:767px){ .sequence-row { grid-template-columns: 1fr; gap: 4px; } .sequence-rows { gap: 30px; } .timeline-lane { grid-template-columns: 44px minmax(0,1fr); } .lane-thumb { height: 30px; } .connections-canvas { height: 320px; } }
+
+/* Handoff prints on white paper with dark text. */
+@media print {
+  .workspace-noir.dark {
+    --background: #fff; --foreground: #111; --card: #fff; --card-foreground: #111;
+    --muted: #f2f2f2; --muted-foreground: #444; --border: #bbb;
+    --gold: #6b4e00; --contradiction: #b00020; --missing: #8a5a00;
+    background: #fff !important; color: #111 !important;
+  }
+  .workspace-main::before { display: none; }
+}

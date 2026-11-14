@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { LogoMark } from "@/components/caselens/logo";
+import { hydrateDecisions } from "@/lib/review-store";
 
 export const Route = createFileRoute("/_workspace")({ component: Workspace });
 
@@ -10,9 +12,13 @@ const nav = [
 ] as const;
 
 function Workspace() {
+  useEffect(() => {
+    hydrateDecisions();
+  }, []);
+
   return (
     <div className="workspace-noir dark flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 flex h-16 items-center gap-8 border-b bg-card/90 px-6 backdrop-blur">
+      <header className="sticky top-0 z-20 flex h-16 items-center print:hidden gap-8 border-b bg-card/90 px-6 backdrop-blur">
         <Link to="/" className="flex items-center gap-2 text-ivory">
           <LogoMark className="h-8 w-8 shrink-0" />
           <span className="font-serif text-2xl font-semibold">CaseLens Text</span>
