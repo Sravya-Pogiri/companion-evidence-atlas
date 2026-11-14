@@ -267,6 +267,13 @@ describe("message pipeline", () => {
     expect(whatsMissing([])).toContain("nothing filed in Bodycam");
   });
 
+  it("understands curly apostrophes, as typed on a phone", async () => {
+    const r = await send(seed(), "What\u2019s missing", llm());
+    expect(r.replies[0]?.text).toMatch(/^Possible gaps:/);
+    const c = await send(seed(), "What\u2019s changed since yesterday?", llm());
+    expect(c.replies[0]?.text).toBe("Nothing new has been filed since yesterday.");
+  });
+
   it("answers What changed since yesterday? using filing times", async () => {
     expect(whatsChanged(ITEMS, NOW)).toBe("Nothing new has been filed since yesterday.");
     const asked = await send(seed(), "", llm(), [note]);

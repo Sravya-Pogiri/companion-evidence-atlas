@@ -114,10 +114,14 @@ function clamp(n: number, lo: number, hi: number): number {
 }
 
 function norm(text: string): string {
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/[.!?\s]+$/, "");
+  return (
+    text
+      .trim()
+      .toLowerCase()
+      // Phones type curly quotes ("What’s missing?"); match them like straight ones.
+      .replace(/[\u2018\u2019\u02bc]/g, "'")
+      .replace(/[.!?\s]+$/, "")
+  );
 }
 
 function cleanLabel(text: string): string {
