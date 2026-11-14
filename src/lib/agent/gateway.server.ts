@@ -33,7 +33,7 @@ export async function askJson(system: string, user: string): Promise<unknown> {
         reasoning: { effort: "low" },
         store: false,
       }),
-      signal: AbortSignal.timeout(45_000),
+      signal: AbortSignal.timeout(15_000),
     });
   } catch {
     throw new GatewayError("The analysis service did not answer in time.");

@@ -16,6 +16,7 @@ import { Route as WorkspaceHandoffRouteImport } from './routes/_workspace.handof
 import { Route as WorkspaceReviewRouteImport } from './routes/_workspace.review'
 import { Route as WorkspaceRosalesRouteImport } from './routes/_workspace.rosales'
 import { Route as WorkspaceSettingsRouteImport } from './routes/_workspace.settings'
+import { Route as ApiPhotonWebhookRouteImport } from './routes/api.photon.webhook'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/_workspace',
@@ -51,6 +52,11 @@ const WorkspaceSettingsRoute = WorkspaceSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => WorkspaceRoute,
 } as any)
+const ApiPhotonWebhookRoute = ApiPhotonWebhookRouteImport.update({
+  id: '/api/photon/webhook',
+  path: '/api/photon/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof WorkspaceIndexRoute
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/review': typeof WorkspaceReviewRoute
   '/rosales': typeof WorkspaceRosalesRoute
   '/settings': typeof WorkspaceSettingsRoute
+  '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRoutesByTo {
   '/court-prep': typeof WorkspaceCourtPrepRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/rosales': typeof WorkspaceRosalesRoute
   '/settings': typeof WorkspaceSettingsRoute
   '/': typeof WorkspaceIndexRoute
+  '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,13 +85,27 @@ export interface FileRoutesById {
   '/_workspace/rosales': typeof WorkspaceRosalesRoute
   '/_workspace/settings': typeof WorkspaceSettingsRoute
   '/_workspace/': typeof WorkspaceIndexRoute
+  '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/court-prep' | '/handoff' | '/review' | '/rosales' | '/settings'
+    | '/'
+    | '/court-prep'
+    | '/handoff'
+    | '/review'
+    | '/rosales'
+    | '/settings'
+    | '/api/photon/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/court-prep' | '/handoff' | '/review' | '/rosales' | '/settings' | '/'
+  to:
+    | '/court-prep'
+    | '/handoff'
+    | '/review'
+    | '/rosales'
+    | '/settings'
+    | '/'
+    | '/api/photon/webhook'
   id:
     | '__root__'
     | '/_workspace'
@@ -93,10 +115,12 @@ export interface FileRouteTypes {
     | '/_workspace/rosales'
     | '/_workspace/settings'
     | '/_workspace/'
+    | '/api/photon/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
+  ApiPhotonWebhookRoute: typeof ApiPhotonWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -150,6 +174,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceSettingsRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/api/photon/webhook': {
+      id: '/api/photon/webhook'
+      path: '/api/photon/webhook'
+      fullPath: '/api/photon/webhook'
+      preLoaderRoute: typeof ApiPhotonWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -177,6 +208,7 @@ const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   WorkspaceRoute: WorkspaceRouteWithChildren,
+  ApiPhotonWebhookRoute: ApiPhotonWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

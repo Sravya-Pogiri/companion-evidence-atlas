@@ -10,9 +10,17 @@ export interface CaseState extends PipelineState {
   messages: ChatMessage[];
   /** True while the agent is working on a message. */
   busy: boolean;
+  /** Who runs the conversation: this page (simulated) or the server (Photon). */
+  mode: "simulated" | "photon";
 }
 
-const INITIAL: CaseState = { items: ITEMS, messages: CONVERSATION, pendingId: null, busy: false };
+const INITIAL: CaseState = {
+  items: ITEMS,
+  messages: CONVERSATION,
+  pendingId: null,
+  busy: false,
+  mode: "simulated",
+};
 let state: CaseState = INITIAL;
 const listeners = new Set<() => void>();
 

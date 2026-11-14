@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { LogoMark } from "@/components/caselens/logo";
 import { hydrateDecisions } from "@/lib/review-store";
+import { useChannelSync } from "@/lib/use-channel-sync";
 
 export const Route = createFileRoute("/_workspace")({ component: Workspace });
 
@@ -15,6 +16,7 @@ function Workspace() {
   useEffect(() => {
     hydrateDecisions();
   }, []);
+  useChannelSync();
 
   return (
     <div className="workspace-noir dark flex min-h-screen flex-col">
@@ -36,7 +38,10 @@ function Workspace() {
           ))}
         </nav>
       </header>
-      <div role="note" className="border-b border-missing/40 bg-missing/10 px-6 py-2 text-sm text-foreground">
+      <div
+        role="note"
+        className="border-b border-missing/40 bg-missing/10 px-6 py-2 text-sm text-foreground"
+      >
         Potential findings. Review before use.
       </div>
       <main className="workspace-main min-w-0 flex-1 p-6 lg:p-8">

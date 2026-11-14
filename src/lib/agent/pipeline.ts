@@ -169,7 +169,7 @@ export async function handleMessage(
     });
   }
   return say(state, {
-    text: `Send me a photo, document, or voice note and I'll suggest where it goes on the timeline. You can also ask "What's missing?" or "What changed since yesterday?"`,
+    text: `Send me evidence and I'll suggest where it goes on the timeline. You can also ask "What's missing?" or "What changed since yesterday?"`,
   });
 }
 
