@@ -1,0 +1,13 @@
+{
+  "caseId": "conflicting",
+  "coverage": {
+    "start": 0,
+    "end": 26
+  },
+  "sources": {
+    "report": "report.pdf",
+    "video": "bodycam.mp4",
+    "transcript": "transcript.json",
+    "dispatch": "dispatch.json"
+  }
+}

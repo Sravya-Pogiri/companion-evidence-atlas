@@ -1,0 +1,179 @@
+{
+  "caseId": "matching",
+  "runId": "01a1d831-d256-7af5-84fa-7856c4edb365",
+  "outcome": "Records agree on this claim",
+  "explanation": "The report says a spoken request preceded trunk opening. The transcript records “Please open the trunk” at 6–8 seconds. Lead-up video samples at 0, 5, and 9.8 seconds show the trunk closed; it remains closed at 10 seconds and is open at 13 seconds. A second request at 18–20 seconds occurs while the trunk is already open. That later request could appear inconsistent in isolation, but the earlier request supports the reported sequence. Coverage spans 0–26 seconds, and CAD-001 records the camera synchronization anchor.",
+  "gaps": [],
+  "citations": [
+    {
+      "sourceId": "report",
+      "page": 3,
+      "start": null,
+      "end": null,
+      "rowId": null
+    },
+    {
+      "sourceId": "video",
+      "page": null,
+      "start": 0,
+      "end": 26,
+      "rowId": null
+    },
+    {
+      "sourceId": "transcript",
+      "page": null,
+      "start": 6,
+      "end": 8,
+      "rowId": null
+    },
+    {
+      "sourceId": "video",
+      "page": null,
+      "start": 0,
+      "end": 10,
+      "rowId": null
+    },
+    {
+      "sourceId": "video",
+      "page": null,
+      "start": 10,
+      "end": 16,
+      "rowId": null
+    },
+    {
+      "sourceId": "transcript",
+      "page": null,
+      "start": 18,
+      "end": 20,
+      "rowId": null
+    },
+    {
+      "sourceId": "video",
+      "page": null,
+      "start": 18,
+      "end": 22,
+      "rowId": null
+    },
+    {
+      "sourceId": "dispatch",
+      "page": null,
+      "start": null,
+      "end": null,
+      "rowId": "CAD-001"
+    }
+  ],
+  "checks": [
+    {
+      "tool": "Checked recording coverage",
+      "status": "completed",
+      "result": "{\"requested\":{\"start\":0,\"end\":26},\"available\":{\"start\":0,\"end\":26},\"covered\":true}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 0,
+          "end": 26,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Read report page 3",
+      "status": "completed",
+      "result": "SYNTHETIC TRAINING EVIDENCE - INCIDENT REPORT\nCase: matching | Page 3\nOfficer Patel narrative:\nI asked Morgan to open the trunk before the trunk was opened.\nThe request was made during the initial vehicle check.\nRecording time anchored to dispatch entry CAD-001.\n\n-- 3 of 3 --\n\n",
+      "references": [
+        {
+          "sourceId": "report",
+          "page": 3,
+          "start": null,
+          "end": null,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Searched earlier transcript",
+      "status": "completed",
+      "result": "{\"query\":\"trunk\",\"before\":26,\"segments\":[{\"start\":6,\"end\":8,\"text\":\"Please open the trunk.\"},{\"start\":12,\"end\":14,\"text\":\"[Trunk opening visible; no speech.]\"},{\"start\":18,\"end\":20,\"text\":\"Can you open the trunk, please?\"}],\"coverage\":{\"start\":0,\"end\":26}}",
+      "references": [
+        {
+          "sourceId": "transcript",
+          "page": null,
+          "start": 6,
+          "end": 8,
+          "rowId": null
+        },
+        {
+          "sourceId": "transcript",
+          "page": null,
+          "start": 12,
+          "end": 14,
+          "rowId": null
+        },
+        {
+          "sourceId": "transcript",
+          "page": null,
+          "start": 18,
+          "end": 20,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Checked dispatch entry",
+      "status": "completed",
+      "result": "{\"id\":\"CAD-001\",\"time\":\"2026-11-02T20:40:00Z\",\"text\":\"Unit Patel begins vehicle check; body camera synchronized.\"}",
+      "references": [
+        {
+          "sourceId": "dispatch",
+          "page": null,
+          "start": null,
+          "end": null,
+          "rowId": "CAD-001"
+        }
+      ]
+    },
+    {
+      "tool": "Checked video window",
+      "status": "completed",
+      "result": "{\"window\":{\"start\":18,\"end\":22},\"sampledAt\":[18,20,21.8],\"observation\":\"- 18 s: Rear trunk lid is open.\\n- 20 s: Rear trunk lid is open.\\n- 21.8 s: Rear trunk lid is open.\"}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 18,
+          "end": 22,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Checked video window",
+      "status": "completed",
+      "result": "{\"window\":{\"start\":10,\"end\":16},\"sampledAt\":[10,13,15.8],\"observation\":\"- **10 s:** Rear trunk lid is closed.\\n- **13 s:** Rear trunk lid is open and raised.\\n- **15.8 s:** Rear trunk lid is open and raised.\"}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 10,
+          "end": 16,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Checked video lead-up",
+      "status": "completed",
+      "result": "{\"window\":{\"start\":0,\"end\":10},\"sampledAt\":[0,5,9.8],\"observation\":\"- 0 seconds: Rear trunk lid closed.\\n- 5 seconds: Rear trunk lid closed.\\n- 9.8 seconds: Rear trunk lid closed.\"}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 0,
+          "end": 10,
+          "rowId": null
+        }
+      ]
+    }
+  ]
+}

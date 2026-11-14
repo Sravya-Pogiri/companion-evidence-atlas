@@ -1,0 +1,22 @@
+[
+  {
+    "start": 0,
+    "end": 2,
+    "text": "Officer approaches vehicle."
+  },
+  {
+    "start": 6,
+    "end": 8,
+    "text": "Please open the trunk."
+  },
+  {
+    "start": 12,
+    "end": 14,
+    "text": "[Trunk opening visible; no speech.]"
+  },
+  {
+    "start": 18,
+    "end": 20,
+    "text": "Can you open the trunk, please?"
+  }
+]

@@ -1,0 +1,138 @@
+{
+  "caseId": "incomplete",
+  "runId": "01a1d832-0165-77e6-8650-851c80926916",
+  "outcome": "Insufficient evidence",
+  "explanation": "Page 3 says the spoken trunk request preceded opening. The available video begins at 10 seconds with the trunk already open; the transcript records a request at 18\u201320 seconds. That later request cannot rule out an earlier request during the missing lead-up. CAD-001 supplies the synchronization anchor but does not establish the request-opening sequence.",
+  "gaps": [
+    "The 0\u201310 second lead-up is missing from the recording and transcript. The earlier transcript search returned no segments, so neither the opening nor any preceding request can be checked."
+  ],
+  "citations": [
+    {
+      "sourceId": "report",
+      "page": 3,
+      "start": null,
+      "end": null,
+      "rowId": null
+    },
+    {
+      "sourceId": "video",
+      "page": null,
+      "start": 10,
+      "end": 26,
+      "rowId": null
+    },
+    {
+      "sourceId": "transcript",
+      "page": null,
+      "start": 18,
+      "end": 20,
+      "rowId": null
+    },
+    {
+      "sourceId": "dispatch",
+      "page": null,
+      "start": null,
+      "end": null,
+      "rowId": "CAD-001"
+    }
+  ],
+  "checks": [
+    {
+      "tool": "Checked recording coverage",
+      "status": "completed",
+      "result": "{\"requested\":{\"start\":0,\"end\":26},\"available\":{\"start\":10,\"end\":26},\"covered\":false}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 10,
+          "end": 26,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Read report page 3",
+      "status": "completed",
+      "result": "SYNTHETIC TRAINING EVIDENCE - INCIDENT REPORT\nCase: incomplete | Page 3\nOfficer Patel narrative:\nI asked Morgan to open the trunk before the trunk was opened.\nThe request was made during the initial vehicle check.\nRecording time anchored to dispatch entry CAD-001.\n\n-- 3 of 3 --\n\n",
+      "references": [
+        {
+          "sourceId": "report",
+          "page": 3,
+          "start": null,
+          "end": null,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Searched earlier transcript",
+      "status": "completed",
+      "result": "{\"query\":\"trunk\",\"before\":26,\"segments\":[{\"start\":10,\"end\":12,\"text\":\"Recording resumes. Trunk is already open.\"},{\"start\":18,\"end\":20,\"text\":\"Can you open the trunk, please?\"}],\"coverage\":{\"start\":10,\"end\":26}}",
+      "references": [
+        {
+          "sourceId": "transcript",
+          "page": null,
+          "start": 10,
+          "end": 12,
+          "rowId": null
+        },
+        {
+          "sourceId": "transcript",
+          "page": null,
+          "start": 18,
+          "end": 20,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Checked dispatch entry",
+      "status": "completed",
+      "result": "{\"id\":\"CAD-001\",\"time\":\"2026-11-02T20:40:00Z\",\"text\":\"Unit Patel begins vehicle check; body camera synchronized.\"}",
+      "references": [
+        {
+          "sourceId": "dispatch",
+          "page": null,
+          "start": null,
+          "end": null,
+          "rowId": "CAD-001"
+        }
+      ]
+    },
+    {
+      "tool": "Checked video window",
+      "status": "completed",
+      "result": "{\"window\":{\"start\":10,\"end\":26},\"sampledAt\":[10,18,25.8],\"observation\":\"- 10 s: Rear trunk lid open.\\n- 18 s: Rear trunk lid open.\\n- 25.8 s: Rear trunk lid open.\"}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 10,
+          "end": 26,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Checked recording coverage",
+      "status": "completed",
+      "result": "{\"requested\":{\"start\":0,\"end\":10},\"available\":{\"start\":10,\"end\":26},\"covered\":false}",
+      "references": [
+        {
+          "sourceId": "video",
+          "page": null,
+          "start": 10,
+          "end": 26,
+          "rowId": null
+        }
+      ]
+    },
+    {
+      "tool": "Searched earlier transcript",
+      "status": "completed",
+      "result": "{\"query\":\"trunk\",\"before\":10,\"segments\":[],\"coverage\":{\"start\":10,\"end\":26}}",
+      "references": []
+    }
+  ]
+}

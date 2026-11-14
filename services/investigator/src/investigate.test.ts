@@ -1,0 +1,12 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { validateResult } from './investigate.ts';
+const citation={sourceId:'video' as const,page:null,start:10,end:26,rowId:null};
+const checks=[{tool:'Checked recording coverage',status:'completed' as const,result:'coverage',references:[citation]}];
+const result={outcome:'Insufficient evidence' as const,explanation:'Lead-up missing',gaps:['0–10 missing'],citations:[citation]};
+test('incomplete lead-up never validates a discrepancy',()=>assert.throws(()=>validateResult({...result,outcome:'Possible discrepancy'},checks,{start:10,end:26}),/missing lead-up/));
+test('incomplete lead-up never validates agreement',()=>assert.throws(()=>validateResult({...result,outcome:'Records agree on this claim'},checks,{start:10,end:26}),/missing lead-up/));
+test('missing lead-up validates insufficient evidence',()=>assert.doesNotThrow(()=>validateResult(result,checks,{start:10,end:26})));
+test('fabricated reference is rejected',()=>assert.throws(()=>validateResult({...result,citations:[{...citation,start:0}]},checks,{start:10,end:26}),/citation/));
+test('failed evidence check cannot validate outcome',()=>assert.throws(()=>validateResult(result,[...checks,{tool:'Vision',status:'failed',result:'unavailable',references:[]}],{start:10,end:26}),/failed/));
+test('full coverage discrepancy requires completed lead-up inspection',()=>assert.throws(()=>validateResult({...result,outcome:'Possible discrepancy'},checks,{start:0,end:26}),/lead-up was not inspected/));
