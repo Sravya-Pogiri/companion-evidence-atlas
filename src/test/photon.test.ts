@@ -106,6 +106,39 @@ describe("Photon inbound event mapping", () => {
     });
   });
 
+  it("maps the real Beta envelope, where the message is at data.object", () => {
+    const r = parseInboundEvent({
+      id: "evt_01",
+      apiVersion: "2026-07-01",
+      type: "message.received",
+      source: "imessage.photon",
+      timestamp: "2026-11-14T19:54:32.223Z",
+      data: {
+        projectId: "pho_prj_1",
+        object: {
+          id: "msg_real",
+          platform: "imessage",
+          status: "received",
+          content: { format: "plain", text: "Hello", type: "text" },
+          sentBy: { kind: "human", handle: "+15550001111", id: "usr_1", details: {}, metadata: {} },
+          receivedBy: {
+            kind: "agent",
+            handle: "+15550002222",
+            id: "agt_1",
+            details: { type: "shared" },
+          },
+          space: { kind: "direct", id: "spc_1", participantIds: ["usr_1"] },
+          timestamps: { receivedAt: "2026-11-14T19:54:32.223Z" },
+        },
+      },
+    });
+    expect(r).toEqual({
+      ok: true,
+      message: { text: "Hello", attachments: [] },
+      context: { spaceId: "spc_1", senderId: "agt_1", parentMessageId: "msg_real" },
+    });
+  });
+
   it("finds the message in the other likely places", () => {
     const content = { type: "text", format: "plain", text: "hi" };
     expect(parseInboundEvent({ data: { message: human(content) } })).toMatchObject({ ok: true });

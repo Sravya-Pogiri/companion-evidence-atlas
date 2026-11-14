@@ -3,13 +3,13 @@ import type { InboundMessage } from "./types";
 // Pure helpers for Photon 2.0 (Beta) webhooks: signature check and mapping an inbound event
 // to an InboundMessage. No env and no network, so they can be tested without Photon.
 //
-// What is and is not confirmed (Beta docs and the @photon-ai/api 0.6.0 types):
-//  - Confirmed: Standard Webhooks signing headers; a message has id, space.id, sentBy.kind,
-//    receivedBy.id and content; content is { type: "text", text } or { type: "attachment",
-//    attachmentId }.
-//  - NOT confirmed: the webhook body's exact envelope for an inbound message, and its event
-//    type string. The mapper looks for the message in the likely places and logs only the
-//    event type when it cannot find one. Check it against one real event.
+// Confirmed against a real event from the Beta API (2026-07-01): the envelope is
+//   { id, apiVersion, type: "message.received", source: "imessage.photon", timestamp,
+//     data: { object: <message>, projectId } }
+// and the message has id, platform, status ("received"), content, sentBy { kind: "human" },
+// receivedBy { id, kind: "agent" } and space { id }. Text content is { type: "text", text }.
+// Not yet seen: how an image arrives. Docs say { type: "attachment", attachmentId }.
+// The mapper still checks a few other places for the message so a version change fails soft.
 
 const TOLERANCE_SECONDS = 5 * 60;
 
@@ -103,7 +103,7 @@ const looksLikeMessage = (o: Rec) => "content" in o && "sentBy" in o;
 export function parseInboundEvent(event: unknown): ParsedEvent {
   const e = rec(event);
   const data = rec(e["data"]);
-  const found = [data, rec(data["message"]), e].find(looksLikeMessage);
+  const found = [rec(data["object"]), data, rec(data["message"]), e].find(looksLikeMessage);
   if (!found) return { ok: false, reason: "not a message event" };
 
   // Only messages from a person. Messages the agent sent can come back through the same feed.
