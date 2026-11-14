@@ -10,11 +10,6 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
-  vite: {
-    // Route splitting otherwise discovers Motion after React has loaded, triggering
-    // a second dependency optimization and potentially mixing React module versions.
-    optimizeDeps: { include: ["framer-motion"] },
-  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

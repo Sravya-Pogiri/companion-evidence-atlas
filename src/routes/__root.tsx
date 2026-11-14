@@ -82,8 +82,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "CaseLens — Legal Intelligence for Public Defenders" },
-      { name: "description", content: "AI-powered evidence analysis for public defenders." },
+      { title: "CaseLens Text" },
+      { name: "description", content: "Text evidence to one number; it lands on a live case timeline with a link to its source." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
           ],

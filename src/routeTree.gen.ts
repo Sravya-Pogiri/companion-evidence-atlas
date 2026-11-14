@@ -9,42 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
-import { Route as WorkspaceAssistantRouteImport } from './routes/_workspace.assistant'
-import { Route as WorkspaceCasesRouteImport } from './routes/_workspace.cases'
-import { Route as WorkspaceContradictionsRouteImport } from './routes/_workspace.contradictions'
+import { Route as WorkspaceIndexRouteImport } from './routes/_workspace.index'
 import { Route as WorkspaceCourtPrepRouteImport } from './routes/_workspace.court-prep'
-import { Route as WorkspaceDashboardRouteImport } from './routes/_workspace.dashboard'
-import { Route as WorkspaceEvidenceRouteImport } from './routes/_workspace.evidence'
-import { Route as WorkspaceGraphRouteImport } from './routes/_workspace.graph'
-import { Route as WorkspaceMissingRouteImport } from './routes/_workspace.missing'
+import { Route as WorkspaceHandoffRouteImport } from './routes/_workspace.handoff'
+import { Route as WorkspaceReviewRouteImport } from './routes/_workspace.review'
 import { Route as WorkspaceRosalesRouteImport } from './routes/_workspace.rosales'
 import { Route as WorkspaceSettingsRouteImport } from './routes/_workspace.settings'
-import { Route as WorkspaceTimelineRouteImport } from './routes/_workspace.timeline'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/_workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WorkspaceAssistantRoute = WorkspaceAssistantRouteImport.update({
-  id: '/assistant',
-  path: '/assistant',
-  getParentRoute: () => WorkspaceRoute,
-} as any)
-const WorkspaceCasesRoute = WorkspaceCasesRouteImport.update({
-  id: '/cases',
-  path: '/cases',
-  getParentRoute: () => WorkspaceRoute,
-} as any)
-const WorkspaceContradictionsRoute = WorkspaceContradictionsRouteImport.update({
-  id: '/contradictions',
-  path: '/contradictions',
+const WorkspaceIndexRoute = WorkspaceIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => WorkspaceRoute,
 } as any)
 const WorkspaceCourtPrepRoute = WorkspaceCourtPrepRouteImport.update({
@@ -52,24 +31,14 @@ const WorkspaceCourtPrepRoute = WorkspaceCourtPrepRouteImport.update({
   path: '/court-prep',
   getParentRoute: () => WorkspaceRoute,
 } as any)
-const WorkspaceDashboardRoute = WorkspaceDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const WorkspaceHandoffRoute = WorkspaceHandoffRouteImport.update({
+  id: '/handoff',
+  path: '/handoff',
   getParentRoute: () => WorkspaceRoute,
 } as any)
-const WorkspaceEvidenceRoute = WorkspaceEvidenceRouteImport.update({
-  id: '/evidence',
-  path: '/evidence',
-  getParentRoute: () => WorkspaceRoute,
-} as any)
-const WorkspaceGraphRoute = WorkspaceGraphRouteImport.update({
-  id: '/graph',
-  path: '/graph',
-  getParentRoute: () => WorkspaceRoute,
-} as any)
-const WorkspaceMissingRoute = WorkspaceMissingRouteImport.update({
-  id: '/missing',
-  path: '/missing',
+const WorkspaceReviewRoute = WorkspaceReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
   getParentRoute: () => WorkspaceRoute,
 } as any)
 const WorkspaceRosalesRoute = WorkspaceRosalesRouteImport.update({
@@ -82,116 +51,56 @@ const WorkspaceSettingsRoute = WorkspaceSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => WorkspaceRoute,
 } as any)
-const WorkspaceTimelineRoute = WorkspaceTimelineRouteImport.update({
-  id: '/timeline',
-  path: '/timeline',
-  getParentRoute: () => WorkspaceRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/assistant': typeof WorkspaceAssistantRoute
-  '/cases': typeof WorkspaceCasesRoute
-  '/contradictions': typeof WorkspaceContradictionsRoute
+  '/': typeof WorkspaceIndexRoute
   '/court-prep': typeof WorkspaceCourtPrepRoute
-  '/dashboard': typeof WorkspaceDashboardRoute
-  '/evidence': typeof WorkspaceEvidenceRoute
-  '/graph': typeof WorkspaceGraphRoute
-  '/missing': typeof WorkspaceMissingRoute
+  '/handoff': typeof WorkspaceHandoffRoute
+  '/review': typeof WorkspaceReviewRoute
   '/rosales': typeof WorkspaceRosalesRoute
   '/settings': typeof WorkspaceSettingsRoute
-  '/timeline': typeof WorkspaceTimelineRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/assistant': typeof WorkspaceAssistantRoute
-  '/cases': typeof WorkspaceCasesRoute
-  '/contradictions': typeof WorkspaceContradictionsRoute
   '/court-prep': typeof WorkspaceCourtPrepRoute
-  '/dashboard': typeof WorkspaceDashboardRoute
-  '/evidence': typeof WorkspaceEvidenceRoute
-  '/graph': typeof WorkspaceGraphRoute
-  '/missing': typeof WorkspaceMissingRoute
+  '/handoff': typeof WorkspaceHandoffRoute
+  '/review': typeof WorkspaceReviewRoute
   '/rosales': typeof WorkspaceRosalesRoute
   '/settings': typeof WorkspaceSettingsRoute
-  '/timeline': typeof WorkspaceTimelineRoute
+  '/': typeof WorkspaceIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_workspace': typeof WorkspaceRouteWithChildren
-  '/_workspace/assistant': typeof WorkspaceAssistantRoute
-  '/_workspace/cases': typeof WorkspaceCasesRoute
-  '/_workspace/contradictions': typeof WorkspaceContradictionsRoute
   '/_workspace/court-prep': typeof WorkspaceCourtPrepRoute
-  '/_workspace/dashboard': typeof WorkspaceDashboardRoute
-  '/_workspace/evidence': typeof WorkspaceEvidenceRoute
-  '/_workspace/graph': typeof WorkspaceGraphRoute
-  '/_workspace/missing': typeof WorkspaceMissingRoute
+  '/_workspace/handoff': typeof WorkspaceHandoffRoute
+  '/_workspace/review': typeof WorkspaceReviewRoute
   '/_workspace/rosales': typeof WorkspaceRosalesRoute
   '/_workspace/settings': typeof WorkspaceSettingsRoute
-  '/_workspace/timeline': typeof WorkspaceTimelineRoute
+  '/_workspace/': typeof WorkspaceIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/assistant'
-    | '/cases'
-    | '/contradictions'
-    | '/court-prep'
-    | '/dashboard'
-    | '/evidence'
-    | '/graph'
-    | '/missing'
-    | '/rosales'
-    | '/settings'
-    | '/timeline'
+    '/' | '/court-prep' | '/handoff' | '/review' | '/rosales' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/assistant'
-    | '/cases'
-    | '/contradictions'
-    | '/court-prep'
-    | '/dashboard'
-    | '/evidence'
-    | '/graph'
-    | '/missing'
-    | '/rosales'
-    | '/settings'
-    | '/timeline'
+  to: '/court-prep' | '/handoff' | '/review' | '/rosales' | '/settings' | '/'
   id:
     | '__root__'
-    | '/'
     | '/_workspace'
-    | '/_workspace/assistant'
-    | '/_workspace/cases'
-    | '/_workspace/contradictions'
     | '/_workspace/court-prep'
-    | '/_workspace/dashboard'
-    | '/_workspace/evidence'
-    | '/_workspace/graph'
-    | '/_workspace/missing'
+    | '/_workspace/handoff'
+    | '/_workspace/review'
     | '/_workspace/rosales'
     | '/_workspace/settings'
-    | '/_workspace/timeline'
+    | '/_workspace/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_workspace': {
       id: '/_workspace'
       path: ''
@@ -199,25 +108,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_workspace/assistant': {
-      id: '/_workspace/assistant'
-      path: '/assistant'
-      fullPath: '/assistant'
-      preLoaderRoute: typeof WorkspaceAssistantRouteImport
-      parentRoute: typeof WorkspaceRoute
-    }
-    '/_workspace/cases': {
-      id: '/_workspace/cases'
-      path: '/cases'
-      fullPath: '/cases'
-      preLoaderRoute: typeof WorkspaceCasesRouteImport
-      parentRoute: typeof WorkspaceRoute
-    }
-    '/_workspace/contradictions': {
-      id: '/_workspace/contradictions'
-      path: '/contradictions'
-      fullPath: '/contradictions'
-      preLoaderRoute: typeof WorkspaceContradictionsRouteImport
+    '/_workspace/': {
+      id: '/_workspace/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof WorkspaceIndexRouteImport
       parentRoute: typeof WorkspaceRoute
     }
     '/_workspace/court-prep': {
@@ -227,32 +122,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceCourtPrepRouteImport
       parentRoute: typeof WorkspaceRoute
     }
-    '/_workspace/dashboard': {
-      id: '/_workspace/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof WorkspaceDashboardRouteImport
+    '/_workspace/handoff': {
+      id: '/_workspace/handoff'
+      path: '/handoff'
+      fullPath: '/handoff'
+      preLoaderRoute: typeof WorkspaceHandoffRouteImport
       parentRoute: typeof WorkspaceRoute
     }
-    '/_workspace/evidence': {
-      id: '/_workspace/evidence'
-      path: '/evidence'
-      fullPath: '/evidence'
-      preLoaderRoute: typeof WorkspaceEvidenceRouteImport
-      parentRoute: typeof WorkspaceRoute
-    }
-    '/_workspace/graph': {
-      id: '/_workspace/graph'
-      path: '/graph'
-      fullPath: '/graph'
-      preLoaderRoute: typeof WorkspaceGraphRouteImport
-      parentRoute: typeof WorkspaceRoute
-    }
-    '/_workspace/missing': {
-      id: '/_workspace/missing'
-      path: '/missing'
-      fullPath: '/missing'
-      preLoaderRoute: typeof WorkspaceMissingRouteImport
+    '/_workspace/review': {
+      id: '/_workspace/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof WorkspaceReviewRouteImport
       parentRoute: typeof WorkspaceRoute
     }
     '/_workspace/rosales': {
@@ -269,42 +150,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceSettingsRouteImport
       parentRoute: typeof WorkspaceRoute
     }
-    '/_workspace/timeline': {
-      id: '/_workspace/timeline'
-      path: '/timeline'
-      fullPath: '/timeline'
-      preLoaderRoute: typeof WorkspaceTimelineRouteImport
-      parentRoute: typeof WorkspaceRoute
-    }
   }
 }
 
 interface WorkspaceRouteChildren {
-  WorkspaceAssistantRoute: typeof WorkspaceAssistantRoute
-  WorkspaceCasesRoute: typeof WorkspaceCasesRoute
-  WorkspaceContradictionsRoute: typeof WorkspaceContradictionsRoute
   WorkspaceCourtPrepRoute: typeof WorkspaceCourtPrepRoute
-  WorkspaceDashboardRoute: typeof WorkspaceDashboardRoute
-  WorkspaceEvidenceRoute: typeof WorkspaceEvidenceRoute
-  WorkspaceGraphRoute: typeof WorkspaceGraphRoute
-  WorkspaceMissingRoute: typeof WorkspaceMissingRoute
+  WorkspaceHandoffRoute: typeof WorkspaceHandoffRoute
+  WorkspaceReviewRoute: typeof WorkspaceReviewRoute
   WorkspaceRosalesRoute: typeof WorkspaceRosalesRoute
   WorkspaceSettingsRoute: typeof WorkspaceSettingsRoute
-  WorkspaceTimelineRoute: typeof WorkspaceTimelineRoute
+  WorkspaceIndexRoute: typeof WorkspaceIndexRoute
 }
 
 const WorkspaceRouteChildren: WorkspaceRouteChildren = {
-  WorkspaceAssistantRoute: WorkspaceAssistantRoute,
-  WorkspaceCasesRoute: WorkspaceCasesRoute,
-  WorkspaceContradictionsRoute: WorkspaceContradictionsRoute,
   WorkspaceCourtPrepRoute: WorkspaceCourtPrepRoute,
-  WorkspaceDashboardRoute: WorkspaceDashboardRoute,
-  WorkspaceEvidenceRoute: WorkspaceEvidenceRoute,
-  WorkspaceGraphRoute: WorkspaceGraphRoute,
-  WorkspaceMissingRoute: WorkspaceMissingRoute,
+  WorkspaceHandoffRoute: WorkspaceHandoffRoute,
+  WorkspaceReviewRoute: WorkspaceReviewRoute,
   WorkspaceRosalesRoute: WorkspaceRosalesRoute,
   WorkspaceSettingsRoute: WorkspaceSettingsRoute,
-  WorkspaceTimelineRoute: WorkspaceTimelineRoute,
+  WorkspaceIndexRoute: WorkspaceIndexRoute,
 }
 
 const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
@@ -312,7 +176,6 @@ const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   WorkspaceRoute: WorkspaceRouteWithChildren,
 }
 export const routeTree = rootRouteImport
