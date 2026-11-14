@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { PageHeader } from "@/components/caselens/shared";
+import { useFiledItems } from "@/lib/case-store";
 import { decide, useDecisions } from "@/lib/review-store";
 import { seo } from "@/lib/seo";
 import {
   DECISION_LABEL,
   FLAG_LABEL,
-  ITEMS,
   LANES,
   SAMPLE_CASE,
   findItem,
@@ -18,7 +18,8 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_workspace/review")({
-  head: () => seo("Review", "Flagged items waiting for a person to confirm, dismiss, or follow up."),
+  head: () =>
+    seo("Review", "Flagged items waiting for a person to confirm, dismiss, or follow up."),
   component: Review,
 });
 
@@ -31,7 +32,8 @@ const ACTION_BUTTON: Record<ReviewDecision, string> = {
 
 function Review() {
   const decisions = useDecisions();
-  const queue = reviewQueue(ITEMS);
+  const items = useFiledItems();
+  const queue = reviewQueue(items);
   const reviewed = queue.filter((i) => decisions[i.id]).length;
 
   return (
@@ -48,15 +50,23 @@ function Review() {
 
       <ul className="space-y-4">
         {queue.map((item) => (
-          <ReviewCard key={item.id} item={item} decision={decisions[item.id]} />
+          <ReviewCard key={item.id} item={item} items={items} decision={decisions[item.id]} />
         ))}
       </ul>
     </div>
   );
 }
 
-function ReviewCard({ item, decision }: { item: TimelineItem; decision: ReviewDecision | undefined }) {
-  const related = findItem(ITEMS, item.relatedId);
+function ReviewCard({
+  item,
+  items,
+  decision,
+}: {
+  item: TimelineItem;
+  items: TimelineItem[];
+  decision: ReviewDecision | undefined;
+}) {
+  const related = findItem(items, item.relatedId);
   const lane = LANES.find((l) => l.id === item.lane)?.label;
   const kind = item.status === "pending" ? "Waiting for confirmation" : FLAG_LABEL[item.flag];
   const sources = [item, ...(related ? [related] : [])].filter((s) => s.sourceLink);
@@ -74,24 +84,37 @@ function ReviewCard({ item, decision }: { item: TimelineItem; decision: ReviewDe
           {kind} · {lane} · {formatRange(item)}
         </p>
         {decision && (
-          <span className="rounded-full border border-gold px-3 py-0.5 text-sm text-gold">{DECISION_LABEL[decision]}</span>
+          <span className="rounded-full border border-gold px-3 py-0.5 text-sm text-gold">
+            {DECISION_LABEL[decision]}
+          </span>
         )}
       </div>
       <h2 className="mt-1 font-serif text-xl">{item.label}</h2>
       <p className="mt-2 text-base leading-relaxed">{item.extractedText}</p>
 
       <ul className="mt-3 space-y-1 text-sm">
-        {sources.length === 0 && <li className="text-muted-foreground">Source: {item.sourceLabel}</li>}
+        {sources.length === 0 && (
+          <li className="text-muted-foreground">Source: {item.sourceLabel}</li>
+        )}
         {sources.map((s) => (
           <li key={s.id}>
-            <a href={s.sourceLink!} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-gold hover:underline">
+            <a
+              href={s.sourceLink!}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-gold hover:underline"
+            >
               {s.sourceLabel} <ExternalLink className="size-4" />
             </a>
           </li>
         ))}
       </ul>
 
-      <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label={`Decision for ${item.label}`}>
+      <div
+        className="mt-4 flex flex-wrap gap-2"
+        role="group"
+        aria-label={`Decision for ${item.label}`}
+      >
         {ACTIONS.map((action) => (
           <button
             key={action}

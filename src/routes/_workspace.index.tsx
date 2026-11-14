@@ -5,10 +5,10 @@ import { ChatPanel } from "@/components/caselens/chat-panel";
 import { ConflictDialog } from "@/components/caselens/conflict-dialog";
 import { PageHeader } from "@/components/caselens/shared";
 import { Timeline } from "@/components/caselens/timeline";
+import { useFiledItems } from "@/lib/case-store";
 import { seo } from "@/lib/seo";
 import {
   FLAG_LABEL,
-  ITEMS,
   LANES,
   SAMPLE_CASE,
   findItem,
@@ -19,7 +19,8 @@ import {
 } from "@/lib/sample-case";
 
 export const Route = createFileRoute("/_workspace/")({
-  head: () => seo("Live Case", "Text evidence to one number and watch it land on a live case timeline."),
+  head: () =>
+    seo("Live Case", "Text evidence to one number and watch it land on a live case timeline."),
   component: LiveCase,
 });
 
@@ -27,11 +28,12 @@ function LiveCase() {
   const [playhead, setPlayhead] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [conflict, setConflict] = useState<TimelineItem | null>(null);
+  const items = useFiledItems();
 
-  const selected = findItem(ITEMS, selectedId ?? undefined);
-  const related = findItem(ITEMS, selected?.relatedId);
-  const here = itemsAt(ITEMS, playhead);
-  const footage = findItem(ITEMS, conflict?.relatedId) ?? null;
+  const selected = findItem(items, selectedId ?? undefined);
+  const related = findItem(items, selected?.relatedId);
+  const here = itemsAt(items, playhead);
+  const footage = findItem(items, conflict?.relatedId) ?? null;
 
   return (
     <div className="space-y-6">
@@ -47,20 +49,25 @@ function LiveCase() {
           <section className="rounded-lg border bg-card p-5" aria-label="Synchronized timeline">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-serif text-xl">Timeline</h2>
-              <ul className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground" aria-label="Legend">
+              <ul
+                className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground"
+                aria-label="Legend"
+              >
                 <li className="flex items-center gap-2">
-                  <span className="inline-block h-3 w-6 rounded-sm border border-border bg-muted" /> Agrees
+                  <span className="inline-block h-3 w-6 rounded-sm border border-border bg-muted" />{" "}
+                  Agrees
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="inline-block h-4 w-0.5 bg-contradiction" /> Possible conflict
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="inline-block h-3 w-6 rounded-sm border-2 border-dashed border-missing bg-missing/10" /> Missing
+                  <span className="inline-block h-3 w-6 rounded-sm border-2 border-dashed border-missing bg-missing/10" />{" "}
+                  Missing
                 </li>
               </ul>
             </div>
             <Timeline
-              items={ITEMS}
+              items={items}
               playhead={playhead}
               onPlayhead={setPlayhead}
               selectedId={selectedId}
@@ -68,14 +75,17 @@ function LiveCase() {
               onOpenConflict={setConflict}
             />
             <p className="mt-4 text-sm text-muted-foreground">
-              Drag the playhead. Click the red line to compare the claim with the footage. Times on the public sample are approximate.
+              Drag the playhead. Click the red line to compare the claim with the footage. Times on
+              the public sample are approximate.
             </p>
           </section>
 
           <section className="rounded-lg border bg-card p-5" aria-live="polite">
             <h2 className="font-serif text-xl">At {formatTime(playhead)}</h2>
             {here.length === 0 ? (
-              <p className="mt-2 text-base text-muted-foreground">Nothing is filed at this moment.</p>
+              <p className="mt-2 text-base text-muted-foreground">
+                Nothing is filed at this moment.
+              </p>
             ) : (
               <ul className="mt-3 flex flex-wrap gap-2">
                 {here.map((i) => (
@@ -96,7 +106,8 @@ function LiveCase() {
           {selected && (
             <section className="rounded-lg border border-gold/50 bg-card p-5">
               <p className="font-mono text-sm text-muted-foreground">
-                {LANES.find((l) => l.id === selected.lane)?.label} · {formatRange(selected)} · {FLAG_LABEL[selected.flag]}
+                {LANES.find((l) => l.id === selected.lane)?.label} · {formatRange(selected)} ·{" "}
+                {FLAG_LABEL[selected.flag]}
               </p>
               <h2 className="mt-1 font-serif text-xl">{selected.label}</h2>
               <p className="mt-2 text-base leading-relaxed">{selected.extractedText}</p>
@@ -115,10 +126,16 @@ function LiveCase() {
 }
 
 function SourceLink({ item }: { item: TimelineItem }) {
-  if (!item.sourceLink) return <li className="text-muted-foreground">Source: {item.sourceLabel}</li>;
+  if (!item.sourceLink)
+    return <li className="text-muted-foreground">Source: {item.sourceLabel}</li>;
   return (
     <li>
-      <a href={item.sourceLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-gold hover:underline">
+      <a
+        href={item.sourceLink}
+        target="_blank"
+        rel="noreferrer"
+        className="inline-flex items-center gap-1 text-gold hover:underline"
+      >
         {item.sourceLabel} <ExternalLink className="size-4" />
       </a>
     </li>

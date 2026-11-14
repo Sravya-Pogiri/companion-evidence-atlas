@@ -23,6 +23,8 @@ export interface TimelineItem {
   flag: Flag;
   /** The item this one is compared against. */
   relatedId?: string;
+  /** When it was filed through the message pipeline (ISO). Sample items have none. */
+  filedAt?: string;
 }
 
 export interface ChatMessage {
@@ -99,7 +101,7 @@ export const ITEMS: TimelineItem[] = [
   },
 ];
 
-// Simulated until Phase 3: the transcript the team and the agent would have had.
+// Seed transcript: what the team and the agent already said before the live demo starts.
 export const CONVERSATION: ChatMessage[] = [
   { id: "m1", from: "team", attachment: "video", text: "Bodycam clip, from 0:45", itemId: "bodycam-approach" },
   { id: "m2", from: "agent", text: "File this as Bodycam: Mustang approaches, left signal appears on? Reply Y.", itemId: "bodycam-approach" },
