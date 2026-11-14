@@ -197,7 +197,9 @@ describe("PhotonChannel", () => {
   it("hands an inbound text to the agent and records it in the conversation", async () => {
     const { channel, log, received } = setup(vi.fn() as unknown as typeof fetch);
     expect(await channel.handleInbound(event)).toEqual({});
-    expect(received).toEqual([{ text: "What's missing?", attachments: [] }]);
+    expect(received).toEqual([
+      { text: "What's missing?", attachments: [], conversationId: "spc_1" },
+    ]);
     expect(log).toEqual([{ from: "team", text: "What's missing?" }]);
   });
 
@@ -211,7 +213,7 @@ describe("PhotonChannel", () => {
     const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
     const { channel, log } = setup(fetchMock as unknown as typeof fetch);
     await channel.handleInbound(event);
-    await channel.sendReply("Possible gaps: none.", { itemId: "item-1" });
+    await channel.sendReply("Possible gaps: none.", { itemId: "item-1", conversationId: "spc_1" });
 
     expect(log.at(-1)).toEqual({ from: "agent", text: "Possible gaps: none.", itemId: "item-1" });
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
@@ -232,8 +234,8 @@ describe("PhotonChannel", () => {
     const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
     const { channel } = setup(fetchMock as unknown as typeof fetch);
     await channel.handleInbound(event);
-    await channel.sendReply("one");
-    await channel.sendReply("two");
+    await channel.sendReply("one", { conversationId: "spc_1" });
+    await channel.sendReply("two", { conversationId: "spc_1" });
     const keys = fetchMock.mock.calls.map(
       (c) =>
         ((c as unknown as [string, RequestInit])[1].headers as Record<string, string>)[
@@ -249,14 +251,16 @@ describe("PhotonChannel", () => {
       vi.fn(async () => new Response("no", { status: 403 })) as unknown as typeof fetch,
     );
     await bad.channel.handleInbound(event);
-    await expect(bad.channel.sendReply("hi")).resolves.toBeUndefined();
+    await expect(bad.channel.sendReply("hi", { conversationId: "spc_1" })).resolves.toBeUndefined();
     const down = setup(
       vi.fn(async () => {
         throw new Error("network");
       }) as unknown as typeof fetch,
     );
     await down.channel.handleInbound(event);
-    await expect(down.channel.sendReply("hi")).resolves.toBeUndefined();
+    await expect(
+      down.channel.sendReply("hi", { conversationId: "spc_1" }),
+    ).resolves.toBeUndefined();
     expect(bad.log.at(-1)).toMatchObject({ from: "agent", text: "hi" });
     expect(errors).toHaveBeenCalled();
     errors.mockRestore();
@@ -269,5 +273,46 @@ describe("PhotonChannel", () => {
     await channel.sendReply("hello?");
     expect(fetchMock).not.toHaveBeenCalled();
     errors.mockRestore();
+  });
+  describe("two people texting at once", () => {
+    const from = (space: string, msg: string, text: string) => ({
+      data: human(
+        { type: "text", format: "plain", text },
+        { id: msg, space: { id: space, kind: "direct" } },
+      ),
+    });
+
+    it("sends each reply to the conversation it answers, not to whoever texted last", async () => {
+      const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
+      const { channel } = setup(fetchMock as unknown as typeof fetch);
+      await channel.handleInbound(from("spc_A", "msg_A", "hello"));
+      await channel.handleInbound(from("spc_B", "msg_B", "hello"));
+      // A's reply is sent after B texted. It must still go to A.
+      await channel.sendReply("for A", { conversationId: "spc_A" });
+      await channel.sendReply("for B", { conversationId: "spc_B" });
+      const bodies = fetchMock.mock.calls.map((c) =>
+        JSON.parse((c as unknown as [string, RequestInit])[1].body as string),
+      );
+      expect(bodies[0]).toMatchObject({ spaceId: "spc_A", parentMessageId: "msg_A" });
+      expect(bodies[0].content.text).toBe("for A");
+      expect(bodies[1]).toMatchObject({ spaceId: "spc_B", parentMessageId: "msg_B" });
+    });
+
+    it("tags each inbound message with its own conversation", async () => {
+      const { channel, received } = setup(vi.fn() as unknown as typeof fetch);
+      await channel.handleInbound(from("spc_A", "msg_A", "hello"));
+      await channel.handleInbound(from("spc_B", "msg_B", "hello"));
+      expect(received.map((m) => m.conversationId)).toEqual(["spc_A", "spc_B"]);
+    });
+
+    it("never sends a reply that names no conversation, even when someone has texted", async () => {
+      const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+      const fetchMock = vi.fn();
+      const { channel } = setup(fetchMock as unknown as typeof fetch);
+      await channel.handleInbound(from("spc_A", "msg_A", "hello"));
+      await channel.sendReply("who is this for?");
+      expect(fetchMock).not.toHaveBeenCalled();
+      errors.mockRestore();
+    });
   });
 });

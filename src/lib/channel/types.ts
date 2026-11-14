@@ -22,11 +22,18 @@ export interface Attachment {
 export interface InboundMessage {
   text: string;
   attachments: Attachment[];
+  /**
+   * Which conversation it came from, when the channel has more than one person texting it.
+   * Replies are sent back to that conversation, and a "Y" only counts from the one it was asked of.
+   */
+  conversationId?: string;
 }
 
 export interface ReplyMeta {
   /** The timeline item this reply is about, so the chat can link to it. */
   itemId?: string;
+  /** The conversation to send this reply to (copied from the message it answers). */
+  conversationId?: string;
 }
 
 export type MessageHandler = (message: InboundMessage) => Promise<void>;

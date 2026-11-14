@@ -60,8 +60,10 @@ export interface AgentLlm {
 
 export interface PipelineState {
   items: TimelineItem[];
-  /** The item waiting for the team to reply Y. */
+  /** The item waiting for a Y. */
   pendingId: string | null;
+  /** Who it is waiting on (the conversation that proposed it). Empty or missing when there is one conversation. */
+  pendingFor?: string | null;
 }
 export interface Reply {
   text: string;
@@ -154,12 +156,13 @@ export async function handleMessage(
   llm: AgentLlm,
   now: Date = new Date(),
 ): Promise<PipelineResult> {
+  const who = message.conversationId ?? "";
   const attachment = message.attachments[0];
-  if (attachment) return proposeFiling(state, message, attachment, llm);
+  if (attachment) return proposeFiling(state, message, attachment, llm, who);
 
   const t = norm(message.text);
-  if (/^(y|yes|yep|yeah)$/.test(t)) return confirmFiling(state, llm, now);
-  if (/^(n|no|nope)$/.test(t)) return skipFiling(state);
+  if (/^(y|yes|yep|yeah)$/.test(t)) return confirmFiling(state, llm, now, who);
+  if (/^(n|no|nope)$/.test(t)) return skipFiling(state, who);
   if (/\bwhat(?:'s|s| is| are)?\s+missing\b/.test(t))
     return say(state, { text: whatsMissing(state.items) });
   if (/\bwhat(?:'s| has| have)?\s+changed\b/.test(t))
@@ -175,10 +178,10 @@ export async function handleMessage(
       name: "Text note from the case team",
       extractedText: message.text.trim(),
     };
-    return proposeFiling(state, { text: "", attachments: [note] }, note, llm);
+    return proposeFiling(state, { text: "", attachments: [note] }, note, llm, who);
   }
 
-  const pending = state.items.find((i) => i.id === state.pendingId);
+  const pending = ownPending(state, who);
   if (pending) {
     return say(state, {
       text: `I'm still waiting on "${pending.label}". Reply Y to file it, or N to skip it.`,
@@ -199,6 +202,14 @@ function shortHash(text: string): string {
   return h.toString(36);
 }
 
+/** The pending item, if it is waiting on this person. */
+function ownPending(state: PipelineState, who: string): TimelineItem | undefined {
+  if ((state.pendingFor ?? "") !== who) return undefined;
+  return state.items.find((i) => i.id === state.pendingId && i.status === "pending");
+}
+
+const NOT_YOURS = "That one is waiting on someone else's reply, so I haven't changed it.";
+
 function isNote(text: string): boolean {
   const t = text.trim();
   return !t.endsWith("?") && t.split(/\s+/).length >= NOTE_MIN_WORDS;
@@ -211,10 +222,11 @@ async function proposeFiling(
   message: InboundMessage,
   attachment: Attachment,
   llm: AgentLlm,
+  who: string,
 ): Promise<PipelineResult> {
-  // An unconfirmed proposal is dropped when something new arrives.
+  // There is one pending proposal at a time. An unconfirmed one is dropped when something new arrives.
   const items = state.items.filter((i) => i.id !== state.pendingId);
-  const base: PipelineState = { items, pendingId: null };
+  const base: PipelineState = { items, pendingId: null, pendingFor: null };
   const extra =
     message.attachments.length > 1
       ? " I only looked at the first attachment; send the others one at a time."
@@ -276,18 +288,25 @@ async function proposeFiling(
     flag: "agrees",
   };
   return say(
-    { items: [...items, item], pendingId: item.id },
+    { items: [...items, item], pendingId: item.id, pendingFor: who },
     { text: `File this as ${label}? Reply Y.${extra}`, itemId: item.id },
   );
 }
 
 // ---------- Y / N ----------
 
-function skipFiling(state: PipelineState): PipelineResult {
-  const pending = state.items.find((i) => i.id === state.pendingId);
-  if (!pending) return say(state, { text: "There is nothing waiting to be filed." });
+function skipFiling(state: PipelineState, who: string): PipelineResult {
+  const pending = ownPending(state, who);
+  if (!pending) {
+    const other = state.pendingId !== null && (state.pendingFor ?? "") !== who;
+    return say(state, { text: other ? NOT_YOURS : "There is nothing waiting to be filed." });
+  }
   return say(
-    { items: state.items.filter((i) => i.id !== pending.id), pendingId: null },
+    {
+      items: state.items.filter((i) => i.id !== pending.id),
+      pendingId: null,
+      pendingFor: null,
+    },
     { text: "Okay, I did not file it." },
   );
 }
@@ -298,13 +317,21 @@ async function confirmFiling(
   state: PipelineState,
   llm: AgentLlm,
   now: Date,
+  who: string,
 ): Promise<PipelineResult> {
-  const pending = state.items.find((i) => i.id === state.pendingId && i.status === "pending");
-  if (!pending) return say(state, { text: "There is nothing waiting to be filed." });
+  const pending = ownPending(state, who);
+  if (!pending) {
+    const other = state.pendingId !== null && (state.pendingFor ?? "") !== who;
+    return say(state, { text: other ? NOT_YOURS : "There is nothing waiting to be filed." });
+  }
 
   const filed: TimelineItem = { ...pending, status: "filed", filedAt: now.toISOString() };
   const others = filedItems(state.items).filter((i) => i.id !== filed.id);
-  let next: PipelineState = { items: replaceItem(state.items, filed), pendingId: null };
+  let next: PipelineState = {
+    items: replaceItem(state.items, filed),
+    pendingId: null,
+    pendingFor: null,
+  };
 
   if (others.length === 0) {
     return say(next, {

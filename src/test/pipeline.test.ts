@@ -377,3 +377,57 @@ describe("text notes as evidence", () => {
     expect(again.state.pendingId).not.toBe(asked.state.pendingId);
   });
 });
+
+describe("more than one person", () => {
+  const text = "Dashcam shows the left signal coming on at 0:55";
+  const from = (conversationId: string, t: string) => ({
+    text: t,
+    attachments: [],
+    conversationId,
+  });
+
+  async function proposeAs(who: string) {
+    return handleMessage(seed(), from(who, text), llm(), NOW);
+  }
+
+  it("only the person who was asked can confirm, and the other is told why", async () => {
+    const asked = await proposeAs("A");
+    expect(asked.state.pendingFor).toBe("A");
+    const b = await handleMessage(asked.state, from("B", "Y"), llm(), NOW);
+    expect(b.replies[0]?.text).toContain("someone else's reply");
+    expect(b.state.items.find((i) => i.id === asked.state.pendingId)?.status).toBe("pending");
+    const a = await handleMessage(b.state, from("A", "Y"), llm(), NOW);
+    expect(a.state.items.find((i) => i.id === asked.state.pendingId)?.status).toBe("filed");
+    expect(a.state.pendingFor).toBeNull();
+  });
+
+  it("only the person who was asked can skip it", async () => {
+    const asked = await proposeAs("A");
+    const b = await handleMessage(asked.state, from("B", "N"), llm(), NOW);
+    expect(b.state.pendingId).toBe(asked.state.pendingId);
+    const a = await handleMessage(b.state, from("A", "N"), llm(), NOW);
+    expect(a.state.pendingId).toBeNull();
+  });
+
+  it("someone else's proposal is not nagged about, and their Y with nothing pending says so", async () => {
+    const asked = await proposeAs("A");
+    const r = await handleMessage(asked.state, from("B", "maybe"), llm(), NOW);
+    expect(r.replies[0]?.text).toContain("Send me evidence");
+    const none = await handleMessage(seed(), from("B", "Y"), llm(), NOW);
+    expect(none.replies[0]?.text).toContain("nothing waiting");
+  });
+
+  it("a new proposal from another person replaces the pending one and takes it over", async () => {
+    const a = await proposeAs("A");
+    const b = await handleMessage(
+      a.state,
+      from("B", "Bodycam shows the officer walking up at 1:10"),
+      llm(),
+      NOW,
+    );
+    expect(b.state.pendingFor).toBe("B");
+    expect(b.state.items.filter((i) => i.status === "pending")).toHaveLength(1);
+    const lateA = await handleMessage(b.state, from("A", "Y"), llm(), NOW);
+    expect(lateA.replies[0]?.text).toContain("someone else's reply");
+  });
+});

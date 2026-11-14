@@ -64,7 +64,11 @@ export function getPhotonRuntime(): PhotonRuntime | null {
     },
   );
   connectAgent(channel, gatewayLlm, {
-    get: () => ({ items: state.items, pendingId: state.pendingId }),
+    get: () => ({
+      items: state.items,
+      pendingId: state.pendingId,
+      pendingFor: state.pendingFor ?? null,
+    }),
     update: (patch) => Object.assign(state, patch),
   });
   g.__caselensPhoton = {

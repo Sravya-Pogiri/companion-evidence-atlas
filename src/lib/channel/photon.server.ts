@@ -23,7 +23,8 @@ export type ConversationLog = (message: Omit<ChatMessage, "id">) => void;
 export class PhotonChannel implements ChannelAdapter {
   readonly name = "photon";
   private handler: MessageHandler | null = null;
-  private context: ReplyContext | null = null;
+  /** Where to reply, per conversation (space), so two people never get each other's replies. */
+  private readonly contexts = new Map<string, ReplyContext>();
 
   constructor(
     private readonly config: PhotonConfig,
@@ -39,7 +40,10 @@ export class PhotonChannel implements ChannelAdapter {
   async handleInbound(event: unknown): Promise<{ skipped?: string }> {
     const parsed = parseInboundEvent(event);
     if (!parsed.ok) return { skipped: parsed.reason };
-    if (parsed.context) this.context = parsed.context;
+    if (parsed.context) {
+      this.contexts.set(parsed.context.spaceId, parsed.context);
+      parsed.message.conversationId = parsed.context.spaceId;
+    }
     await this.receiveMessage(parsed.message);
     return {};
   }
@@ -56,9 +60,9 @@ export class PhotonChannel implements ChannelAdapter {
   async sendReply(text: string, meta?: ReplyMeta): Promise<void> {
     this.log({ from: "agent", text, ...(meta?.itemId ? { itemId: meta.itemId } : {}) });
 
-    const ctx = this.context;
+    const ctx = meta?.conversationId ? this.contexts.get(meta.conversationId) : undefined;
     if (!ctx) {
-      console.error("photon: no conversation to reply to yet; the reply was not sent.");
+      console.error("photon: no conversation to send this reply to; it was not sent.");
       return;
     }
     try {
