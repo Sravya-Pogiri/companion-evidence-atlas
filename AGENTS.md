@@ -32,5 +32,5 @@ use the editor.
 ## CaseLens Text architecture
 - Three pages only, under the pathless `_workspace` layout (top nav + "Potential findings. Review before use." banner): Live Case `/`, Review `/review`, Handoff `/handoff`. Do not add pages without asking.
 - Findings are suggestions only. Never state conclusions about guilt, legality, or case strategy.
-- Sample case data (Rosales v. Terrell, public footage and filings) lives in src/lib/case-data.ts; keep data separate from presentation.
+- Sample case data (Rosales v. Terrell, public footage and filings) lives in src/lib/sample-case.ts (timeline items and seed conversation), with the public source links in src/lib/case-data.ts; keep data separate from presentation.
 - Synthetic and public data only. Keep keys in environment variables and never commit secrets (.env is ignored; see .env.example).
