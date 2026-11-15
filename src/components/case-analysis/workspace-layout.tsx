@@ -57,10 +57,8 @@ function CaseAnalysisLayout() {
             aria-selected={pane === p}
             onClick={() => setPane(p)}
             className={cn(
-              "h-8 flex-1 rounded-md text-[14px] font-medium transition-colors",
-              pane === p
-                ? "border border-border bg-white text-foreground"
-                : "text-muted-foreground",
+              "h-8 flex-1 rounded-md text-[15px] font-medium transition-colors",
+              pane === p ? "border border-border bg-card text-foreground" : "text-muted-foreground",
             )}
           >
             {p === "document" ? "Document" : "Intelligence"}

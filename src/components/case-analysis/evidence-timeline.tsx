@@ -6,9 +6,9 @@ import { Citations } from "./source-citation";
 
 function markerClass(item: TimelineItem): string {
   if (item.flag === "conflict") return "border-contradiction bg-contradiction";
-  if (item.flag === "missing") return "border-[#c89426] bg-white border-dashed";
+  if (item.flag === "missing") return "border-[var(--lx-amber-border)] bg-card border-dashed";
   if (item.relatedId) return "border-corroborate bg-corroborate";
-  return "border-[#9aa2b4] bg-white";
+  return "border-[var(--lx-faint)] bg-card";
 }
 
 /** Vertical evidence timeline. New events slide in; events tied to the focused finding stand out. */
@@ -34,7 +34,7 @@ export function EvidenceTimeline() {
 
   if (sorted.length === 0) {
     return (
-      <p className="text-[15px] text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         Nothing is on the timeline yet. Text evidence to the case line to start.
       </p>
     );
@@ -58,7 +58,7 @@ export function EvidenceTimeline() {
                 on ? "bg-accent/70" : "hover:bg-muted/60",
               )}
             >
-              <span className="pl-2 pt-1 font-mono text-[12px] text-muted-foreground">
+              <span className="pl-2 pt-1 font-mono text-[13px] text-muted-foreground">
                 {item.when ??
                   (item.end - item.start >= 80 ? "throughout" : `~${formatTime(item.start)}`)}
               </span>
@@ -71,20 +71,20 @@ export function EvidenceTimeline() {
                 />
               </span>
               <span className="min-w-0">
-                <span className="text-[12px] text-muted-foreground">
+                <span className="text-[13px] text-muted-foreground">
                   {lane}
                   {item.flag === "conflict" && (
                     <span className="text-contradiction"> · possible conflict</span>
                   )}
                   {item.flag === "missing" && (
-                    <span className="text-[#9a6614]"> · possible gap</span>
+                    <span className="text-[color:var(--lx-amber-text)]"> · possible gap</span>
                   )}
                   {item.status === "pending" && " · awaiting filing"}
                 </span>
                 <button
                   type="button"
                   onClick={() => focusItem(item.id)}
-                  className="block text-left font-serif text-[21px] leading-snug text-foreground"
+                  className="block text-left font-serif text-[22px] leading-snug text-foreground"
                 >
                   {item.label}
                 </button>

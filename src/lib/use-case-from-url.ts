@@ -19,7 +19,9 @@ export function useCaseFromUrl(): boolean {
   const [resolved, setResolved] = useState(false);
 
   useEffect(() => {
-    let id = requestedCase(window.location.search);
+    const asked = new URLSearchParams(window.location.search).get("case");
+    // A link that names a case wins over the one remembered for this tab, the default included.
+    let id = isCaseId(asked) ? asked : null;
     if (!id) {
       try {
         const saved = window.sessionStorage.getItem(KEY);
