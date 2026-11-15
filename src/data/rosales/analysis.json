@@ -1,6 +1,6 @@
 {
  "caseId": "rosales",
- "generatedAt": "2026-11-15T04:12:47.854Z",
+ "generatedAt": "2026-11-15T04:21:44.829Z",
  "models": {
   "text": "auto",
   "vision": "auto",
@@ -10,10 +10,12 @@
   "transcription": 0,
   "frame description": 0,
   "claim extraction": 0,
-  "claim verification": 154.9,
-  "cross-check": 12.6,
-  "time check": 0.2,
-  "total": 167.7
+  "claim verification": 0.6,
+  "cross-check": 0,
+  "video check": 0,
+  "frame match": 0,
+  "time check": 0.1,
+  "total": 0.8
  },
  "sources": [
   {
@@ -1283,12 +1285,15 @@
    "id": "finding-3",
    "kind": "conflict",
    "title": "Video Evidence of Signaling",
-   "explanation": "The complaint and court opinion assert that video evidence shows the signal was activated, while the court also notes that it is not objectively clear from the video whether the signal was activated at the legally required distance.",
+   "explanation": "The complaint and court opinion assert that video evidence shows the signal was activated, while the court also notes that it is not objectively clear from the video whether the signal was activated at the legally required distance. Also cited: bodycam 5:30: A speaker appears to state the reason for the stop is a failure to signal; bodycam 8:00: A speaker appears to reiterate the reason for the stop as a failure to signal; complaint p.8: The officers claimed they stopped the vehicle for a failure to signal, which the complaint alleges is contradicted by video evidence.",
    "claimIds": [
     "complaint-029",
     "opinion-045",
     "opinion-046",
-    "opinion-049"
+    "opinion-049",
+    "bodycam-audio-052",
+    "bodycam-audio-053",
+    "complaint-004"
    ],
    "status": "verified"
   },
@@ -1332,10 +1337,69 @@
    "id": "finding-7",
    "kind": "agrees",
    "title": "Instruction to Exit Vehicle",
-   "explanation": "The complaint and court opinion agree that Officer Terrell instructed Rosales to exit the vehicle and that he complied.",
+   "explanation": "The complaint and court opinion agree that Officer Terrell instructed Rosales to exit the vehicle and that he complied. Also cited: dashcam 1:34: The driver-side door of the red car appears to open while an individual wearing a dark uniform stands on the right.",
    "claimIds": [
     "complaint-005",
-    "opinion-033"
+    "opinion-033",
+    "dashcam-063"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-v1",
+   "kind": "agrees",
+   "title": "Driver's phone placement",
+   "explanation": "Bodycam footage shows a person holding a document near the vehicle, and documents confirm the driver was instructed to place his phone on the police vehicle hood.",
+   "claimIds": [
+    "complaint-007",
+    "opinion-037"
+   ],
+   "status": "dropped",
+   "droppedBecause": "its frame moment was not confirmed by looking at the frame"
+  },
+  {
+   "id": "finding-v2",
+   "kind": "agrees",
+   "title": "Passenger instructed to exit",
+   "explanation": "Bodycam footage shows individuals standing near the vehicle, consistent with document claims that the passenger was ordered to exit and leave her belongings.",
+   "claimIds": [
+    "bodycam-072",
+    "complaint-008",
+    "opinion-039"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-f1",
+   "kind": "agrees",
+   "title": "Bodycam 0:04 matches the record",
+   "explanation": "An individual in a dark shirt appears to be handing a document to the camera operator.",
+   "claimIds": [
+    "bodycam-064",
+    "complaint-006"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-f2",
+   "kind": "agrees",
+   "title": "Bodycam 0:54 matches the record",
+   "explanation": "A piece of paper and a cell phone appear to be held between the camera wearer and an individual.",
+   "claimIds": [
+    "bodycam-068",
+    "complaint-007",
+    "opinion-037"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-f3",
+   "kind": "agrees",
+   "title": "Bodycam 18:42 matches the record",
+   "explanation": "A person appears to be holding a clipboard with a document and a pen in front of a white vehicle.",
+   "claimIds": [
+    "bodycam-075",
+    "complaint-027"
    ],
    "status": "verified"
   }
@@ -1348,11 +1412,14 @@
   "  transcription: 0s",
   "  frame description: 0s",
   "  claim extraction: 0s",
-  "  claim verification: 154.9s",
-  "  cross-check: 12.6s",
+  "  claim verification: 0.6s",
+  "  cross-check: 0s",
+  "  video check: 0s",
+  "  frame match: 3 confirmed (dashcam-063|complaint-005, bodycam-064|complaint-006, bodycam-068|complaint-007, bodycam-068|opinion-037, bodycam-072|complaint-008, bodycam-075|complaint-027)",
+  "  frame match: 0s",
   "  bodycam-audio-052 at 5:30: time check: 100% of the quoted words heard in 5:10-5:50",
   "  bodycam-audio-053 at 8:00: time check: 100% of the quoted words heard in 7:40-8:20",
   "  bodycam-audio-056 at 18:46: time check: 95% of the quoted words heard in 18:26-19:06",
-  "  time check: 0.2s"
+  "  time check: 0.1s"
  ]
 }

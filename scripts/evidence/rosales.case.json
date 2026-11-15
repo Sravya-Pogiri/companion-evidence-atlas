@@ -39,5 +39,8 @@
       "label": "Dispatch audio",
       "why": "A traffic stop is normally logged with dispatch; no recording is in the record."
     }
+  ],
+  "questions": [
+    "Was the Mustang's left turn signal on before it turned, as the stop's stated reason and the video descriptions bear on it?"
   ]
 }

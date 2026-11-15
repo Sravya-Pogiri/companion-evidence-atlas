@@ -90,6 +90,8 @@ interface CaseFile {
   caseId: string;
   sources: { id: string; kind: "pdf" | "video"; file: string; label: string; url: string }[];
   expected: { id: string; label: string; why: string }[];
+  /** Central questions of the case, answered from the sources by the video check. */
+  questions?: string[];
 }
 const caseFile = JSON.parse(readFileSync(casePath, "utf8")) as CaseFile;
 const CACHE = join("cache", caseFile.caseId);
@@ -424,6 +426,133 @@ interface RawFinding {
   claimIds: string[];
 }
 
+/**
+ * A targeted pass after the general cross-check, whose output varies between runs: every
+ * checked moment from the videos (what is seen, and what is said) is compared with the document
+ * passages about the same event, for agreements and possible conflicts. One request. Each
+ * finding must cite at least one video moment and one document; the usual rules then apply.
+ */
+async function videoCheck(claims: Claim[], existing: Finding[]): Promise<Finding[]> {
+  const moments = claims.filter((c) => "t" in c.at);
+  const docs = claims.filter((c) => "page" in c.at);
+  if (moments.length === 0 || docs.length === 0) return [];
+  const line = (c: Claim) => {
+    const where = "page" in c.at ? `p.${c.at.page}${c.at.paragraph ? ` ¶${c.at.paragraph}` : ""}` : `${mmss(c.at.t)}`;
+    const kind = c.origin === "transcript" ? "said" : c.origin === "video" ? "seen" : "document";
+    return `${c.id} | ${kind} | ${c.at.source} ${where} | ${c.claim}${c.exactQuote ? ` | "${c.exactQuote}"` : ""}`;
+  };
+  const text = `VIDEO MOMENTS (seen in frames, or said on the recording):
+${moments.map(line).join("\n")}
+
+DOCUMENT CLAIMS:
+${docs.map(line).join("\n")}
+
+For each video moment, look for document claims about the same event or the same question. Report agreements, and possible conflicts: for example where what someone says on the recording differs from what a document says the video shows, or where a frame differs from a document's description.
+Match the dashcam and bodycam frame moments ("seen") with document descriptions of the same driving or roadside events, not only what is said.
+${(caseFile.questions ?? []).length ? `CASE QUESTIONS (answer each from the moments and documents that bear on it; do not assume an answer; where sources point different ways, report a possible conflict citing both sides):\n${caseFile.questions!.map((q) => `- ${q}`).join("\n")}\n` : ""}Every finding must cite at least one video moment id and at least one document id. Do not report a link you are unsure about.
+Return {"findings":[{"kind":"conflict|agrees","title":"short","explanation":"one or two hedged sentences","claimIds":["..."]}]}. At most 8.`;
+  const r = await cached(`vxcheck:${TEXT_MODEL}:${createHash("sha256").update(text).digest("hex")}`, { findings: [] }, () =>
+    askJsonParts(XCHECK_SYSTEM, [{ type: "input_text", text }], { ...modelOpt(TEXT_MODEL), timeoutMs: 180_000, effort: "medium" }),
+  );
+  const ids = new Set(moments.map((c) => c.id));
+  const docIds = new Set(docs.map((c) => c.id));
+  const fresh = asArray<RawFinding>(r, "findings")
+    .filter((f) => ["conflict", "agrees"].includes(f.kind) && clean(f.title) && Array.isArray(f.claimIds))
+    .map((f) => ({ ...f, claimIds: f.claimIds.map(String) }))
+    .filter((f) => f.claimIds.some((id) => ids.has(id)) && f.claimIds.some((id) => docIds.has(id)))
+    // A finding that repeats one from the cross-check (same kind, two or more shared claims)
+    // is folded into it rather than listed twice.
+    .filter((f) => {
+      const twin = existing.find((e) => e.kind === f.kind && e.claimIds.filter((id) => f.claimIds.includes(id)).length >= 2);
+      if (!twin) return true;
+      const added = f.claimIds.filter((id) => !twin.claimIds.includes(id));
+      twin.claimIds = [...twin.claimIds, ...added];
+      // Name what was added from the data itself (the model's wording can mislabel a source).
+      const byId = new Map(claims.map((c) => [c.id, c]));
+      const said = added
+        .map((id) => byId.get(id))
+        .filter((c): c is Claim => !!c)
+        .map((c) => `${c.at.source} ${"t" in c.at ? mmss(c.at.t) : `p.${c.at.page}`}: ${c.claim.replace(/\.$/, "")}`);
+      if (said.length) twin.explanation = `${twin.explanation} Also cited: ${said.join("; ")}.`;
+      return false;
+    });
+  return fresh
+    .map((f, i) => ({
+      id: `finding-v${i + 1}`,
+      kind: f.kind as Finding["kind"],
+      title: f.title.trim(),
+      explanation: String(f.explanation ?? "").trim(),
+      claimIds: f.claimIds,
+      status: "verified" as const,
+    }));
+}
+
+/**
+ * Frame moments matched with documents by looking at the frames: every checked "seen" moment is
+ * sent with its image, and the model names the document claims that describe what that frame
+ * shows. One request. Confirmed pairs become findings; findings from the text-only checks that
+ * rest on a frame moment without a confirmed pair lose that moment (and are dropped by the
+ * usual rules if nothing from a video remains).
+ */
+async function frameMatch(claims: Claim[], findings: Finding[]): Promise<Finding[]> {
+  const frames = claims.filter((c) => c.origin === "video" && c.frameRef && existsSync(join("public", c.frameRef)));
+  const docs = claims.filter((c) => "page" in c.at);
+  if (frames.length === 0 || docs.length === 0) return [];
+  const parts: InputPart[] = [];
+  frames.forEach((c, i) => {
+    parts.push({ type: "input_text", text: `FRAME ${i + 1}: ${c.id} (${c.at.source} ${"t" in c.at ? mmss(c.at.t) : ""}). Described as: ${c.claim}` });
+    parts.push({ type: "input_image", image_url: dataUrl(join("public", c.frameRef!)) });
+  });
+  const docList = docs.map((c) => `${c.id} | ${c.at.source} p.${"page" in c.at ? c.at.page : ""} | ${c.claim}`).join("\n");
+  parts.push({
+    type: "input_text",
+    text: `DOCUMENT CLAIMS:\n${docList}\n
+For each frame, judging from the image itself, list the document claims that describe what this frame shows (the same moment or event). Only list a claim when the frame clearly shows it; most frames match nothing. If a frame clearly shows something a document claim contradicts, list it with kind "conflict".
+Return {"matches":[{"frame":"<frame claim id>","kind":"agrees|conflict","claimIds":["<document ids>"],"shows":"one hedged sentence on what the frame shows that matches"}]}.`,
+  });
+  const key = `framematch:${VISION_MODEL}:${createHash("sha256").update(JSON.stringify(parts.map((p) => ("text" in p ? p.text : p.image_url.length)))).digest("hex")}`;
+  const r = await cached(key, { matches: [] }, () => askJsonParts(VISION_SYSTEM, parts, { ...modelOpt(VISION_MODEL), timeoutMs: 180_000 }));
+  const frameIds = new Set(frames.map((c) => c.id));
+  const docIds = new Set(docs.map((c) => c.id));
+  const byId = new Map(claims.map((c) => [c.id, c]));
+  const confirmed = new Set<string>();
+  const out: Finding[] = [];
+  for (const raw of asArray<{ frame: string; kind: string; claimIds: string[]; shows: string }>(r, "matches")) {
+    // The model may name a frame by its claim id or by its label ("FRAME 4").
+    const n = /^\s*frame\s*(\d+)\s*$/i.exec(String(raw.frame));
+    const m = { ...raw, frame: n ? (frames[Number(n[1]) - 1]?.id ?? "") : String(raw.frame) };
+    const ids = (Array.isArray(m.claimIds) ? m.claimIds.map(String) : []).filter((id) => docIds.has(id));
+    if (!frameIds.has(String(m.frame)) || ids.length === 0 || !["agrees", "conflict"].includes(m.kind)) continue;
+    for (const id of ids) confirmed.add(`${m.frame}|${id}`);
+    // Already covered by a finding that cites this frame and these documents.
+    if (findings.some((e) => e.status === "verified" && e.claimIds.includes(m.frame) && ids.every((id) => e.claimIds.includes(id)))) continue;
+    const f = byId.get(String(m.frame))!;
+    const where = "t" in f.at ? `${f.at.source} ${mmss(f.at.t)}` : f.at.source;
+    out.push({
+      id: `finding-f${out.length + 1}`,
+      kind: m.kind as Finding["kind"],
+      title: `${where[0]!.toUpperCase()}${where.slice(1)} ${m.kind === "conflict" ? "differs from" : "matches"} the record`,
+      explanation: String(m.shows ?? "").trim(),
+      claimIds: [String(m.frame), ...ids],
+      status: "verified",
+    });
+  }
+  // Text-only links between a frame moment and a document stand only if the frames confirm them.
+  for (const f of findings) {
+    const seen = f.claimIds.filter((id) => byId.get(id)?.origin === "video");
+    for (const s of seen) {
+      const docsHere = f.claimIds.filter((id) => docIds.has(id));
+      if (!docsHere.some((d) => confirmed.has(`${s}|${d}`))) f.claimIds = f.claimIds.filter((id) => id !== s);
+    }
+    if (seen.length && !f.claimIds.some((id) => "t" in (byId.get(id)?.at ?? {})) && f.id.startsWith("finding-v")) {
+      f.status = "dropped";
+      f.droppedBecause = "its frame moment was not confirmed by looking at the frame";
+    }
+  }
+  say(`  frame match: ${out.length} confirmed (${[...confirmed].join(", ") || "none"})`);
+  return out;
+}
+
 async function crossCheck(claims: Claim[]): Promise<Finding[]> {
   const list = claims
     .map((c) => {
@@ -589,6 +718,9 @@ async function main() {
   });
   await timed("claim verification", () => verifyClaims(claims, pagesBySource, transcripts));
   const findings = await timed("cross-check", () => crossCheck(claims.filter((c) => c.verification.status === "passed" || c.verification.status === "fixed")));
+  const passedClaims = claims.filter((c) => c.verification.status === "passed" || c.verification.status === "fixed");
+  findings.push(...(await timed("video check", () => videoCheck(passedClaims, findings))));
+  findings.push(...(await timed("frame match", () => frameMatch(passedClaims, findings))));
   await timed("time check", () => timeCheck(findings, claims));
   verifyFindings(findings, claims);
   timings["total"] = Math.round((Date.now() - t0) / 100) / 10;
