@@ -33,7 +33,7 @@ function Workspace() {
     <div className="workspace-noir dark flex min-h-screen flex-col">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-8 border-b bg-background/90 px-6 backdrop-blur print:hidden">
         <Link to="/" className="flex items-center gap-2 text-foreground">
-          <LogoMark className="h-6 w-6 shrink-0" />
+          <LogoMark className="h-8 w-8 shrink-0" />
           <span className="font-serif text-xl font-semibold tracking-wide">{APP_NAME}</span>
         </Link>
         <nav aria-label="Main" className="flex h-full items-stretch gap-1">

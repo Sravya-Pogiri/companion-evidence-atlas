@@ -68,9 +68,7 @@ export function ChatPanel({
       )}
     >
       <div className="flex items-center gap-3 border-b border-white/[0.06] px-3 pb-3 pt-2">
-        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#24242c] text-foreground">
-          <LogoMark className="size-5" />
-        </span>
+        <LogoMark className="size-9 rounded-full" />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold leading-tight">{APP_NAME}</p>
           <p className="font-mono text-[13px] leading-tight text-muted-foreground">{CASE_LINE}</p>
