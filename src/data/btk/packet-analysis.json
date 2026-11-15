@@ -1,7 +1,7 @@
 {
  "caseId": "btk",
- "generatedAt": "2026-11-15T02:56:33.723Z",
- "model": "cached",
+ "generatedAt": "2026-11-15T03:46:05.219Z",
+ "model": "gemini-3.5-flash",
  "observations": [
   {
    "id": "B-001",
@@ -828,11 +828,11 @@
      "source": "VIDEO_UNT",
      "section": "00:00–00:50, with document imagery around 00:45",
      "quotes": [],
-     "status": "unchecked",
-     "note": "No page text in the packet for this source (external link or not a PDF)."
+     "status": "passed",
+     "note": "Frames every 5 s described without the packet's text: exterior footage seen; document close-ups at 0:07, 0:42, 0:47. The arraignment date comes from the archive record, not from the frames."
     }
    ],
-   "status": "unverified"
+   "status": "verified"
   },
   {
    "id": "B-021",
@@ -1570,11 +1570,11 @@
      "source": "VIDEO_UNT",
      "section": "Creation date and description",
      "quotes": [],
-     "status": "unchecked",
-     "note": "No page text in the packet for this source (external link or not a PDF)."
+     "status": "passed",
+     "note": "Frames every 5 s described without the packet's text: exterior footage seen; document close-ups at 0:07, 0:42, 0:47. The arraignment date comes from the archive record, not from the frames."
     }
    ],
-   "status": "unverified"
+   "status": "verified"
   },
   {
    "id": "T21",
@@ -1953,10 +1953,11 @@
   "  T23 JUDGMENT p.3: quote not on the page (missing): \"Said sentences shall run consecutivelyto each other. The def…\"",
   "  T24 JUDGMENT p.1: quote not on the page (missing): \"2005 OCT 31 AM 10 50 IN THE EIGHTEENTH JUDICIAL DISTRIČT— DI…\"",
   "  T24 DISPOSITION p.1: quote not on the page (missing): \"2005 JCT 31 AM 10 49 IN THE EIGHTEENTH JUDICIAL DISTRICT DIS…\"",
-  "observations: 17 verified, 4 partial, 2 unverified",
-  "timeline: 21 verified, 1 partial, 2 unverified",
+  "clip: 2.5s people, 7.5s document, 12.5s exterior, 17.5s interior, 22.5s exterior, 27.5s exterior, 32.5s exterior, 37.5s exterior, 42.5s document, 47.5s document",
+  "observations: 18 verified, 4 partial, 1 unverified",
+  "timeline: 22 verified, 1 partial, 1 unverified",
   "agreements across sources: B-004 (STATE, CHURCH); B-016 (PLEA, JUDGMENT); B-017 (JUDGMENT, VALADEZ); B-019 (STATE, VAULT, FBI_CASE_STUDY)",
   "without the disk lead: 9 links remain, 5 drop out",
-  "provider: {\"provider\":\"gemini\",\"requests\":0,\"exhaustedModels\":[],\"requestsByModel\":{}}; 0s"
+  "provider: {\"provider\":\"gemini\",\"requests\":1,\"exhaustedModels\":[],\"requestsByModel\":{\"gemini-3.5-flash\":1}}; 9.4s"
  ]
 }

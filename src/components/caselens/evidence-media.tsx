@@ -12,7 +12,7 @@ import {
   Search,
   type LucideIcon,
 } from "lucide-react";
-import { embedUrl, nearestFrame, type PageImage, type VideoId } from "@/lib/media";
+import { LOCAL_VIDEO, embedUrl, nearestFrame, type PageImage, type VideoId } from "@/lib/media";
 import { VIDEOS, formatTime, type Lane } from "@/lib/sample-case";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +49,51 @@ export function FrameThumb({
         </span>
       )}
     </span>
+  );
+}
+
+/**
+ * A video that is not on YouTube, played from its local copy. When the file is not there (it is
+ * kept out of git), it shows a link to where the video is published instead.
+ */
+export function LocalClip({
+  src,
+  href,
+  label,
+  className,
+}: {
+  src: string;
+  href: string | null;
+  label: string;
+  className?: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  if (failed)
+    return (
+      <a
+        href={href ?? undefined}
+        target="_blank"
+        rel="noreferrer"
+        className={cn(
+          "grid aspect-video place-items-center rounded-md border border-current/15 text-sm opacity-80 hover:opacity-100",
+          className,
+        )}
+      >
+        <span className="flex items-center gap-2">
+          <Play className="size-4" aria-hidden /> Open {label} at the archive
+        </span>
+      </a>
+    );
+  return (
+    <video
+      className={cn("aspect-video w-full rounded-md bg-black", className)}
+      src={src}
+      controls
+      preload="metadata"
+      playsInline
+      onError={() => setFailed(true)}
+      aria-label={label}
+    />
   );
 }
 
@@ -108,10 +153,23 @@ export function PlayableStill({
   badge?: string;
 }) {
   const [playing, setPlaying] = useState(false);
+  const [localFailed, setLocalFailed] = useState(false);
   const frame = nearestFrame(video, at);
+  const local = LOCAL_VIDEO[video];
   return (
     <div className={cn("relative aspect-video overflow-hidden rounded-md bg-black", className)}>
-      {playing ? (
+      {playing && local && !localFailed ? (
+        // The local copy when it is there; YouTube when it is not.
+        <video
+          className="size-full"
+          src={`${local}#t=${Math.floor(at)}`}
+          autoPlay
+          controls
+          playsInline
+          onError={() => setLocalFailed(true)}
+          aria-label={`${VIDEOS[video].label} from ${formatTime(at)}`}
+        />
+      ) : playing ? (
         <iframe
           className="size-full"
           src={embedUrl(video, at)}

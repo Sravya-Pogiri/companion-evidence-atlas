@@ -47,9 +47,19 @@ export const PAGES = {
 
 export const BLURRY_PHOTO = "/frames/blurry-photo.jpg";
 
+/**
+ * Local copies of the case videos under public/media (git-ignored: too large for git, or held
+ * under third-party rights). Players use them when present and fall back to YouTube otherwise.
+ */
+export const LOCAL_VIDEO: Partial<Record<VideoId, string>> = {
+  bodycam: "/media/rosales-bodycam-480p.mp4",
+};
+
 export type ItemMedia =
   | { kind: "video"; video: VideoId; at: number; frame: string; file: string }
-  | { kind: "page"; page: PageImage };
+  | { kind: "page"; page: PageImage }
+  /** A video that is not on YouTube: a local file, with a link to where it is published. */
+  | { kind: "clip"; src: string; file: string; href: string | null };
 
 function video(v: VideoId, at: number): ItemMedia {
   return {
@@ -77,12 +87,13 @@ export function nearestFrame(v: VideoId, at: number): Frame {
 
 /** The still or page that belongs to an item, when the sample has one. */
 export function mediaFor(
-  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame" | "page">,
+  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame" | "page" | "clip">,
 ): ItemMedia | null {
   const known = BY_ITEM[item.id];
   if (known) return known;
   // A rendered image of the cited page that came with the item.
   if (item.page) return { kind: "page", page: item.page };
+  if (item.clip) return { kind: "clip", src: item.clip.src, file: item.clip.file, href: item.sourceLink };
   // Items from the evidence analysis carry their own verified frame.
   if (item.frame && (item.lane === "dashcam" || item.lane === "bodycam")) {
     return { ...(video(item.lane, item.start) as Extract<ItemMedia, { kind: "video" }>), frame: item.frame };

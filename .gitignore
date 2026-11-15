@@ -36,3 +36,8 @@ dist-ssr
 .env.*
 !.env.example
 cache/
+
+# Local video files: too large for git (GitHub limit 100 MB) or third-party rights.
+# The app plays them when present and falls back to YouTube or the archive link.
+public/media/
+/*.mp4

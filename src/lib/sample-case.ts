@@ -44,6 +44,8 @@ export interface TimelineItem {
   frame?: string;
   /** A rendered image of the cited page, under /public. */
   page?: { src: string; page: number; file: string };
+  /** A video clip that is not on YouTube (a local file under /public/media). */
+  clip?: { src: string; file: string };
 }
 
 export interface ChatMessage {

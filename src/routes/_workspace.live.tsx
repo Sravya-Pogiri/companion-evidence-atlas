@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { ChatPanel } from "@/components/caselens/chat-panel";
 import { ConflictDialog } from "@/components/caselens/conflict-dialog";
-import { LANE_ICON, PageThumb, PlayableStill } from "@/components/caselens/evidence-media";
+import { LANE_ICON, LocalClip, PageThumb, PlayableStill } from "@/components/caselens/evidence-media";
 import { Timeline } from "@/components/caselens/timeline";
 import { getCase, useFiledItems } from "@/lib/case-store";
 import { startDemo } from "@/lib/demo";
@@ -321,6 +321,8 @@ function MomentPanel({
                 p.{media.page.page}
               </span>
             </a>
+          ) : media?.kind === "clip" ? (
+            <LocalClip src={media.src} href={media.href} label={media.file} />
           ) : focus.flag !== "missing" ? (
             <a
               href={focus.sourceLink ?? undefined}
@@ -368,7 +370,7 @@ function MomentPanel({
               className="max-w-full truncate rounded-full border border-white/10 px-2.5 py-0.5 text-muted-foreground"
               title={focus.sourceLabel}
             >
-              {media?.kind === "video"
+              {media?.kind === "video" || media?.kind === "clip"
                 ? media.file
                 : media?.kind === "page"
                   ? media.page.file

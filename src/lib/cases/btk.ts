@@ -146,6 +146,15 @@ function pageImage(x: CheckedCitation | undefined) {
   return { src: `/pages/btk/${key}.jpg`, page: x.page, file };
 }
 
+/** Local copies of packet videos under public/media (git-ignored: third-party broadcast rights). */
+const LOCAL_CLIPS: Record<string, string> = {
+  VIDEO_UNT: "/media/btk-kxas-arraignment-2005-05-03.mp4",
+};
+function clipFor(cits: CheckedCitation[]) {
+  const id = cits.map((x) => x.source).find((sid) => LOCAL_CLIPS[sid]);
+  return id ? { src: LOCAL_CLIPS[id]!, file: SOURCES_BY_ID.get(id)?.path?.split("/").pop() ?? id } : undefined;
+}
+
 const obsById = new Map(analysis.observations.map((o) => [o.id, o]));
 const itemId = (eventId: string) => `btk-${eventId}`;
 
@@ -193,6 +202,7 @@ function buildItems(): TimelineItem[] {
       status: "filed",
       flag: "agrees",
       ...(image ? { page: image } : {}),
+      ...(clipFor(cits) ? { clip: clipFor(cits)! } : {}),
     };
   });
 
@@ -345,8 +355,9 @@ function buildSources(itemsByQuote: Map<string, string>): Source[] {
         meta: s.pages ? `${s.pages} pages · ${pages.length} cited with checked quotes` : s.type.replace(/_/g, " "),
         subtitle: `${s.title}. ${s.origin}. ${s.note ?? ""}`.trim(),
         provenance: "public-record",
-        available: pages.length > 0,
+        available: pages.length > 0 || !!LOCAL_CLIPS[s.id],
         url: pdfLink(s),
+        ...(LOCAL_CLIPS[s.id] ? { localVideo: LOCAL_CLIPS[s.id]! } : {}),
         blocks: pages.map(([page, quotes]) => ({
           heading: s.id === "CHURCH" ? "Congregation council officers" : `PDF page ${page}`,
           paragraphs: [...quotes].map((q, k): Paragraph => {

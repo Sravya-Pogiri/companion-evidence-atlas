@@ -47,6 +47,8 @@ export interface Source {
   url: string | null;
   blocks?: Block[];
   video?: VideoId;
+  /** A local copy of a video that is not on YouTube (under /public/media). */
+  localVideo?: string;
 }
 
 const ROSALES_SOURCES: Source[] = [

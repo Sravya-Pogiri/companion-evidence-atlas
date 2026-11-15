@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { FrameThumb, PlayableStill } from "@/components/caselens/evidence-media";
+import { FrameThumb, LocalClip, PlayableStill } from "@/components/caselens/evidence-media";
 import { useCase } from "@/lib/case-store";
 import { segment, type Mark } from "@/lib/highlight";
 import { FRAMES } from "@/lib/media";
@@ -99,6 +99,7 @@ function SourceBody({
   flashKey: string | null;
 }) {
   if (!source) return <p className="text-muted-foreground">This source is not in the case.</p>;
+  if (source.kind === "video" && !source.video) return <ClipSource source={source} />;
   if (source.kind === "video")
     return <VideoSource source={source} flashAnchor={flashAnchor} flashKey={flashKey} />;
   if (!source.available) return <MissingSource source={source} />;
@@ -154,7 +155,8 @@ function DocParagraph({
   const filed = new Set(items.map((i) => i.id));
   const marks: Mark[] = [
     ...(p.marks ?? [])
-      .filter((m) => filed.has(m.itemId))
+      // Passages behind timeline items, and behind document-only findings ("finding:<id>").
+      .filter((m) => filed.has(m.itemId) || m.itemId.startsWith("finding:"))
       .map((m) => ({ phrase: m.phrase, kind: "finding" as const, id: m.itemId })),
     ...(view === "entities"
       ? ENTITIES.flatMap((e) =>
@@ -232,6 +234,38 @@ export function EvidenceHighlight({
     >
       {text}
     </mark>
+  );
+}
+
+/** A video that is not on YouTube: its local copy, or a link to it, and what cites it. */
+function ClipSource({ source }: { source: Source }) {
+  const { items, focusItem } = useWorkspace();
+  const citing = items.filter((i) => (ITEM_CITATIONS[i.id] ?? []).some((c) => c.source === source.id));
+  return (
+    <article>
+      <DocHeader label="Source · Public record · Video" title={source.title} subtitle={source.subtitle} url={source.url} />
+      <div className="mt-7">
+        {source.localVideo ? (
+          <LocalClip src={source.localVideo} href={source.url} label={source.title} className="rounded-lg" />
+        ) : (
+          <p className="text-[15px] text-muted-foreground">No copy of this video is in the packet. Open it from the link above.</p>
+        )}
+      </div>
+      {citing.length > 0 && (
+        <section className="mt-9">
+          <h2 className="font-serif text-[26px] leading-snug">Cited by</h2>
+          <ul className="mt-3 space-y-2">
+            {citing.map((i) => (
+              <li key={i.id}>
+                <button type="button" onClick={() => focusItem(i.id)} className="text-left text-[17px] text-primary hover:underline">
+                  {i.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </article>
   );
 }
 
