@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { segment } from "@/lib/highlight";
-import { ITEMS } from "@/lib/sample-case";
+import { SAMPLE_ITEMS as ITEMS } from "@/lib/sample-case";
 import {
   ENTITIES,
   ITEM_CITATIONS,

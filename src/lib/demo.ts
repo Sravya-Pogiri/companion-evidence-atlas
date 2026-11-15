@@ -11,17 +11,30 @@ interface Step {
   file?: string[];
 }
 
-const SCRIPT: Step[] = [
-  { message: "m1" },
-  { message: "m2" },
-  { message: "m3", file: ["dashcam-approach", "turn-left"] },
-  { message: "m4" },
-  { message: "m5", file: ["complaint-reason", "opinion-signal"] },
-  { message: "m6" },
-  { message: "m7", file: ["bodycam-after-stop"] },
-  { message: "m8" },
-  { message: "m9", file: ["dispatch-missing", "activation-missing"] },
-];
+/**
+ * The script follows the loaded conversation: each agent reply files the item it is about and
+ * the items compared with it; anything left is filed with the last reply. So the demo shows the
+ * same findings as the case, whether they come from the evidence analysis or the sample.
+ */
+function buildScript(): Step[] {
+  const filed = new Set<string>();
+  const steps: Step[] = CONVERSATION.map((m) => {
+    if (m.from !== "agent" || !m.itemId) return { message: m.id };
+    const item = ITEMS.find((i) => i.id === m.itemId);
+    const ids = ITEMS.filter(
+      (i) => !filed.has(i.id) && (i.id === m.itemId || i.relatedId === m.itemId || i.id === item?.relatedId),
+    ).map((i) => i.id);
+    ids.forEach((id) => filed.add(id));
+    return { message: m.id, file: ids };
+  });
+  const rest = ITEMS.filter((i) => !filed.has(i.id)).map((i) => i.id);
+  const last = [...steps].reverse().find((s) => s.file);
+  if (rest.length) {
+    if (last) last.file = [...(last.file ?? []), ...rest];
+    else if (steps.length) steps[steps.length - 1]!.file = rest;
+  }
+  return steps;
+}
 
 const TEAM_GAP = 1300;
 const TYPING = 1100;
@@ -43,7 +56,7 @@ function buildEvents(onDone: () => void): Event[] {
   const order = new Map(ITEMS.map((i, n) => [i.id, n]));
   const events: Event[] = [];
   let at = 700;
-  for (const step of SCRIPT) {
+  for (const step of buildScript()) {
     const message = byId.get(step.message);
     if (!message) continue;
     if (message.from === "agent") {

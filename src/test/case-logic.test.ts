@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { decide, getDecisions, resetDecisions } from "@/lib/review-store";
 import {
-  ITEMS,
+  SAMPLE_ITEMS as ITEMS,
   formatTime,
   handoffItems,
   itemsAt,

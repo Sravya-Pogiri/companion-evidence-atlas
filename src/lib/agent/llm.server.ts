@@ -1,6 +1,7 @@
 // Server only. The model calls behind the pipeline, shared by the browser's server functions
 // (agent.functions.ts) and the Photon webhook, which runs the pipeline on the server.
-import { COMPARE_SYSTEM, DESCRIBE_SYSTEM, askJson } from "@/lib/agent/gateway.server";
+import { COMPARE_SYSTEM, DESCRIBE_SYSTEM } from "@/lib/agent/gateway.server";
+import { askJson } from "@/lib/ai/provider.server";
 import type {
   AgentLlm,
   CompareInput,

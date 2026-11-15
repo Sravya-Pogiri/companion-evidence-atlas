@@ -1,0 +1,388 @@
+{
+ "caseId": "rosales",
+ "generatedAt": "2026-11-15T02:34:05.587Z",
+ "models": {
+  "text": "auto",
+  "vision": "auto",
+  "audio": "auto"
+ },
+ "timings": {
+  "transcription": 0,
+  "frame description": 0,
+  "claim extraction": 0,
+  "claim verification": 0.5,
+  "cross-check": 0,
+  "total": 0.5
+ },
+ "sources": [
+  {
+   "id": "complaint",
+   "kind": "pdf",
+   "label": "Filed complaint, No. 1:22-cv-05838 (W.D. La.)",
+   "url": "https://ij.org/wp-content/uploads/2022/10/LA-Rosales-Traffic-Stop-Complaint.pdf",
+   "sha256": "8840d2c82e2c67b09e571ff2dc84298b5ee3ec228915fda0b6dadb9cd4d3370a",
+   "pages": 40
+  },
+  {
+   "id": "opinion",
+   "kind": "pdf",
+   "label": "Fifth Circuit opinion, No. 25-30650",
+   "url": "https://www.govinfo.gov/content/pkg/USCOURTS-ca5-25-30650/pdf/USCOURTS-ca5-25-30650-0.pdf",
+   "sha256": "e8b86216ed8dd613b28d070d9c5e6317721f9e3c18415c1e9cc67c83d4d03973",
+   "pages": 24
+  },
+  {
+   "id": "dashcam",
+   "kind": "video",
+   "label": "Patrol dashcam (public video)",
+   "url": "https://www.youtube.com/watch?v=xqvFJ8yzDfw",
+   "sha256": "030de98e1818aac837882bee7a9b5514ccb197a9cec552e6c21d380c1005c371",
+   "duration": 1443.89
+  },
+  {
+   "id": "bodycam",
+   "kind": "video",
+   "label": "Officer bodycam (public video)",
+   "url": "https://www.youtube.com/watch?v=Z6z35SUVpdQ",
+   "sha256": "54c00262cd64e43f1bb78a4a53d6e1e3e3bf0ab53ee050f8defb8b600edd5340",
+   "duration": 1280.12
+  }
+ ],
+ "claims": [
+  {
+   "id": "complaint-001",
+   "origin": "document",
+   "claim": "While Officer Lewis was allegedly questioning Gracie, Officer Terrell appears to have been questioning Mario, who reportedly asked if Officer Terrell had his phone.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 24,
+    "paragraph": 205
+   },
+   "exactQuote": "While Officer Lewis was interrogating Gracie, Officer Terrell was interrogating Mario. But before Officer Terrell began asking Mario questions, Mario asked Officer Terrell if he had Mario’s phone.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-002",
+   "origin": "document",
+   "claim": "Officer Terrell reportedly claimed at first that he did not have the phone, but later indicated that it was in the police vehicle.",
+   "actor": "Officer Terrell",
+   "location": "police vehicle",
+   "at": {
+    "source": "complaint",
+    "page": 24,
+    "paragraph": 206
+   },
+   "exactQuote": "Officer Terrell initially said that he did not, but later said he did have Mario’s phone in the police vehicle.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-003",
+   "origin": "document",
+   "claim": "Mario appears to have asked Officer Terrell to explain why he was being stopped.",
+   "actor": "Mario",
+   "at": {
+    "source": "complaint",
+    "page": 24,
+    "paragraph": 207
+   },
+   "exactQuote": "Mario then asked, “So, can you be honest with me? Why am I being stopped?”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-004",
+   "origin": "document",
+   "claim": "Officer Terrell reportedly stated that the traffic stop occurred because of an alleged failure to signal.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 24,
+    "paragraph": 208
+   },
+   "exactQuote": "Officer Terrell responded, “Failure to signal. That’s straight, pure and straight honest answer. You failed to signal, so we stopped you.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-005",
+   "origin": "document",
+   "claim": "Officer Terrell appears to have asked Mario where he lived, and Mario reportedly repeated what he had previously told Officer Lewis.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 24,
+    "paragraph": 209
+   },
+   "exactQuote": "Officer Terrell asked Mario about where he lives. Mario reiterated what he had told Officer Lewis.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-006",
+   "origin": "document",
+   "claim": "Officer Lewis appears to have looked into Mario's vehicle again.",
+   "actor": "Officer Lewis",
+   "location": "Mario’s car",
+   "at": {
+    "source": "complaint",
+    "page": 24,
+    "paragraph": 210
+   },
+   "exactQuote": "Meanwhile, Officer Lewis was once again peering into Mario’s car:",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-007",
+   "origin": "document",
+   "claim": "Officers may have alleged that Rosales failed to use his left turn signal for a lane change and a left turn at least one hundred feet prior to turning.",
+   "actor": "Rosales",
+   "at": {
+    "source": "opinion",
+    "page": 10
+   },
+   "exactQuote": "Rosales failed to use his left turn signal to indicate a lane change and a left turn at least one hundred feet before turning.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-008",
+   "origin": "document",
+   "claim": "The video recording appears to show that Rosales changed lanes prior to being pulled over.",
+   "actor": "Rosales",
+   "at": {
+    "source": "opinion",
+    "page": 10
+   },
+   "exactQuote": "video evidence clearly demonstrates that Rosales changed lanes before being pulled over",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-009",
+   "origin": "document",
+   "claim": "It does not appear clear from the video whether the turn signal on the Mustang was activated in compliance with state law.",
+   "actor": "Rosales",
+   "at": {
+    "source": "opinion",
+    "page": 10
+   },
+   "exactQuote": "whether the Mustang’s left turn signal was activated in accordance with Louisiana law is not apparent from the video.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-010",
+   "origin": "document",
+   "claim": "The complaint reportedly alleges that officers issued Rosales a traffic ticket after fabricating an infraction.",
+   "actor": "Officers",
+   "at": {
+    "source": "opinion",
+    "page": 11
+   },
+   "exactQuote": "asserts that Officers “concoct[ed] a baseless traffic infraction after the fact to support their actions,” and issued Rosales an “invalid traffic ticket.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-011",
+   "origin": "document",
+   "claim": "Appellees allege that Rosales activated his turn signal and executed a left turn at an intersection.",
+   "actor": "Rosales",
+   "location": "an intersection",
+   "at": {
+    "source": "opinion",
+    "page": 11
+   },
+   "exactQuote": "Appellees allege that Rosales used his blinker to indicate a left turn and “legally turned left” at an intersection.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-012",
+   "origin": "document",
+   "claim": "The video appears to depict officers pulling behind the Mustang near an intersection while its left turn signal was already activated.",
+   "actor": "Officers",
+   "location": "an intersection",
+   "at": {
+    "source": "opinion",
+    "page": 11
+   },
+   "exactQuote": "shows Officers pull behind the Mustang as it approached an intersection, and the left turn signal was already activated as the Mustang’s lights come into view.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-013",
+   "origin": "document",
+   "claim": "The timing of when Rosales activated the turn signal relative to the turn does not appear clear from the video.",
+   "actor": "Rosales",
+   "at": {
+    "source": "opinion",
+    "page": 11
+   },
+   "exactQuote": "not clear from the video when Rosales activated the signal—i.e., whether it was activated at least one hundred feet before the turn.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "dashcam-014",
+   "origin": "video",
+   "claim": "A red car and a white vehicle appear in the traffic lanes ahead as the camera vehicle proceeds.",
+   "at": {
+    "source": "dashcam",
+    "t": 40
+   },
+   "verification": {
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "A red car and a white vehicle are visible in the travel lanes directly ahead of the camera view."
+   },
+   "frameRef": "/frames/analysis/dashcam-0040.jpg"
+  },
+  {
+   "id": "dashcam-015",
+   "origin": "video",
+   "claim": "The camera vehicle appears to approach behind a red car and a dark SUV.",
+   "at": {
+    "source": "dashcam",
+    "t": 44
+   },
+   "verification": {
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: The SUV visible ahead alongside the red car appears to be light-colored rather than dark."
+   }
+  },
+  {
+   "id": "dashcam-016",
+   "origin": "video",
+   "claim": "A red car and a dark sedan appear visible stopped or moving slowly ahead.",
+   "at": {
+    "source": "dashcam",
+    "t": 48
+   },
+   "verification": {
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "A red car is visible directly ahead in the lane, and part of a dark vehicle appears visible on the right side of the frame."
+   },
+   "frameRef": "/frames/analysis/dashcam-0048.jpg"
+  },
+  {
+   "id": "dashcam-017",
+   "origin": "video",
+   "claim": "The camera vehicle appears positioned on the roadway behind a red car.",
+   "at": {
+    "source": "dashcam",
+    "t": 64
+   },
+   "verification": {
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "The image shows a forward view from a vehicle traveling on a paved roadway directly behind a red car in the right lane."
+   },
+   "frameRef": "/frames/analysis/dashcam-0064.jpg"
+  },
+  {
+   "id": "dashcam-018",
+   "origin": "video",
+   "claim": "An individual appearing to wear a dark uniform is visible on the right side of the frame.",
+   "at": {
+    "source": "dashcam",
+    "t": 78
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "dashcam-019",
+   "origin": "video",
+   "claim": "The driver-side door of the red car appears to open while an individual wearing a dark uniform stands on the right.",
+   "at": {
+    "source": "dashcam",
+    "t": 94
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  }
+ ],
+ "findings": [
+  {
+   "id": "finding-1",
+   "kind": "agrees",
+   "title": "Stated reason for the traffic stop",
+   "explanation": "Officer Terrell's reported statement during the stop that the vehicle failed to signal appears to align with the officers' position described in the court opinion.",
+   "claimIds": [
+    "complaint-004",
+    "opinion-007"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-2",
+   "kind": "agrees",
+   "title": "Officer positioning behind the suspect vehicle",
+   "explanation": "The dashcam footage depicting the camera vehicle positioned behind a red car appears consistent with the court opinion's description of officers pulling behind the Mustang.",
+   "claimIds": [
+    "dashcam-017",
+    "opinion-012"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-3",
+   "kind": "missing",
+   "title": "Dispatch audio recording",
+   "explanation": "An audio recording from dispatch, which typically logs traffic stops, appears to be missing from the evidence record.",
+   "claimIds": [
+    "dispatch"
+   ],
+   "status": "verified"
+  }
+ ],
+ "log": [
+  "analyze rosales",
+  "  transcription skipped (--skip-audio)",
+  "  transcription: 0s",
+  "  frame description: 0s",
+  "  claim extraction: 0s",
+  "  claim verification: 0.5s",
+  "  cross-check: 0s"
+ ]
+}

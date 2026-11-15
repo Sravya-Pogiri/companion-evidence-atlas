@@ -2,8 +2,9 @@ import express from 'express';
 import { timingSafeEqual } from 'node:crypto';
 import { investigate } from './investigate.ts';
 import { safeError } from './gateway-safety.ts';
+import { modelConfig } from './provider.ts';
 const app=express();app.use(express.json({limit:'16kb'}));
-app.get('/health',(_req,res)=>res.status(process.env['LOVABLE_API_KEY']&&process.env['INVESTIGATOR_TOKEN']?200:503).json({status:process.env['LOVABLE_API_KEY']&&process.env['INVESTIGATOR_TOKEN']?'ready':'setup_required',sdk:'deepagents',model:'openai/gpt-6-astra'}));
+app.get('/health',(_req,res)=>{const cfg=modelConfig();const ready=!!cfg&&!!process.env['INVESTIGATOR_TOKEN'];res.status(ready?200:503).json({status:ready?'ready':'setup_required',sdk:'deepagents',provider:cfg?.provider??null,model:cfg?.model??null});});
 app.post('/investigate',async(req,res)=>{
  const token=process.env['INVESTIGATOR_TOKEN'];const supplied=req.headers.authorization?.replace(/^Bearer /,'');
  if(!token||!supplied||Buffer.byteLength(token)!==Buffer.byteLength(supplied)||!timingSafeEqual(Buffer.from(token),Buffer.from(supplied))){res.status(401).json({error:'Investigator service authorization failed'});return;}

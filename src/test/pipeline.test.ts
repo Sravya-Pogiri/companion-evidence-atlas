@@ -8,7 +8,7 @@ import {
   type PipelineState,
 } from "@/lib/agent/pipeline";
 import type { Attachment } from "@/lib/channel/types";
-import { ITEMS } from "@/lib/sample-case";
+import { SAMPLE_ITEMS as ITEMS } from "@/lib/sample-case";
 
 const NOW = new Date("2026-11-14T15:00:00");
 const seed = (): PipelineState => ({ items: ITEMS, pendingId: null });

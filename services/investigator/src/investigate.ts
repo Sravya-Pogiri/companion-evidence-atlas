@@ -11,6 +11,9 @@ import { resolve } from 'node:path';
 import { createResponsesCall } from './responses.ts';
 import { createLovableAiGatewayRunIdFetch } from './run-id.ts';
 import { checkGatewayPause, safeGatewayFetch, safeError } from './gateway-safety.ts';
+import { modelConfig } from './provider.ts';
+import { createOpenAI } from '@ai-sdk/openai';
+import { generateText } from 'ai';
 const exec = promisify(execFile);
 export const caseIds = ['conflicting','matching','incomplete'] as const;
 const reference = z.object({sourceId:z.enum(['report','video','transcript','dispatch']),page:z.number().nullable(),start:z.number().nullable(),end:z.number().nullable(),rowId:z.string().nullable()}).strict();
@@ -19,11 +22,13 @@ export type Check = {tool:string;status:'completed'|'failed';result:string;refer
 const root = resolve(import.meta.dirname,'../fixtures');
 export async function investigate(caseId:string,emit:(check:Check)=>void = ()=>{},signal?:AbortSignal) {
  if(!caseIds.includes(caseId as typeof caseIds[number]))throw new Error('Unknown synthetic case');
- const key=process.env['LOVABLE_API_KEY']; if(!key)throw new Error('Setup error: LOVABLE_API_KEY is missing in the investigator service.');
+ const cfg=modelConfig(); if(!cfg)throw new Error('Setup error: set GEMINI_API_KEY (or LOVABLE_API_KEY) in the investigator service.'); const key=cfg.apiKey;
  await checkGatewayPause();
  const dir=resolve(root,caseId);const manifest=JSON.parse(await readFile(resolve(dir,'manifest.json'),'utf8'));
  const checks:Check[]=[];const gateway=createLovableAiGatewayRunIdFetch();
- const model=new ChatOpenAI({model:'openai/gpt-6-astra',apiKey:key,useResponsesApi:true,streaming:true,zdrEnabled:true,reasoning:{effort:'low',summary:'auto'},include:['reasoning.encrypted_content'],maxRetries:0,configuration:{baseURL:'https://ai.gateway.lovable.dev/v1',defaultHeaders:{'Lovable-API-Key':key,'X-Lovable-AIG-SDK':'langchain'},fetch:safeGatewayFetch(gateway.fetch)}});
+ const model=cfg.provider==='gemini'
+  ? new ChatOpenAI({model:cfg.model,apiKey:key,maxRetries:0,configuration:{baseURL:cfg.baseURL,fetch:safeGatewayFetch(fetch)}})
+  : new ChatOpenAI({model:'openai/gpt-6-astra',apiKey:key,useResponsesApi:true,streaming:true,zdrEnabled:true,reasoning:{effort:'low',summary:'auto'},include:['reasoning.encrypted_content'],maxRetries:0,configuration:{baseURL:'https://ai.gateway.lovable.dev/v1',defaultHeaders:{'Lovable-API-Key':key,'X-Lovable-AIG-SDK':'langchain'},fetch:safeGatewayFetch(gateway.fetch)}});
  const ref=(sourceId:'report'|'video'|'transcript'|'dispatch',values:Partial<z.infer<typeof reference>>={})=>({sourceId,page:null,start:null,end:null,rowId:null,...values});
  const completed=async(name:string,operation:()=>Promise<{result:unknown;references:z.infer<typeof reference>[]}>)=>{try{const output=await operation();const check:Check={tool:name,status:'completed',result:typeof output.result==='string'?output.result:JSON.stringify(output.result),references:output.references};checks.push(check);emit(check);return output;}catch(e){const check:Check={tool:name,status:'failed',result:safeError(e).message,references:[]};checks.push(check);emit(check);throw e;}};
  const tools=[
@@ -33,6 +38,8 @@ export async function investigate(caseId:string,emit:(check:Check)=>void = ()=>{
  tool(async({start,end})=>completed(start<10?'Checked video lead-up':'Checked video window',async()=>{
   if(start<manifest.coverage.start||end>manifest.coverage.end||end<=start)throw new Error('Requested video interval is not available');
   const frames=[];for(const time of [start,(start+end)/2,Math.max(start,end-.2)]){const {stdout}=await exec('ffmpeg',['-loglevel','error','-ss',String(time-manifest.coverage.start),'-i',resolve(dir,'bodycam.mp4'),'-frames:v','1','-f','image2pipe','-vcodec','mjpeg','-'],{encoding:'buffer',maxBuffer:5*1024*1024});frames.push({time,image:stdout});}
+  const visionPrompt=`Inspect only these sampled frames from the ORIGINAL synthetic clip at absolute seconds ${frames.map(f=>f.time).join(', ')}. Describe whether the rear trunk lid is closed or open in each frame. Do not infer speech, requests, consent, or unseen events. Concise factual observations only.`;
+  if(cfg.provider==='gemini'){const gem=createOpenAI({baseURL:cfg.baseURL,apiKey:key,fetch:safeGatewayFetch(fetch)});const {text}=await generateText({model:gem.chat(cfg.model),maxRetries:0,...(signal?{abortSignal:signal}:{}),messages:[{role:'user',content:[{type:'text',text:visionPrompt},...frames.map(f=>({type:'image' as const,image:f.image}))]}]});if(!text.trim())throw new Error('Vision model returned no observation');return {result:{window:{start,end},sampledAt:frames.map(f=>f.time),observation:text},references:[ref('video',{start,end})]};}
   const req=new Request('http://internal/vision',{...(signal?{signal}:{}),headers:gateway.getRunId()?{'X-Lovable-AIG-Run-ID':gateway.getRunId() as string}:{}});
   const {result}=createResponsesCall(req,{baseURL:'https://ai.gateway.lovable.dev/v1',apiKey:key,model:'openai/gpt-6-astra'},[{role:'user',content:[{type:'text',text:`Inspect only these sampled frames from the ORIGINAL synthetic clip at absolute seconds ${frames.map(f=>f.time).join(', ')}. Describe whether the rear trunk lid is closed or open in each frame. Do not infer speech, requests, consent, or unseen events. Concise factual observations only.`},...frames.map(f=>({type:'image' as const,image:f.image}))]}]);
   const observed=await result.text;if(!observed.trim())throw new Error('Vision model returned no observation');return {result:{window:{start,end},sampledAt:frames.map(f=>f.time),observation:observed},references:[ref('video',{start,end})]};

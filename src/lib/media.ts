@@ -77,10 +77,21 @@ export function nearestFrame(v: VideoId, at: number): Frame {
 
 /** The still or page that belongs to an item, when the sample has one. */
 export function mediaFor(
-  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink">,
+  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame">,
 ): ItemMedia | null {
   const known = BY_ITEM[item.id];
   if (known) return known;
+  // Items from the evidence analysis carry their own verified frame.
+  if (item.frame && (item.lane === "dashcam" || item.lane === "bodycam")) {
+    return { ...(video(item.lane, item.start) as Extract<ItemMedia, { kind: "video" }>), frame: item.frame };
+  }
+  // Document items: use the rendered page only when it is the cited page.
+  if (item.sourceLink?.endsWith(`#page=${PAGES.complaint.page}`) && item.sourceLink.includes("Complaint")) {
+    return { kind: "page", page: PAGES.complaint };
+  }
+  if (item.sourceLink?.endsWith(`#page=${PAGES.opinion.page}`) && item.sourceLink.includes("ca5-25-30650")) {
+    return { kind: "page", page: PAGES.opinion };
+  }
   // Items filed during the demo: footage lanes get the nearest real frame from that video.
   const lane = item.lane as Lane;
   if (lane === "dashcam" || lane === "bodycam") return video(lane, item.start);

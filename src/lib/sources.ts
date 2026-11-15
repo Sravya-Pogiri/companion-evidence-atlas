@@ -1,5 +1,7 @@
 import { sourceLinks } from "@/lib/case-data";
+import { normalizeText } from "@/lib/evidence/verify";
 import type { VideoId } from "@/lib/media";
+import { ANALYSIS_CLAIMS, ITEMS } from "@/lib/sample-case";
 
 // The sources of the public sample case and the text the workspace shows for them.
 // Document text is copied from the public PDFs (complaint page 24; opinion pages 1 and 11),
@@ -229,7 +231,7 @@ export const SOURCES: Source[] = [
 ];
 
 /** Where each sample timeline item is found. Items filed from messages cite the message. */
-export const ITEM_CITATIONS: Record<string, Citation[]> = {
+const SAMPLE_CITATIONS: Record<string, Citation[]> = {
   "dashcam-approach": [{ source: "dashcam", t: 45 }],
   "turn-left": [{ source: "dashcam", t: 58 }],
   "bodycam-after-stop": [{ source: "bodycam", t: 80 }],
@@ -241,6 +243,34 @@ export const ITEM_CITATIONS: Record<string, Citation[]> = {
   "activation-missing": [{ source: "opinion", para: "p11-2" }],
   "dispatch-missing": [{ source: "dispatch" }],
 };
+
+/**
+ * Citations for items from the evidence analysis: video claims cite their second; document
+ * claims cite the paragraph shown in the viewer that contains the verified quote (and mark the
+ * quote there), or the document as a whole when the viewer does not include that passage.
+ */
+function analysisCitations(): Record<string, Citation[]> {
+  const out: Record<string, Citation[]> = {};
+  for (const [itemId, claims] of Object.entries(ANALYSIS_CLAIMS)) {
+    out[itemId] = claims.map((c): Citation => {
+      if ("t" in c.at) return { source: c.at.source, t: c.at.t };
+      const quote = c.exactQuote ?? "";
+      const paragraphs = SOURCES.find((s) => s.id === c.at.source)?.blocks?.flatMap((b) => b.paragraphs) ?? [];
+      const hit = quote ? paragraphs.find((p) => normalizeText(p.text).includes(normalizeText(quote))) : undefined;
+      if (!hit) return { source: c.at.source };
+      if (hit.text.includes(quote)) hit.marks = [...(hit.marks ?? []), { phrase: quote, itemId }];
+      return { source: c.at.source, para: hit.id };
+    });
+  }
+  // A missing record cites the referenced-but-absent source when the viewer lists it.
+  for (const item of ITEMS) {
+    const id = item.id.startsWith("missing-") ? item.id.slice("missing-".length) : null;
+    if (id && SOURCES.some((s) => s.id === id)) out[item.id] = [{ source: id }];
+  }
+  return out;
+}
+
+export const ITEM_CITATIONS: Record<string, Citation[]> = { ...SAMPLE_CITATIONS, ...analysisCitations() };
 
 export type EntityType = "Person" | "Place" | "Date" | "Organization";
 

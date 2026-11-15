@@ -1,4 +1,5 @@
 import { DEMO_CASE, sourceLinks } from "@/lib/case-data";
+import { loadAnalysis, seedFromAnalysis } from "@/lib/evidence/seed";
 
 // One data set feeds Live Case, Review, and Handoff. Public sample only:
 // Rosales v. Terrell (public footage and filings). Times on the shared axis are
@@ -27,6 +28,8 @@ export interface TimelineItem {
   relatedId?: string;
   /** When it was filed through the message pipeline (ISO). Sample items have none. */
   filedAt?: string;
+  /** A verified still for this item (from the evidence analysis), under /public. */
+  frame?: string;
 }
 
 export interface ChatMessage {
@@ -54,15 +57,24 @@ export const VIDEOS = {
   dashcam: { id: "xqvFJ8yzDfw", label: "Dashcam" },
 } as const;
 
+// The case the app opens with: verified findings from the evidence analysis when there are any
+// (scripts/evidence/analyze.ts -> src/data/rosales/analysis.json), else the hand-written sample.
+const SEED = (() => {
+  const analysis = loadAnalysis("rosales");
+  return analysis ? seedFromAnalysis(analysis, 90) : null;
+})();
+export const FROM_ANALYSIS = SEED !== null;
 export const SAMPLE_CASE = {
   name: DEMO_CASE.name,
   number: DEMO_CASE.id,
-  label: "Sample case · public footage",
+  // Says where the case data comes from: verified AI analysis, or the hand-written demo.
+  label: FROM_ANALYSIS ? "AI analysis (verified) · public sources" : "Hand-written demo · public footage",
 } as const;
 
 // Times on the shared axis follow the public dashcam (the approach is at about 0:45 and the
 // turn at about 0:58 in that video). The bodycam starts after the stop, so it sits later.
-export const ITEMS: TimelineItem[] = [
+/** The hand-written sample, used when there is no verified analysis. */
+export const SAMPLE_ITEMS: TimelineItem[] = [
   {
     id: "dashcam-approach", lane: "dashcam", start: 45, end: 55, status: "filed", flag: "agrees",
     label: "Mustang approaches, left signal appears on", short: "Mustang approaches",
@@ -108,7 +120,7 @@ export const ITEMS: TimelineItem[] = [
 ];
 
 // Seed transcript: what the team and the agent already said before the live demo starts.
-export const CONVERSATION: ChatMessage[] = [
+export const SAMPLE_CONVERSATION: ChatMessage[] = [
   { id: "m1", from: "team", attachment: "video", text: "Dashcam clip, from 0:45", itemId: "dashcam-approach" },
   { id: "m2", from: "agent", text: "File this as Dashcam: Mustang approaches, left signal appears on? Reply Y.", itemId: "dashcam-approach" },
   { id: "m3", from: "team", text: "Y" },
@@ -119,6 +131,9 @@ export const CONVERSATION: ChatMessage[] = [
   { id: "m8", from: "team", text: "What's missing?" },
   { id: "m9", from: "agent", text: "Possible gaps: no dispatch audio in the record, and the signal activation point is not shown (opinion, page 11).", itemId: "activation-missing" },
 ];
+
+
+
 
 export const FLAG_LABEL: Record<Flag, string> = {
   agrees: "Agrees",
@@ -186,3 +201,7 @@ export function shortLabel(item: Pick<TimelineItem, "label" | "short">, max = 28
 export function findItem(items: TimelineItem[], id: string | undefined): TimelineItem | undefined {
   return id ? items.find((i) => i.id === id) : undefined;
 }
+
+export const ITEMS: TimelineItem[] = SEED?.items ?? SAMPLE_ITEMS;
+export const CONVERSATION: ChatMessage[] = SEED?.conversation ?? SAMPLE_CONVERSATION;
+export const ANALYSIS_CLAIMS = SEED?.claimsByItem ?? {};

@@ -1,0 +1,43 @@
+{
+  "caseId": "rosales",
+  "title": "Rosales v. Terrell (public sample)",
+  "sources": [
+    {
+      "id": "complaint",
+      "kind": "pdf",
+      "file": "complaint.pdf",
+      "label": "Filed complaint, No. 1:22-cv-05838 (W.D. La.)",
+      "url": "https://ij.org/wp-content/uploads/2022/10/LA-Rosales-Traffic-Stop-Complaint.pdf",
+      "numberedParagraphs": true
+    },
+    {
+      "id": "opinion",
+      "kind": "pdf",
+      "file": "opinion.pdf",
+      "label": "Fifth Circuit opinion, No. 25-30650",
+      "url": "https://www.govinfo.gov/content/pkg/USCOURTS-ca5-25-30650/pdf/USCOURTS-ca5-25-30650-0.pdf",
+      "numberedParagraphs": false
+    },
+    {
+      "id": "dashcam",
+      "kind": "video",
+      "file": "dashcam.mp4",
+      "label": "Patrol dashcam (public video)",
+      "url": "https://www.youtube.com/watch?v=xqvFJ8yzDfw"
+    },
+    {
+      "id": "bodycam",
+      "kind": "video",
+      "file": "bodycam.mp4",
+      "label": "Officer bodycam (public video)",
+      "url": "https://www.youtube.com/watch?v=Z6z35SUVpdQ"
+    }
+  ],
+  "expected": [
+    {
+      "id": "dispatch",
+      "label": "Dispatch audio",
+      "why": "A traffic stop is normally logged with dispatch; no recording is in the record."
+    }
+  ]
+}
