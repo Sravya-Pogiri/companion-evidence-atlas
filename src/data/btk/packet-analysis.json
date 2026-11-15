@@ -1,0 +1,1962 @@
+{
+ "caseId": "btk",
+ "generatedAt": "2026-11-15T02:56:33.723Z",
+ "model": "cached",
+ "observations": [
+  {
+   "id": "B-001",
+   "type": "reported_evidence_intake",
+   "description": "KSAS-TV received the February 16, 2005 mailing described as Communication 11. The prosecution reports that Detective Dana Gouge collected the envelope, which held the purple diskette and accompanying items.",
+   "limitation": "The filing describes the initial transfer. Exhibit intake logs, full chain-of-custody forms, and the original envelope were not located as downloadable items.",
+   "entityIds": [
+    "KSAS",
+    "WPD",
+    "DISK",
+    "COMM11"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "This Is a Test",
+     "quotes": [
+      {
+       "text": "On February 16, 2005, Marcine Andrews, a receptionist for KSAS TV received a padded envelope with excess postage in the mail.",
+       "page": 42,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "Law enforcement was immediately notified and Detective Dana Gouge retrieved the envelope from KSAS.",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "section": "BTK vignette, printed p. 11",
+     "quotes": [
+      {
+       "text": "On February 16, 2005, Rader sent a floppy disk containing a message to a television station in Wichita.",
+       "page": 13,
+       "method": "text-layer"
+      }
+     ],
+     "status": "partial"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-002",
+   "type": "reported_digital_exam",
+   "description": "The prosecution reports that Detective Robert Stone examined the disk, found a valid file named Test A.RTF, and observed references to Dennis and Christ Lutheran Church in document properties.",
+   "limitation": "Sources describe disk properties and a deleted file differently. The disk image, file bytes, exact fields and recovery method remain unverified.",
+   "entityIds": [
+    "WPD",
+    "DISK",
+    "RTF",
+    "DENNIS_STRING",
+    "CHURCH_ENTITY"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "Disk examination paragraph",
+     "quotes": [
+      {
+       "text": "Detective Robert Stone performed a forensic examination of the disk. The disk contained one valid file titled “Test ARTF.”",
+       "page": 42,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "After locating the name of “Dennis” and ‘Christ Lutheran Church’ in the properties section of the document, Detective Stone conducted a Google search on the Internet for Christ Lutheran Chuch.",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "section": "BTK vignette",
+     "quotes": [
+      {
+       "text": "Examination of the disk properties revealed the words “Dennis” and “Christ Lutheran Church,” as well as other words relating to the Park City, Kansas, government.",
+       "page": 13,
+       "method": "text-layer"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "FBI_HISTORY",
+     "section": "BTK case paragraphs",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-003",
+   "type": "contemporaneous_public_record",
+   "description": "The verified Internet Archive capture lists Dennis Rader as congregation president on the church’s people page. The capture predates the KSAS mailing.",
+   "limitation": "Confirms the public listing. By itself it cannot identify the document’s editor or the sender.",
+   "entityIds": [
+    "RADER",
+    "CHURCH_ENTITY"
+   ],
+   "citations": [
+    {
+     "source": "CHURCH",
+     "section": "Congregation council officers, President entry",
+     "quotes": [
+      {
+       "text": "President: Dennis Rader",
+       "page": 1,
+       "method": "archived-html"
+      }
+     ],
+     "status": "passed",
+     "note": "Archived HTML line: President:  Dennis Rader"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-004",
+   "type": "reported_attribution_lead",
+   "description": "The state filing describes Stone’s online lookup following the disk examination. The lookup returned the church association and generated the named suspect lead.",
+   "limitation": "The shared given name and church are attribution clues. A separate evidence stream is needed to corroborate the person’s involvement.",
+   "entityIds": [
+    "DENNIS_STRING",
+    "CHURCH_ENTITY",
+    "RADER",
+    "WPD"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "Disk examination and website lookup",
+     "quotes": [
+      {
+       "text": "After locating the name of “Dennis” and ‘Christ Lutheran Church’ in the properties section of the document, Detective Stone conducted a Google search on the Internet for Christ Lutheran Chuch.",
+       "page": 42,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "Dennis Rader was listed as the President of the Congregation. Members of the BTK Task Force quickly determined that Dennis Rader was a compliance officer for the city of Park City",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "section": "BTK vignette",
+     "quotes": [],
+     "status": "failed"
+    },
+    {
+     "source": "CHURCH",
+     "section": "Congregation council officers",
+     "quotes": [
+      {
+       "text": "President: Dennis Rader",
+       "page": 1,
+       "method": "archived-html"
+      }
+     ],
+     "status": "passed",
+     "note": "Archived HTML line: President:  Dennis Rader"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-005",
+   "type": "reported_surveillance",
+   "description": "The prosecution describes January 8 store security video showing a dark SUV that could have been a Jeep Cherokee. After the disk lead, detectives reported seeing a similar vehicle in Rader’s driveway.",
+   "limitation": "The person in the store tape was reported unidentifiable. The description supports a vehicle-type comparison only. Original video was not located in the reviewed public sources.",
+   "entityIds": [
+    "CCTV",
+    "SUV",
+    "RADER"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 40,
+     "section": "Security tape description",
+     "quotes": [
+      {
+       "text": "A review of Home Depot security tape of January 8, 2005, shows a dark-colored SUV type vehicle possibly a Jeep Cherokee pulling alongside Mr. Bishop’s truck.",
+       "page": 40,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "Vehicle observation",
+     "quotes": [
+      {
+       "text": "Detectives Clint Snyder and Tim Relph drove by 6220 North Independence and noticed a black Jeep Grand Cherokee in the driveway,",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "partial"
+    }
+   ],
+   "status": "partial"
+  },
+  {
+   "id": "B-006",
+   "type": "reported_crime_scene_dna_comparison",
+   "description": "The state’s filing quotes April 2004 county lab findings linking profiles from evidence in the Otero, Fox, and Wegerle cases to a common unknown male contributor.",
+   "limitation": "The conclusions use inclusion and exclusion language. Underlying electropherograms and original county reports were not acquired.",
+   "entityIds": [
+    "OTERO",
+    "FOX",
+    "WEGERLE",
+    "COUNTY_LAB",
+    "UNKNOWN_PROFILE"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "pageEnd": 43,
+     "section": "County lab findings continued on the next page",
+     "quotes": [
+      {
+       "text": "Shelly Steadman, Biology/DNA Laboratory Manager of the Sedgwick County Regional Forensic Science Center (SCRFSC), performed Polymerase Chain Reaction (PCR) DNA analysis on the blue robe found near the head of Nancy Fox.",
+       "page": 42,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "In April 2004, the Otero, Fox and Wegerle homicides were connected through DNA evidence.",
+       "page": 43,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "This individual cannot be excluded as the major contributor to the profile obtained from the left-hand fingernail scrapings of Vicki Wegerle.”",
+       "page": 43,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-007",
+   "type": "reported_familial_dna_step",
+   "description": "A court-authorized family reference was delivered to KBI on February 22, 2005. The prosecution reports that the Otero-scene profile could not be excluded as a biological parent of the reference contributor.",
+   "limitation": "A kinship comparison is an investigative lead. Its strength and methods require the underlying laboratory report.",
+   "entityIds": [
+    "KBI",
+    "FAMILY_REF",
+    "UNKNOWN_PROFILE",
+    "OTERO"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "Reference obtained by court order",
+     "quotes": [
+      {
+       "text": "A biological sample ftom a medical procedure on Kerri Rader, Rader’s daughter, was obtained by Court order.",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "STATE",
+     "page": 43,
+     "section": "KBI comparison",
+     "quotes": [
+      {
+       "text": "Senior Special Agent Ray Lundin of the Kansas Bureau of Investigation (KBI) and a member of the BTK Task Force delivered Kerri Rader’s biological sample to the KBI Forensic Laboratory in Topeka on February 22, 2005.",
+       "page": 43,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "The testing confirmed that the “unknown male individual” responsible for the semen left on the basement floor of the Otero home could not be excluded from being the parent of Kerri Rader.",
+       "page": 43,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "section": "DNA and digital evidence overview",
+     "quotes": [],
+     "status": "failed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-008",
+   "type": "reported_direct_dna_comparison",
+   "description": "The prosecution separately describes oral swabs taken from Rader after arrest. It reports KBI and county laboratory comparisons with earlier crime-scene profiles, including the Otero swabs.",
+   "limitation": "Preserve the source’s profile-specific distinctions and reported match or non-exclusion language. The packet contains the filed description of those comparisons.",
+   "entityIds": [
+    "RADER",
+    "RADER_REF",
+    "KBI",
+    "COUNTY_LAB",
+    "OTERO",
+    "FOX",
+    "WEGERLE"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 45,
+     "pageEnd": 46,
+     "section": "DNA section",
+     "quotes": [
+      {
+       "text": "Detective Gouge took four oral swabs (4). Two (2) swabs were delivered by Detective Gouge to the SCRFSC.",
+       "page": 45,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "Short tandem repeat (STR) DNA analysis was performed on the oral swabs of Dennis Rader by Ms. Schueler of the KBI Forensic Laboratory and a profile at 13 loci was obtained.",
+       "page": 45,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "Schueler’s report states, “The estimated frequency of the [Otero swab profile] in the unrelated general population is 1 in 23 quadrillion.”",
+       "page": 46,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-009",
+   "type": "reported_arrest",
+   "description": "The prosecution places the arrest on February 25, 2005. Police publicly announced the arrest the following day.",
+   "limitation": "Dates distinguish taking custody from the public announcement.",
+   "entityIds": [
+    "RADER",
+    "WPD"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 43,
+     "section": "Arrest",
+     "quotes": [
+      {
+       "text": "At approximately 12:15 P.M. on February 25, 2005, Rader was taken into custody.",
+       "page": 43,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "section": "Factual background",
+     "quotes": [
+      {
+       "text": "On February 26, 2005, at a nationally televised press conference, the police announced that they had arrested Dennis L. Rader in connection with the BTK murders.",
+       "page": 5,
+       "method": "text-layer"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "CNN_PRESS",
+     "section": "Police announcement",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "partial"
+  },
+  {
+   "id": "B-010",
+   "type": "recorded_statement_excerpt",
+   "description": "The state describes a recorded law-enforcement interview after the arrest. ABC publishes an excerpt of that interview.",
+   "limitation": "The public excerpt is edited. The full recording and an official time-coded transcript were not located.",
+   "entityIds": [
+    "RADER",
+    "INTERVIEW"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 47,
+     "section": "Rader’s Statement",
+     "quotes": [
+      {
+       "text": "The interview of Dennis Rader took place in the FBI offices at the Epic Center. The interview was recorded.",
+       "page": 47,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "VIDEO_ABC_INTERVIEW",
+     "section": "Published excerpt",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "partial"
+  },
+  {
+   "id": "B-011",
+   "type": "reported_search_inventory",
+   "description": "The state describes binders, writings, communications and other media seized from Rader’s Park City office. It reports originals or full-sized versions of multiple communications in the collection.",
+   "limitation": "The inventory is a reported account. A described office disk should not be merged with the disk mailed to KSAS.",
+   "entityIds": [
+    "RADER",
+    "OFFICE_RECORDS",
+    "COMM11"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 87,
+     "pageEnd": 91,
+     "section": "The Mother Lode",
+     "quotes": [
+      {
+       "text": "While executing a search warrant on Dennis Rader’s office in Park City the BTK Task Force discovered what would come to be known as the “Mother Lode.”",
+       "page": 87,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "The binder is replete with originals ofthe BTK. communications and information not known to the public.",
+       "page": 88,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "Several full-sized versions of communications that were transferred to postcard size when the communications were sent to media outlets.",
+       "page": 89,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "There are several other 3 % inch computer disks, writings made by Dennis Rader, news and magazine clippings, books and puzzle books in the drawer.",
+       "page": 91,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "section": "Search warrant execution",
+     "quotes": [],
+     "status": "failed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-012",
+   "type": "primary_lab_result",
+   "description": "The released FBI Lab report records that no detectable DNA was recovered from the tested flap area of the October 2004 envelope specimen Q184.",
+   "limitation": "The negative result belongs to the tested area of Q184. It does not resolve DNA results from unrelated crime-scene specimens.",
+   "entityIds": [
+    "FBI_LAB",
+    "Q184"
+   ],
+   "citations": [
+    {
+     "source": "VAULT",
+     "page": 110,
+     "pageEnd": 111,
+     "section": "December 6, 2004 DNA Analysis Unit I report, lab 041015012 PO MD",
+     "quotes": [
+      {
+       "text": "No detectable DNA was recovered from the flap area of specimen Q184; therefore, no STR analysis was conducted.",
+       "page": 110,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "SCAN_Q184",
+     "section": "Image of PDF p. 110",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-013",
+   "type": "primary_questioned_document_result",
+   "description": "An FBI questioned-document report says typewriting on specimens Q184–Q186 was inconsistent with previously submitted documents.",
+   "limitation": "This comparison is limited to the submitted items and typewriting comparison described on those pages.",
+   "entityIds": [
+    "FBI_LAB",
+    "Q184"
+   ],
+   "citations": [
+    {
+     "source": "VAULT",
+     "page": 114,
+     "pageEnd": 115,
+     "section": "October 29, 2004 report",
+     "quotes": [
+      {
+       "text": "The typewriting appearing on the Q184 through Q186 specimens is not consistent with any of the documents previously submitted to this Laboratory in this matter.",
+       "page": 114,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "The typewriting on specimens Q184 through Q186 specimens most closely corresponds to Laboratory standards for a Courier style of type manufactured by Camwil.",
+       "page": 115,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-014",
+   "type": "excluded_lead",
+   "description": "A Kansas Supreme Court opinion records that a different man was publicly speculated about during the investigation and cleared by DNA testing in December 2004.",
+   "limitation": "The court opinion describes this as a cleared lead. No same-person or guilt edge should be attached to that person.",
+   "entityIds": [
+    "CLEARED_LEAD"
+   ],
+   "citations": [
+    {
+     "source": "VALADEZ",
+     "page": 4,
+     "pageEnd": 5,
+     "section": "Factual background, broadcast and testing",
+     "quotes": [
+      {
+       "text": "The news stated that Wichita police had a man in custody whom they were questioning \"in connection with the BTK investigation.\"",
+       "page": 4,
+       "method": "text-layer"
+      },
+      {
+       "text": "The DNA testing results came back on the afternoon of December 3, clearing Valadez of any criminal activities related to BTK.",
+       "page": 5,
+       "method": "text-layer"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-015",
+   "type": "formal_charges",
+   "description": "The Complaint/Information sets out ten first-degree murder counts and identifies the charged victims.",
+   "limitation": "The complaint records the state’s allegations at filing. Refer to the plea and judgment for adjudication.",
+   "entityIds": [
+    "RADER",
+    "COURT"
+   ],
+   "citations": [
+    {
+     "source": "COMPLAINT",
+     "page": 1,
+     "pageEnd": 5,
+     "section": "Counts One through Ten",
+     "quotes": [
+      {
+       "text": "one DENNIS L. RADER did then and there unlaw fully, kill a human being, to-wit: Joseph Otero",
+       "page": 1,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "COUNT TWO and on or about the 15\" day of January, 1974, A.D., in the County of Sedgwick, State of Kansas, one DENNISL. RADER did then and there unlawfully, kill a human being, to-wit: Julie Otero",
+       "page": 2,
+       "method": "vision-ocr, spacing ignored"
+      },
+      {
+       "text": "COUNT FIVE and on or about the 4* day of April, 1974, A.D., in the County of Sedgwick, State of Kansas, one DENNIS L. RADER did then and there unlaw fully, kill a human being, to-wit: Kathryn Bright",
+       "page": 3,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "COUNT TEN and on or about the 18h day of January, 1991, A.D., to the 19th day of January, 1991, A.D., in the County of Sedgwick, State of Kansas, one DENNIS L. RADER did then and there unlawfully, kill a human being, to-wit: Dolores E. Davis",
+       "page": 4,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "partial"
+    }
+   ],
+   "status": "partial"
+  },
+  {
+   "id": "B-016",
+   "type": "accepted_guilty_plea",
+   "description": "On June 27, 2005 the district court accepted guilty pleas on all ten first-degree murder counts.",
+   "limitation": "The transcript establishes plea and adjudication. It does not independently validate every forensic method described in the prosecution filing.",
+   "entityIds": [
+    "RADER",
+    "COURT"
+   ],
+   "citations": [
+    {
+     "source": "PLEA",
+     "page": 74,
+     "section": "Lines 1–16",
+     "quotes": [
+      {
+       "text": "I will accept these pleas of guilty and adjudge you, Dennis L. Rader, guilty of Murder in the First Degree in Count One",
+       "page": 74,
+       "method": "text-layer, spacing ignored"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "PLEA_MINUTE",
+     "page": 1,
+     "section": "Record of Trial or Plea",
+     "quotes": [],
+     "status": "failed"
+    },
+    {
+     "source": "JUDGMENT",
+     "page": 1,
+     "pageEnd": 2,
+     "section": "Plea proceedings",
+     "quotes": [
+      {
+       "text": "and that there is a factual basis for the plea, adjudges the defendant guilty as charged; the Court orders a Pre-Sentence Investigation and continues this case for sentencing.",
+       "page": 2,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-017",
+   "type": "sentence",
+   "description": "The court imposed ten consecutive life sentences in August 2005. The signed judgment records the court’s order.",
+   "limitation": "The signed journal entry in this packet was filed October 31. Sentencing and filing are separate events.",
+   "entityIds": [
+    "RADER",
+    "COURT"
+   ],
+   "citations": [
+    {
+     "source": "JUDGMENT",
+     "page": 3,
+     "pageEnd": 4,
+     "section": "Sentences on Counts One through Ten",
+     "quotes": [
+      {
+       "text": "IT IS THE SENTENCE OF THIS COURT AND IT IS HEREBY CONSIDERED, ORDERED, ADJUDGED AND DECREED that the defendant is hereby committed to the custody ofthe Secretary of Corrections for imprisonment",
+       "page": 3,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "NOW, on this 12'h day of October, 2005, this case comes on for further hearing before The Honorable Gregory L. Waller",
+       "page": 4,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "CNN_SENTENCING",
+     "section": "August 18 sentencing coverage",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    },
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "section": "Factual background",
+     "quotes": [
+      {
+       "text": "He was sentenced to 10 consecutive life terms.",
+       "page": 5,
+       "method": "text-layer"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-018",
+   "type": "evidence_disposition_order",
+   "description": "The court’s order directed destruction of certain investigation swabs, except swabs identifying Rader used in his arrest and conviction, and deferred disposition of other evidence pending appeal and further order.",
+   "limitation": "This is the court’s 2005 direction. The later exhibit inventory and status of particular items remain unverified.",
+   "entityIds": [
+    "COURT"
+   ],
+   "citations": [
+    {
+     "source": "DISPOSITION",
+     "page": 1,
+     "pageEnd": 2,
+     "section": "Court findings and order",
+     "quotes": [
+      {
+       "text": "except those swabs identifying the defendant and used in the arrest and conviction of the defendant, are no longer required as evidence and accordingly should be destroyed according to law.",
+       "page": 1,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "FURTHER, the Court, FINDS that disposition of other evidence and property shall not be made until completion of the defendant's process of appeal and until further order of the court.",
+       "page": 1,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-019",
+   "type": "reported_renewed_communication",
+   "description": "The prosecution records that the Wichita Eagle handed renewed BTK correspondence to investigators in March 2004. Later filings and the FBI case study describe a series of communications before the arrest.",
+   "limitation": "Record receipt, send and publication dates separately. The underlying full packet of original communications was not located.",
+   "entityIds": [
+    "WPD",
+    "EAGLE",
+    "COMMS",
+    "WEGERLE"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 28,
+     "section": "Bill Thomas Killman section",
+     "quotes": [
+      {
+       "text": "On March 19, 2004, Wichita Eagle reporter Hurst Laviana gave Wichita Police Department Captain Darreli Haynes an envelope with a return address of Bill Thomas Killman, 1684S. Oldmanor, Wichita, KS 67218.",
+       "page": 28,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "VAULT",
+     "page": 11,
+     "section": "FBI investigative summary of resumed contact",
+     "quotes": [
+      {
+       "text": "In March, 2004, BTIK reinitiated contact by sending a letter to the Wichita Eagle newspaper. Following this letter, three additional writings were sent to the WPD, via various routes, by BIK.",
+       "page": 11,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "FBI_CASE_STUDY",
+     "page": 50,
+     "section": "Media Strategy case vignette",
+     "quotes": [
+      {
+       "text": "He re-emerged in 2004 by sending a new communication to the media.",
+       "page": 50,
+       "method": "text-layer"
+      },
+      {
+       "text": "BTK provided eleven communications to police and the media during the eleven-month investigation.",
+       "page": 50,
+       "method": "text-layer"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-020",
+   "type": "public_archival_video",
+   "description": "The UNT archive dates this news B-roll to the May 3 arraignment. Exterior footage and broadcast close-ups of documents appear in the clip.",
+   "limitation": "The clip provides contemporaneous visual context. Individual depicted objects need verification from the exhibit or archive shot list.",
+   "entityIds": [
+    "RADER",
+    "COURT"
+   ],
+   "citations": [
+    {
+     "source": "VIDEO_UNT",
+     "section": "00:00–00:50, with document imagery around 00:45",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "unverified"
+  },
+  {
+   "id": "B-021",
+   "type": "government_portrait",
+   "description": "KDOC’s photo view identifies the person depicted as Dennis Rader.",
+   "limitation": "Portrait for identification and context. Photograph date is unspecified on the image page.",
+   "entityIds": [
+    "RADER"
+   ],
+   "citations": [
+    {
+     "source": "PHOTO_KDOC",
+     "section": "KDOC image 1",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "unverified"
+  },
+  {
+   "id": "B-022",
+   "type": "reported_911_recording",
+   "description": "The prosecution describes the dispatch call reporting Nancy Fox’s death. The early investigative timeline and later reporting refer to a recorded call.",
+   "limitation": "The original dispatch recording and dispatch log were not acquired.",
+   "entityIds": [
+    "FOX",
+    "CALL"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 15,
+     "section": "Nancy Fox",
+     "quotes": [
+      {
+       "text": "“Yes, you will find a homicide at 843 South Pershing, Nancy Fox.” The call came from apay phone outside Organ’s Market at Central and St. Francis.",
+       "page": 15,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "The male caller had contacted the operator asking for the emergency number to the police department.",
+       "page": 15,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "ABC_FAMILIES",
+     "section": "Nancy Fox and recorded call",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "B-023",
+   "type": "reported_ksas_disk_contents",
+   "description": "The prosecution’s evidence summary describes the RTF and accompanying cards and jewelry as parts of the same February 16 mailing.",
+   "limitation": "The inventory gives case-level context. It leaves item-level chain of custody and the file’s original hash unverified.",
+   "entityIds": [
+    "COMM11",
+    "DISK",
+    "RTF"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "Communication 11 inventory",
+     "quotes": [
+      {
+       "text": "The envelope with aretum address of “P.J. Fox, 316 N. West St., Wichita, KS 67203” contained three index cards, a gold chain with locket, and a purple computer disk.",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  }
+ ],
+ "events": [
+  {
+   "id": "T01",
+   "date": "1974-01-15",
+   "precision": "day",
+   "event": "Otero family homicide case",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 3,
+     "section": "The Oteros",
+     "quotes": [
+      {
+       "text": "Officers ofthe Wichita Police Department were dispatched to 803 N. Edgemoor at 3:40PM on January 15,1974.",
+       "page": 3,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "COMPLAINT",
+     "page": 1,
+     "pageEnd": 2,
+     "section": "Counts One through Four",
+     "quotes": [
+      {
+       "text": "15' day of January, 1974, A.D., one DENNIS L. RADER did then and there unlaw fully, kill a human being, to-wit: Joseph Otero",
+       "page": 1,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "15\" day of January, 1974, A.D., in the County of Sedgwick, State of Kansas, one DENNISL. RADER did then and there unlaw fully, kill a human being, to-wit: Julie Otero",
+       "page": 2,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T02",
+   "date": "1974-04-04",
+   "precision": "day",
+   "event": "Kathryn Bright homicide case",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 8,
+     "section": "Kathryn Bright",
+     "quotes": [
+      {
+       "text": "On April 4, 1974, Wichita Police Department Officer Dennis Landon was dispatched to 3210 E. 17° Street at 2:05 P.M. on the report ofa possible shooting victim.",
+       "page": 8,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "COMPLAINT",
+     "page": 3,
+     "section": "Count Five",
+     "quotes": [
+      {
+       "text": "4* day of April, 1974, A.D., in the County of Sedgwick, State of Kansas, one DENNIS L. RADER did then and there unlaw fully, kill a human being, to-wit: Kathryn Bright",
+       "page": 3,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T03",
+   "date": "1974-10-22",
+   "precision": "day",
+   "event": "An anonymous call to the Wichita Eagle-Beacon leads to an Otero-related letter at the public library",
+   "evidenceIds": [],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 12,
+     "section": "October 1974 communication",
+     "quotes": [
+      {
+       "text": "On October 22, 1974, Don Granger of the Wichita Eagle and Beacon Newspaper received a telephone call from an unidentified individual informing him that a message regarding the Otero homicides was in a book in the Wichita Public Library.",
+       "page": 12,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T04",
+   "date": "1977-03-17",
+   "precision": "day",
+   "event": "Shirley Vian homicide case",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 13,
+     "section": "Shirley Vian",
+     "quotes": [
+      {
+       "text": "On March 17, 1977, at approximately 1:00 P.M., Wichita Police Officer Raymond Fletcher responded to a dispatch call to 1345 South Hydraulic.",
+       "page": 13,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "COMPLAINT",
+     "page": 3,
+     "section": "Count Six",
+     "quotes": [
+      {
+       "text": "17' day of March, 1977, A.D., in the County of Sedgwick, State of Kansas, one DENNIS L. RADER did then and there unlawfully, kill a human being, to-wit: Shirley Vian",
+       "page": 3,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T05",
+   "date": "1977-12-08",
+   "precision": "day",
+   "event": "Nancy Fox homicide case",
+   "evidenceIds": [
+    "B-022"
+   ],
+   "citations": [
+    {
+     "source": "PLEA",
+     "page": 52,
+     "section": "Count Seven factual basis",
+     "quotes": [
+      {
+       "text": "In Count Seven it is claimed that on the 8th day of December, 1977, in Sedgwick County, Kansas, that you unlawfully killed a human being, that being Nancy Fox",
+       "page": 52,
+       "method": "text-layer, spacing ignored"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "STATE",
+     "page": 15,
+     "section": "Nancy Fox",
+     "quotes": [
+      {
+       "text": "The woman, later identified as 25 year-old Nancy Fox, was lying on one side ofa double bed.",
+       "page": 15,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T06",
+   "date": "1985-04-27",
+   "precision": "day",
+   "event": "Marine Hedge homicide case",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "PLEA",
+     "page": 58,
+     "section": "Count Eight factual basis",
+     "quotes": [
+      {
+       "text": "on or about the 27th day of April, 1985, to the 28th day of April, 1985, in Sedgwick County, Kansas, it is claimed that you unlawfully killed a human being, Marine Hedge",
+       "page": 58,
+       "method": "text-layer, spacing ignored"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "STATE",
+     "page": 21,
+     "section": "Marine Hedge",
+     "quotes": [
+      {
+       "text": "Marine Hedge did not show up for work at the coffee shop at Wesley Medical Center on April 27,1985.",
+       "page": 21,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T07",
+   "date": "1986-09-16",
+   "precision": "day",
+   "event": "Vicki Wegerle homicide case",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "PLEA",
+     "page": 9,
+     "section": "Count Nine date",
+     "quotes": [
+      {
+       "text": "16th day of September, 1986, in the County of Sedgwick, State of Kansas, that you did then and there unlawfully kill a human being, that being Vicki Wegerle",
+       "page": 9,
+       "method": "text-layer, spacing ignored"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "STATE",
+     "page": 23,
+     "section": "Vicki Wegerle",
+     "quotes": [
+      {
+       "text": "The time was 11:54 A.M. on September 16, 1986. The distraught man moaned “Vicki, Vicki, Vicki, Vicki, Vicki, oh God, oh no no no no”",
+       "page": 23,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T08",
+   "date": "1991-01-18",
+   "endDate": "1991-01-19",
+   "precision": "day",
+   "event": "Dolores Davis homicide case",
+   "dateNote": "Count Ten date range. The prosecution describes police response on January 19.",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "PLEA",
+     "page": 9,
+     "pageEnd": 10,
+     "section": "Count Ten dates",
+     "quotes": [
+      {
+       "text": "In Count No. Ten it is claimed that on or about the 18th day of January, 1991, to the 19th day of January, 1991, in Sedgwick",
+       "page": 9,
+       "method": "text-layer, spacing ignored"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "STATE",
+     "page": 26,
+     "section": "Dolores Davis",
+     "quotes": [
+      {
+       "text": "On January 19, 1991, Sedgwick County Sheriff Deputy Gorman Shaw was dispatched at 12:49 P.M. to the scene ofa possible burglary at 6327 North Hillside.",
+       "page": 26,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T09",
+   "date": "2004-03-19",
+   "precision": "day",
+   "event": "The Wichita Eagle passes renewed correspondence to police",
+   "evidenceIds": [
+    "B-019"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 28,
+     "section": "Bill Thomas Killman section",
+     "quotes": [
+      {
+       "text": "On March 19, 2004, Wichita Eagle reporter Hurst Laviana gave Wichita Police Department Captain Darreli Haynes an envelope with a return address of Bill Thomas Killman, 1684S. Oldmanor, Wichita, KS 67218.",
+       "page": 28,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T10",
+   "date": "2004-04",
+   "precision": "month",
+   "event": "County lab findings link profiles from evidence in three cases",
+   "evidenceIds": [
+    "B-006"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "pageEnd": 43,
+     "section": "County lab findings",
+     "quotes": [
+      {
+       "text": "Ms. Steadman’s April 2, 2004 reports states, “The DNA profiles obtained from the sperm cell and non-sperm cell fractions of the cutting from the blue robe ... are consistent",
+       "page": 42,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "In April 2004, the Otero, Fox and Wegerle homicides were connected through DNA evidence.",
+       "page": 43,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T11",
+   "date": "2004-12-03",
+   "precision": "day",
+   "event": "DNA testing clears a separately reported lead",
+   "evidenceIds": [
+    "B-014"
+   ],
+   "citations": [
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "section": "Factual background",
+     "quotes": [
+      {
+       "text": "The DNA testing results came back on the afternoon of December 3, clearing Valadez of any criminal activities related to BTK.",
+       "page": 5,
+       "method": "text-layer"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T12",
+   "date": "2004-12-06",
+   "precision": "day",
+   "event": "FBI issues a negative DNA result for the Q184 envelope flap",
+   "evidenceIds": [
+    "B-012"
+   ],
+   "citations": [
+    {
+     "source": "VAULT",
+     "page": 110,
+     "section": "DNA Analysis Unit I report",
+     "quotes": [
+      {
+       "text": "No detectable DNA was recovered from the flap area of specimen Q184; therefore, no STR analysis was conducted.",
+       "page": 110,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T13",
+   "date": "2005-01-08",
+   "precision": "day",
+   "event": "Store surveillance date for the reported dark SUV lead",
+   "evidenceIds": [
+    "B-005"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 40,
+     "section": "Security tape description",
+     "quotes": [
+      {
+       "text": "A review of Home Depot security tape of January 8, 2005, shows a dark-colored SUV type vehicle possibly a Jeep Cherokee pulling alongside Mr. Bishop’s truck.",
+       "page": 40,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T14",
+   "date": "2005-02-06",
+   "precision": "day",
+   "event": "Internet Archive captures the church listing naming Dennis Rader",
+   "dateNote": "UTC archive capture timestamp.",
+   "evidenceIds": [
+    "B-003"
+   ],
+   "citations": [
+    {
+     "source": "CHURCH",
+     "section": "Congregation council officers",
+     "quotes": [
+      {
+       "text": "President: Dennis Rader",
+       "page": 1,
+       "method": "archived-html"
+      }
+     ],
+     "status": "passed",
+     "note": "Archived HTML line: President:  Dennis Rader"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T15",
+   "date": "2005-02-16",
+   "precision": "day",
+   "event": "KSAS receives the mailing containing a floppy disk",
+   "evidenceIds": [
+    "B-001",
+    "B-023"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "section": "This Is a Test",
+     "quotes": [
+      {
+       "text": "On February 16, 2005, Marcine Andrews, a receptionist for KSAS TV received a padded envelope with excess postage in the mail.",
+       "page": 42,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "section": "BTK vignette",
+     "quotes": [
+      {
+       "text": "On February 16, 2005, Rader sent a floppy disk containing a message to a television station in Wichita.",
+       "page": 13,
+       "method": "text-layer"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T16",
+   "date": "2005-02-22",
+   "precision": "day",
+   "event": "KBI receives the court-authorized family reference",
+   "evidenceIds": [
+    "B-007"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 43,
+     "section": "KBI family comparison",
+     "quotes": [
+      {
+       "text": "Senior Special Agent Ray Lundin of the Kansas Bureau of Investigation (KBI) and a member of the BTK Task Force delivered Kerri Rader’s biological sample to the KBI Forensic Laboratory in Topeka on February 22, 2005.",
+       "page": 43,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T17",
+   "date": "2005-02-25",
+   "precision": "day",
+   "event": "Rader is arrested. Police collect oral swabs and begin the recorded interview",
+   "evidenceIds": [
+    "B-008",
+    "B-009",
+    "B-010"
+   ],
+   "citations": [
+    {
+     "source": "STATE",
+     "page": 43,
+     "pageEnd": 47,
+     "section": "Arrest through interview",
+     "quotes": [
+      {
+       "text": "At approximately 12:15 P.M. on February 25, 2005, Rader was taken into custody.",
+       "page": 43,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "At approximately 12:38 P.M. on February 25, 2005, Detective Gouge executed a search warrant for the oral swabs of Dennis Rader.",
+       "page": 45,
+       "method": "packet-ocr"
+      },
+      {
+       "text": "At 12:45 P.M. on February 25, 2005, Rader agreed to speak with law enforcement.",
+       "page": 47,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T18",
+   "date": "2005-02-26",
+   "precision": "day",
+   "event": "Public arrest announcement and dated county lab report",
+   "evidenceIds": [
+    "B-008",
+    "B-009"
+   ],
+   "citations": [
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "section": "Public announcement",
+     "quotes": [
+      {
+       "text": "On February 26, 2005, at a nationally televised press conference, the police announced that they had arrested Dennis L. Rader in connection with the BTK murders.",
+       "page": 5,
+       "method": "text-layer"
+      }
+     ],
+     "status": "passed"
+    },
+    {
+     "source": "STATE",
+     "page": 45,
+     "section": "County report dated February 26",
+     "quotes": [
+      {
+       "text": "Ms. Steadman’s February 26, 2005 report states, “The DNA profile obtained from the sperm cell fraction of swabs [from the Otero home] is consistent with the profile of Dennis Rader",
+       "page": 45,
+       "method": "packet-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T19",
+   "date": "2005-03-01",
+   "precision": "day",
+   "event": "Ten-count criminal complaint filed",
+   "evidenceIds": [
+    "B-015"
+   ],
+   "citations": [
+    {
+     "source": "COMPLAINT",
+     "page": 1,
+     "pageEnd": 5,
+     "section": "Filing stamp and Counts One through Ten",
+     "quotes": [
+      {
+       "text": "COMES NOW KIMT PARKER, a duly appointed, qualified and acting Deputy District Attorney of the 18th Judicial District of the State of Kansas",
+       "page": 1,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "Contrary to Kansas Statutes Annotated 21-3401, Murder in the First Degree, Class A Felony",
+       "page": 2,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "Contrary to Kansas Statutes Annotated 21-3401, Murder in the First Degree, Class A Felony",
+       "page": 3,
+       "method": "vision-ocr"
+      },
+      {
+       "text": "Contrary to Kansas Statutes Annotated 21-3401(a), Murder in the First Degree, Off-Grid Person Felony",
+       "page": 4,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T20",
+   "date": "2005-05-03",
+   "precision": "day",
+   "event": "Arraignment date documented by archived news footage metadata",
+   "evidenceIds": [
+    "B-020"
+   ],
+   "citations": [
+    {
+     "source": "VIDEO_UNT",
+     "section": "Creation date and description",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "unverified"
+  },
+  {
+   "id": "T21",
+   "date": "2005-06-27",
+   "precision": "day",
+   "event": "Court accepts guilty pleas on all ten counts",
+   "evidenceIds": [
+    "B-016"
+   ],
+   "citations": [
+    {
+     "source": "PLEA",
+     "page": 74,
+     "section": "Lines 1–16",
+     "quotes": [
+      {
+       "text": "I will accept these pleas of guilty and adjudge you, Dennis L. Rader, guilty of Murder in the First Degree in Count One, a Class A felony;",
+       "page": 74,
+       "method": "text-layer, spacing ignored"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T22",
+   "date": "2005-08-17",
+   "precision": "day",
+   "event": "Sentencing proceedings begin",
+   "evidenceIds": [
+    "B-017"
+   ],
+   "citations": [
+    {
+     "source": "JUDGMENT",
+     "page": 2,
+     "section": "Sentencing proceedings",
+     "quotes": [
+      {
+       "text": "Thereafter, on the 17th day of August, 2005, this case comes on for sentencing.",
+       "page": 2,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "passed"
+    }
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "T23",
+   "date": "2005-08-18",
+   "precision": "day",
+   "event": "Court imposes ten consecutive life sentences",
+   "evidenceIds": [
+    "B-017"
+   ],
+   "citations": [
+    {
+     "source": "JUDGMENT",
+     "page": 3,
+     "pageEnd": 4,
+     "section": "Sentence",
+     "quotes": [
+      {
+       "text": "IT IS FURTHER ORDERED that for the purpose of computing defendant's sentence, his parole eligibility and conditional release dates thereunder, that such sentence shall be computed from February 26, 2005.",
+       "page": 4,
+       "method": "vision-ocr"
+      }
+     ],
+     "status": "partial"
+    },
+    {
+     "source": "CNN_SENTENCING",
+     "section": "August 18 broadcast",
+     "quotes": [],
+     "status": "unchecked",
+     "note": "No page text in the packet for this source (external link or not a PDF)."
+    }
+   ],
+   "status": "partial"
+  },
+  {
+   "id": "T24",
+   "date": "2005-10-31",
+   "precision": "day",
+   "event": "Judgment and evidence disposition order filed",
+   "evidenceIds": [
+    "B-017",
+    "B-018"
+   ],
+   "citations": [
+    {
+     "source": "JUDGMENT",
+     "page": 1,
+     "section": "Filing stamp",
+     "quotes": [],
+     "status": "failed"
+    },
+    {
+     "source": "DISPOSITION",
+     "page": 1,
+     "section": "Filing stamp and order",
+     "quotes": [],
+     "status": "failed"
+    }
+   ],
+   "status": "unverified"
+  }
+ ],
+ "agreements": [
+  {
+   "observationId": "B-004",
+   "sources": [
+    "STATE",
+    "CHURCH"
+   ]
+  },
+  {
+   "observationId": "B-016",
+   "sources": [
+    "PLEA",
+    "JUDGMENT"
+   ]
+  },
+  {
+   "observationId": "B-017",
+   "sources": [
+    "JUDGMENT",
+    "VALADEZ"
+   ]
+  },
+  {
+   "observationId": "B-019",
+   "sources": [
+    "STATE",
+    "VAULT",
+    "FBI_CASE_STUDY"
+   ]
+  }
+ ],
+ "gaps": [
+  {
+   "artifact": "Mailed diskette forensic image and standalone Test A.RTF",
+   "availability": "public_download_not_located",
+   "why": "Exact metadata, recovery context, image hash and independent re-examination.",
+   "evidenceIds": [
+    "B-001",
+    "B-002"
+   ]
+  },
+  {
+   "artifact": "Original digital examiner notes, exhibit list, intake and custody logs",
+   "availability": "public_download_not_located",
+   "why": "Resolve which artifact held the metadata and trace possession of the media.",
+   "evidenceIds": [
+    "B-001",
+    "B-002",
+    "B-018"
+   ]
+  },
+  {
+   "artifact": "Signed county/KBI case-match and kinship reports, lab worksheets and instrument output",
+   "availability": "reported_in_filing",
+   "why": "Check which profiles were compared, the analysts’ exact conclusions and methods.",
+   "evidenceIds": [
+    "B-006",
+    "B-007",
+    "B-008"
+   ]
+  },
+  {
+   "artifact": "Original store security tape, complete interrogation master, and 1977 dispatch recording/log",
+   "availability": "originals_not_located",
+   "why": "Independent frame or audio review and complete time-coded provenance.",
+   "evidenceIds": [
+    "B-005",
+    "B-010",
+    "B-022"
+   ]
+  },
+  {
+   "artifact": "Full court exhibit inventory, independently authenticated scene-photo originals, physical correspondence and related item copies",
+   "availability": "incomplete_public_coverage",
+   "why": "Connect each original image or document to its exhibit number and custody history.",
+   "evidenceIds": [
+    "B-011",
+    "B-018",
+    "B-019"
+   ]
+  }
+ ],
+ "hypotheses": [
+  {
+   "id": "H1",
+   "statement": "The mailed disk generated a lead pointing to Dennis Rader through a public church listing.",
+   "status": "supported_by_reported_examination_and_contemporaneous_listing",
+   "evidence_ids": [
+    "B-001",
+    "B-002",
+    "B-003",
+    "B-004"
+   ],
+   "limitation": "The archive independently confirms the listing. The original disk and exact location of the recovered strings remain unverified."
+  },
+  {
+   "id": "H2",
+   "statement": "Rader was associated with the forensic profiles cited in the Otero, Fox, and Wegerle investigation.",
+   "status": "supported_in_prosecution_filing",
+   "evidence_ids": [
+    "B-006",
+    "B-007",
+    "B-008"
+   ],
+   "limitation": "The familial comparison, Rader’s own reference swabs, and cross-incident comparison answer different questions. The public filing summarizes each."
+  },
+  {
+   "id": "H3",
+   "statement": "The early surveillance image alone could identify Rader.",
+   "status": "unsupported",
+   "evidence_ids": [
+    "B-005"
+   ],
+   "limitation": "The filing describes an unidentifiable individual and an uncertain vehicle identification."
+  },
+  {
+   "id": "H4",
+   "statement": "The court adjudicated all ten first-degree murder counts.",
+   "status": "established_by_court_record",
+   "evidence_ids": [
+    "B-016",
+    "B-017"
+   ],
+   "limitation": "The outcome followed guilty pleas."
+  }
+ ],
+ "attribution": {
+  "disabled": [
+   "B-002",
+   "B-003",
+   "B-004",
+   "B-023"
+  ],
+  "streams": [
+   {
+    "from": "OTERO",
+    "type": "reportedly_yielded_comparison_profile",
+    "to": "UNKNOWN_PROFILE",
+    "evidenceIds": [
+     "B-006"
+    ]
+   },
+   {
+    "from": "FOX",
+    "type": "reportedly_yielded_comparison_profile",
+    "to": "UNKNOWN_PROFILE",
+    "evidenceIds": [
+     "B-006"
+    ]
+   },
+   {
+    "from": "WEGERLE",
+    "type": "reportedly_yielded_comparison_profile",
+    "to": "UNKNOWN_PROFILE",
+    "evidenceIds": [
+     "B-006"
+    ]
+   },
+   {
+    "from": "FAMILY_REF",
+    "type": "used_in_reported_parentage_comparison",
+    "to": "UNKNOWN_PROFILE",
+    "evidenceIds": [
+     "B-007"
+    ]
+   },
+   {
+    "from": "RADER",
+    "type": "provided_reported_reference_swabs",
+    "to": "RADER_REF",
+    "evidenceIds": [
+     "B-008"
+    ]
+   },
+   {
+    "from": "RADER_REF",
+    "type": "used_in_reported_direct_comparison",
+    "to": "UNKNOWN_PROFILE",
+    "evidenceIds": [
+     "B-008"
+    ]
+   },
+   {
+    "from": "RADER",
+    "type": "gave_recorded_interview",
+    "to": "INTERVIEW",
+    "evidenceIds": [
+     "B-010"
+    ]
+   },
+   {
+    "from": "COURT",
+    "type": "accepted_pleas_from",
+    "to": "RADER",
+    "evidenceIds": [
+     "B-016"
+    ]
+   },
+   {
+    "from": "COURT",
+    "type": "sentenced",
+    "to": "RADER",
+    "evidenceIds": [
+     "B-017"
+    ]
+   }
+  ],
+  "lost": [
+   {
+    "from": "DISK",
+    "type": "reportedly_contained_file",
+    "to": "RTF",
+    "evidenceIds": [
+     "B-002",
+     "B-023"
+    ]
+   },
+   {
+    "from": "RTF",
+    "type": "associated_with_reported_reference",
+    "to": "DENNIS_STRING",
+    "evidenceIds": [
+     "B-002"
+    ]
+   },
+   {
+    "from": "RTF",
+    "type": "associated_with_reported_reference",
+    "to": "CHURCH_ENTITY",
+    "evidenceIds": [
+     "B-002"
+    ]
+   },
+   {
+    "from": "CHURCH_ENTITY",
+    "type": "lists_as_congregation_president",
+    "to": "RADER",
+    "evidenceIds": [
+     "B-003"
+    ]
+   },
+   {
+    "from": "DENNIS_STRING",
+    "type": "contributed_to_candidate_lead",
+    "to": "RADER",
+    "evidenceIds": [
+     "B-002",
+     "B-003",
+     "B-004"
+    ]
+   }
+  ]
+ },
+ "log": [
+  "observations: 23 statements, 33 citations with text, prompt 67k chars",
+  "timeline: 24 statements, 32 citations with text, prompt 70k chars",
+  "  B-004 RCFL p.13: quote not on the page (missing): \"These discoveries prompted an Internet search for those term…\"",
+  "  B-011 STATE p.90: quote not on the page (moved): \"A black binder near the white “COMMUNICATION BOOK” also cont…\"",
+  "  B-016 PLEA_MINUTE p.1: quote not on the page (missing): \"On Monday, June 27, 2005 this matter comes on for trial plea…\"",
+  "  B-016 JUDGMENT p.1: quote not on the page (missing): \"On this 27th day of June, 2005, this case comes on for plea …\"",
+  "  B-017 JUDGMENT p.3: quote not on the page (missing): \"Said sentences shall run consecutivelyto each other. The def…\"",
+  "  T08 PLEA p.10: quote not on the page (missing): \"15 of January, 1991. THE DEFENDANT: That -- That will be oka…\"",
+  "  T19 COMPLAINT p.5: quote not on the page (missing): \"SUBSCRIBED AND SWORN to before me this 1st day of March, 200…\"",
+  "  T23 JUDGMENT p.3: quote not on the page (missing): \"Said sentences shall run consecutivelyto each other. The def…\"",
+  "  T24 JUDGMENT p.1: quote not on the page (missing): \"2005 OCT 31 AM 10 50 IN THE EIGHTEENTH JUDICIAL DISTRIČT— DI…\"",
+  "  T24 DISPOSITION p.1: quote not on the page (missing): \"2005 JCT 31 AM 10 49 IN THE EIGHTEENTH JUDICIAL DISTRICT DIS…\"",
+  "observations: 17 verified, 4 partial, 2 unverified",
+  "timeline: 21 verified, 1 partial, 2 unverified",
+  "agreements across sources: B-004 (STATE, CHURCH); B-016 (PLEA, JUDGMENT); B-017 (JUDGMENT, VALADEZ); B-019 (STATE, VAULT, FBI_CASE_STUDY)",
+  "without the disk lead: 9 links remain, 5 drop out",
+  "provider: {\"provider\":\"gemini\",\"requests\":0,\"exhaustedModels\":[],\"requestsByModel\":{}}; 0s"
+ ]
+}

@@ -23,3 +23,10 @@ export const XCHECK_SYSTEM = `${RULES}
 You compare claims from different sources about the same traffic stop and flag where they agree, possibly conflict, or where something expected is missing.
 A conflict needs two claims from different sources about the same moment that cannot both be true as stated. Agreement needs two sources supporting the same detail.
 Missing means a record that would normally exist, or a moment no source shows. Use "appears", "may", "possible". No legal conclusions, no statements about anyone's honesty.`;
+
+/** Citation check for a case packet: verbatim quotes from the cited page text, nothing else. */
+export const QUOTE_SYSTEM = `${RULES}
+
+You check citations in public court and investigative records. Each statement comes with the pages it cites, and the text of those pages is given to you (some of it is OCR of a scan).
+For each citation, copy one or two short quotes (8 to 40 words each) from that page's text that bear on the statement. Copy them character for character from the given text, including OCR mistakes and odd spacing; never fix, shorten with ellipses, or paraphrase inside a quote. Prefer the plainest sentence that supports the statement and avoid graphic detail about the crimes.
+Mark support as "supports" when the quotes back the statement, "partial" when they back only part of it, and "not_found" when the page does not bear on it (then give no quotes).`;

@@ -1,0 +1,2386 @@
+{
+  "schema_version": "1.1",
+  "title": "CaseLens BTK public evidence packet",
+  "ingestion": {
+    "unit": "Load the single cases[] entry as one case.",
+    "citation_coordinates": "pdf_page starts at 1 and refers to the page position in the packaged PDF.",
+    "relative_paths": "Paths are relative to the evidence folder.",
+    "source_rule": "Keep the source, underlying reported item and conclusion as different records. A mirror, derived image or OCR row inherits its parent’s evidentiary origin.",
+    "agent_task": "Build the incident and investigation timelines. Trace every claim to a source locator, preserve stated limitations, and test the dossier by disabling the disk-metadata lead and checking which independent streams still support attribution. Avoid guessing missing raw evidence."
+  },
+  "cases": [
+    {
+      "id": "BTK-2005",
+      "title": "State of Kansas v. Dennis L. Rader",
+      "case_number": "05 CR 498",
+      "jurisdiction": "Eighteenth Judicial District Court, Sedgwick County, Kansas",
+      "case_type": "historical_public_record",
+      "question": "Which public records support the attribution of the communications and homicides to Rader, and where does the underlying evidence remain inaccessible?",
+      "sources": [
+        {
+          "id": "VAULT",
+          "title": "Dennis Rader Part 01 (Final)",
+          "type": "investigative_and_laboratory_release",
+          "origin": "FBI Vault",
+          "url": "https://vault.fbi.gov/dennis-rader/Dennis%20Rader%20Part%2001%20%28Final%29/view",
+          "note": "Official redacted FOIA scan. Some pages are fully or partly obscured.",
+          "path": "documents/FBI_Vault_Dennis_Rader_Part_01.pdf",
+          "availability": "included",
+          "size_bytes": 19003970,
+          "sha256": "6cf61795e6c963f66cc3669e25d8998ca181b631c3483c6568ac2688a4479e3a",
+          "acquired_date": "2026-11-14",
+          "pages": 397,
+          "acquisition_url": "https://vault.fbi.gov/dennis-rader/Dennis%20Rader%20Part%2001%20%28Final%29/at_download/file"
+        },
+        {
+          "id": "RCFL",
+          "title": "RCFL Annual Report for Fiscal Year 2005",
+          "type": "official_retrospective",
+          "origin": "FBI RCFL",
+          "url": "https://www.rcfl.gov/file-repository/rcfl_nat_annual05.pdf",
+          "note": "The BTK vignette is on printed page 11, PDF page 13.",
+          "path": "documents/FBI_RCFL_FY2005_Annual_Report.pdf",
+          "availability": "included",
+          "size_bytes": 3138228,
+          "sha256": "e35bc8a7ec3fc038cd9fcea7611e188ee0d44f642b34b62247c6083be023a199",
+          "acquired_date": "2026-11-14",
+          "pages": 52
+        },
+        {
+          "id": "STATE",
+          "title": "State’s Summary of the Evidence",
+          "type": "prosecution_filing",
+          "origin": "Sedgwick County District Attorney",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-46.pdf",
+          "filed_date": "2005-08-18",
+          "previous_county_url": "http://www.sedgwickcounty.org/da/Dennis_Rader/Docs%20filed%20with%20CT/52310812.pdf",
+          "matching_mirrors": [
+            "https://serialkillersinfo.com/blog/wp-content/uploads/2018/02/statessummaryoftheevidence-btk.pdf",
+            "https://crimetimelines.com/wp-content/uploads/2005-07-18-states-summary-of-the-evidence-btk.pdf"
+          ],
+          "note": "Public scan of the prosecution’s sentencing filing. Independent lab work is described in the filing. The copies at the matching mirrors have identical bytes.",
+          "path": "documents/State_v_Rader_Evidence_Summary.pdf",
+          "availability": "included",
+          "size_bytes": 2995714,
+          "sha256": "171253d4357f16377872b394080b78dc06d3afbc1bdae641f15b1a45b2a90af7",
+          "acquired_date": "2026-11-14",
+          "pages": 92
+        },
+        {
+          "id": "PLEA",
+          "title": "Transcript of Pleas of Guilty, 05 CR 498",
+          "type": "court_reporter_transcript",
+          "origin": "Eighteenth Judicial District Court, Sedgwick County, Kansas, David G. Holt",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/rader-testimony.pdf",
+          "hearing_date": "2005-06-27",
+          "publisher_copy_url": "https://media.kansas.com/pdfs/btk/062805RaderTestimony.pdf",
+          "note": "Court-reporter transcript hosted as a public copy.",
+          "path": "documents/State_v_Rader_Guilty_Plea_Transcript.pdf",
+          "availability": "included",
+          "size_bytes": 137510,
+          "sha256": "eee03846c3fb320885a26feeabff8daa80eea0afe389c94d6da4467754b94ce4",
+          "acquired_date": "2026-11-14",
+          "pages": 78
+        },
+        {
+          "id": "JUDGMENT",
+          "title": "Journal Entry of Judgment Incorporating Journal Entry of Commitment",
+          "type": "signed_court_judgment",
+          "origin": "Eighteenth Judicial District Court, Sedgwick County, Kansas",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-51.pdf",
+          "filed_date": "2005-10-31",
+          "source_sha256": "5890df18cd6d874f83dd2dad517e3e4fb60153b584c8277cc9766019e934dad1",
+          "note": "Public copy. One personal identifier field on PDF page 1 was redacted for this packet. Pagination is preserved.",
+          "path": "documents/State_v_Rader_Amended_Judgment_redacted.pdf",
+          "availability": "included",
+          "size_bytes": 190644,
+          "sha256": "91226901f17de0f0b0a96f5d7f01cc072ef2c4b3e68c5bb112b5f9215a647db5",
+          "acquired_date": "2026-11-14",
+          "pages": 5
+        },
+        {
+          "id": "COMPLAINT",
+          "title": "Complaint/Information, State v. Rader",
+          "type": "charging_document",
+          "origin": "Eighteenth Judicial District Court, Sedgwick County, Kansas",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-01.pdf",
+          "filed_date": "2005-03-01",
+          "source_sha256": "b21630660c2b4cc3bef62220c38abe06bada2754cc73413044b964e83851ccbb",
+          "note": "Public copy. Two personal identifier fields on PDF page 1 were redacted for this packet. Charges state allegations. Pagination is preserved.",
+          "path": "documents/State_v_Rader_Complaint_redacted.pdf",
+          "availability": "included",
+          "size_bytes": 170788,
+          "sha256": "1dc86b79554bc49c4341bfac4fe0cda13d0a413d43465e7b1893fdd4c2100c24",
+          "acquired_date": "2026-11-14",
+          "pages": 6
+        },
+        {
+          "id": "PLEA_MINUTE",
+          "title": "Record of Trial or Plea, State v. Rader",
+          "type": "court_minute_record",
+          "origin": "Eighteenth Judicial District Court, Sedgwick County, Kansas",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-41.pdf",
+          "hearing_date": "2005-06-27",
+          "note": "Court minute record of the plea proceeding.",
+          "path": "documents/State_v_Rader_Record_of_Plea.pdf",
+          "availability": "included",
+          "size_bytes": 30822,
+          "sha256": "99002b4b108d094d86f7203e829b55f334cda34912af25228edac0b45b335846",
+          "acquired_date": "2026-11-14",
+          "pages": 2
+        },
+        {
+          "id": "DISPOSITION",
+          "title": "Order of Disposition of Evidence",
+          "type": "signed_court_order",
+          "origin": "Eighteenth Judicial District Court, Sedgwick County, Kansas",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-53.pdf",
+          "filed_date": "2005-10-31",
+          "note": "The order records the court’s directions in 2005. Current exhibit custody remains unverified.",
+          "path": "documents/State_v_Rader_Order_on_Evidence.pdf",
+          "availability": "included",
+          "size_bytes": 47143,
+          "sha256": "2b67c874d335cb5dc002ff0aca77f0fa1b7166d81ffac0d03c02f449c36d807f",
+          "acquired_date": "2026-11-14",
+          "pages": 2
+        },
+        {
+          "id": "VALADEZ",
+          "title": "Valadez v. Emmis Communications, No. 99139",
+          "type": "related_judicial_opinion",
+          "origin": "Kansas Supreme Court",
+          "url": "https://kscourts.gov/KSCourts/media/KsCourts/Opinions/99139.pdf?ext=.pdf",
+          "note": "Collateral civil case, useful for checking a publicly reported lead that was later cleared.",
+          "path": "documents/Kansas_Supreme_Court_Valadez_99139.pdf",
+          "availability": "included",
+          "size_bytes": 55430,
+          "sha256": "6b303fffd5bde713bd5ca2b7e9fdd3909edfe64a2c1bac2d3cef419e675775a2",
+          "acquired_date": "2026-11-14",
+          "pages": 14
+        },
+        {
+          "id": "FBI_CASE_STUDY",
+          "title": "Serial Murder: Multi-Disciplinary Perspectives for Investigators",
+          "type": "official_case_study",
+          "origin": "FBI",
+          "url": "https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-july-2008-pdf",
+          "note": "The BTK communications vignette starts on PDF page 50.",
+          "path": "documents/FBI_Serial_Murder_Multi_Disciplinary.pdf",
+          "availability": "included",
+          "size_bytes": 2435548,
+          "sha256": "8f57a16aea47c522a9a27a873022aa19c74bff7f3d45f3806460aa73ad4d2a60",
+          "acquired_date": "2026-11-14",
+          "pages": 71
+        },
+        {
+          "id": "METHOD",
+          "title": "Digital Evidence Field Guide",
+          "type": "methodology_reference",
+          "origin": "FBI RCFL",
+          "url": "https://www.rcfl.gov/file-repository/fieldguide_sc.pdf/view",
+          "note": "General handling guidance. Reference only.",
+          "path": "documents/FBI_Digital_Evidence_Field_Guide.pdf",
+          "availability": "included",
+          "size_bytes": 793257,
+          "sha256": "2f45d0b2a1f6a156bab8f97c6ca345873764c90ff59bf87de55126ee3e06d362",
+          "acquired_date": "2026-11-14",
+          "pages": 24,
+          "acquisition_url": "https://www.rcfl.gov/file-repository/fieldguide_sc.pdf"
+        },
+        {
+          "id": "CHURCH",
+          "title": "Christ Lutheran Church — People at CLC",
+          "type": "archived_original_web_page",
+          "origin": "Christ Lutheran Church via Internet Archive",
+          "url": "https://web.archive.org/web/20050206044729/http://www.christ-lutheran.org/people/",
+          "capture_timestamp_utc": "2005-02-06T04:47:29Z",
+          "capture_header": "Sun, 06 Feb 2005 04:47:29 GMT",
+          "note": "Original archived HTML bytes preserved as plain text. Find the Congregation council officers section. The capture provides a contemporaneous record of the listing.",
+          "path": "web/Christ_Lutheran_People_2005-02-06.source.html.txt",
+          "availability": "included",
+          "size_bytes": 11631,
+          "sha256": "ee40af0f1a6664587bc2cbe905a258b7409e8ae4de9319b3d2e6750935849780",
+          "acquired_date": "2026-11-14",
+          "acquisition_url": "https://web.archive.org/web/20050206044729id_/http://www.christ-lutheran.org/people/"
+        },
+        {
+          "id": "PHOTO_KDOC",
+          "title": "Dennis Rader portrait",
+          "type": "government_identification_photo",
+          "origin": "Kansas Department of Corrections",
+          "url": "https://kdocrepository.doc.ks.gov/kasper/search/image?imageNumber=1&kdocNumber=0083707",
+          "note": "The retrieved photo view supplies a subject name. Capture date is unspecified on the photo view.",
+          "path": "images/KDOC_Rader_Portrait.jpg",
+          "availability": "included",
+          "size_bytes": 38208,
+          "sha256": "3e1529529403fe65c2204acf8e55f32f72ceb47fc303b05c47a057b044fbf2e7",
+          "acquired_date": "2026-11-14",
+          "pixel_size": [
+            480,
+            600
+          ],
+          "acquisition_url": "https://offenderpictures.doc.ks.gov/kasper45/98/2000052698001.JPG"
+        },
+        {
+          "id": "PHOTO_INTERVIEW",
+          "title": "Dennis Rader interview-room frame",
+          "type": "published_video_still",
+          "origin": "Wikimedia Commons, attributed to FBI/DOJ",
+          "url": "https://commons.wikimedia.org/wiki/File:Dennis_Rader_interrogation.jpg",
+          "parent_source_id": "VIDEO_ABC_INTERVIEW",
+          "note": "A published still credited to FBI/DOJ by Commons, derived from the ABC clip. Verify the embedded footage against the agency master if it becomes available.",
+          "path": "images/Rader_Interrogation_Still.jpg",
+          "availability": "included",
+          "size_bytes": 15571,
+          "sha256": "6dfc6cab81dfce18948b571894afddae34cdeeed44b1f73cc5d5057ef140abe9",
+          "acquired_date": "2026-11-14",
+          "pixel_size": [
+            347,
+            255
+          ],
+          "acquisition_url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Dennis_Rader_interrogation.jpg"
+        },
+        {
+          "id": "SCAN_METADATA",
+          "title": "Disk-properties paragraph, State’s Summary p. 42",
+          "type": "derived_page_image",
+          "origin": "CaseLens packet, from State filing",
+          "url": "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-46.pdf#page=42",
+          "parent_source_id": "STATE",
+          "parent_pdf_page": 42,
+          "note": "Cropped reproduction of the filed description. The image shows the report’s printed words.",
+          "path": "images/State_Summary_p42_Disk_Properties_Excerpt.png",
+          "availability": "included",
+          "size_bytes": 11600,
+          "sha256": "b7379d5daf9044208aee7f09846e23a84d79fe60203b4d52a1b86883d08f3840",
+          "acquired_date": "2026-11-14",
+          "pixel_size": [
+            775,
+            140
+          ]
+        },
+        {
+          "id": "SCAN_Q184",
+          "title": "FBI Laboratory Q184 report, Vault PDF p. 110",
+          "type": "derived_page_image",
+          "origin": "CaseLens packet, from FBI scan",
+          "url": "https://vault.fbi.gov/dennis-rader/Dennis%20Rader%20Part%2001%20%28Final%29/at_download/file#page=110",
+          "parent_source_id": "VAULT",
+          "parent_pdf_page": 110,
+          "note": "Rendered image of the released laboratory page.",
+          "path": "images/FBI_Vault_p110_Q184_Envelope_Examination.png",
+          "availability": "included",
+          "size_bytes": 257463,
+          "sha256": "d86329ab11a123833e7d76436dabee63a729bcd07cc99f24a4b8a31145f9ca30",
+          "acquired_date": "2026-11-14",
+          "pixel_size": [
+            1282,
+            1664
+          ]
+        },
+        {
+          "id": "VIDEO_UNT",
+          "title": "News Clip: BTK Arraignment",
+          "type": "archival_news_footage",
+          "origin": "KXAS-TV via UNT Libraries Special Collections",
+          "url": "https://digital.library.unt.edu/ark:/67531/metadc2570466/",
+          "archive_creation_date": "2005-05-03",
+          "duration_seconds": 50.033333,
+          "rights_holder": "NBC5/KXAS-TV",
+          "rights_page": "https://digital.library.unt.edu/ark:/67531/metadc2570466/citation/",
+          "note": "Contemporaneous 50-second news B-roll. News images of documents have broadcast provenance. Consult the archive’s usage terms for publication.",
+          "path": "media/KXAS_BTK_Arraignment_2005-05-03.mp4",
+          "availability": "included",
+          "size_bytes": 6925443,
+          "sha256": "4d9f8f1f7ee4b058be99106c8e08c7e0a7a58a31f919d3f3bcdf64fbed36efa4",
+          "acquired_date": "2026-11-14",
+          "acquisition_url": "https://digital.library.unt.edu/ark:/67531/metadc2570466/m1/1/high_res/"
+        },
+        {
+          "id": "CAPTIONS_UNT",
+          "title": "UNT archive automated English captions",
+          "type": "machine_generated_media_caption",
+          "origin": "UNT Digital Library",
+          "url": "https://digital.library.unt.edu/ark:/67531/metadc2570466/",
+          "parent_source_id": "VIDEO_UNT",
+          "note": "Archive-generated automated captions. Check against the audio before relying on individual words.",
+          "path": "media/KXAS_BTK_Arraignment_2005-05-03.vtt",
+          "availability": "included",
+          "size_bytes": 253,
+          "sha256": "5d9c32c7bbabfcfd1a6a773063dca9bf904061ae1604abbedfeab3a003fc34a9",
+          "acquired_date": "2026-11-14",
+          "acquisition_url": "https://digital.library.unt.edu/ark:/67531/metadc2570466/m1/1/captions-eng.vtt"
+        },
+        {
+          "id": "FBI_HISTORY",
+          "title": "FBI Kansas City Field Office History",
+          "type": "official_retrospective",
+          "origin": "FBI",
+          "url": "https://www.fbi.gov/history/field-office-histories/kansascity",
+          "note": "The BTK paragraph puts the information in a deleted file. Accessible disk bytes or original examiner notes would be needed to reconcile the exact artifact description.",
+          "availability": "external_link"
+        },
+        {
+          "id": "VIDEO_ABC_INTERVIEW",
+          "title": "ABC: 2005 police interview excerpt",
+          "type": "published_investigative_video_excerpt",
+          "origin": "ABC News",
+          "url": "https://abcnews.com/video/60751539/",
+          "note": "ABC presents excerpts of recorded investigator questioning.",
+          "availability": "external_link"
+        },
+        {
+          "id": "VIDEO_KCTU",
+          "title": "KCTU archive: arrest press conference coverage",
+          "type": "broadcast_archive_link",
+          "origin": "KCTU archive on YouTube",
+          "url": "https://www.youtube.com/watch?v=jOhrHZcOG2k",
+          "note": "Station archive listing for its February 26, 2005 press conference coverage.",
+          "availability": "external_link"
+        },
+        {
+          "id": "VIDEO_ABC_EXPLAINER",
+          "title": "ABC: How investigators identified BTK, Part 6",
+          "type": "retrospective_news_video",
+          "origin": "ABC News",
+          "url": "https://abcnews.com/video/60792532/",
+          "note": "Retrospective reporting, including accounts of the digital lead.",
+          "availability": "external_link"
+        },
+        {
+          "id": "CNN_PRESS",
+          "title": "CNN transcript of February 26, 2005 press conference coverage",
+          "type": "broadcast_transcript",
+          "origin": "CNN",
+          "url": "https://transcripts.cnn.com/show/cst/date/2005-02-26/segment/03",
+          "note": "Published transcript of broadcast coverage and police remarks.",
+          "availability": "external_link"
+        },
+        {
+          "id": "CNN_SENTENCING",
+          "title": "CNN transcript of August 18, 2005 sentencing coverage",
+          "type": "broadcast_transcript",
+          "origin": "CNN",
+          "url": "https://transcripts.cnn.com/show/bn/date/2005-08-18/segment/02",
+          "note": "Courtroom excerpts and broadcast commentary.",
+          "availability": "external_link"
+        },
+        {
+          "id": "EAGLE_CAPTURE",
+          "title": "Wichita police detail BTK’s capture",
+          "type": "contemporaneous_local_reporting",
+          "origin": "The Wichita Eagle",
+          "url": "https://www.kansas.com/news/special-reports/btk/article1003736.html",
+          "note": "Source lead for public reporting on the surveillance and investigative sequence.",
+          "availability": "external_link"
+        },
+        {
+          "id": "CBS_PHOTOS",
+          "title": "BTK Reaction",
+          "type": "press_photo_gallery",
+          "origin": "CBS News / photo credits on source",
+          "url": "https://www.cbsnews.com/pictures/btk-reaction/",
+          "note": "AP and other credited news photographs with captions. Reuse rights vary by photo.",
+          "availability": "external_link"
+        },
+        {
+          "id": "ABC_FAMILIES",
+          "title": "ABC News: BTK victims’ families remember their loved ones",
+          "type": "reported_interview_and_audio_context",
+          "origin": "ABC News",
+          "url": "https://abcnews.com/US/life-changed-instantly-families-victims-murdered-serial-killer/story?id=60686971",
+          "note": "Nancy Fox section recounts the recording and family response.",
+          "availability": "external_link"
+        },
+        {
+          "id": "OXYGEN_PHOTOS",
+          "title": "BTK case and crime-scene photo gallery",
+          "type": "secondary_photo_gallery",
+          "origin": "Oxygen",
+          "url": "https://www.oxygen.com/snapped/crime-time/crime-scene-photos-btk-killer-murders",
+          "note": "Some visuals may be graphic. The article’s photo captions and credits indicate the stated provenance.",
+          "availability": "external_link"
+        },
+        {
+          "id": "COURT_RECORDS",
+          "title": "Sedgwick County district court records",
+          "type": "request_portal",
+          "origin": "Eighteenth Judicial District Court, Sedgwick County, Kansas",
+          "url": "https://www.dc18.org/records",
+          "availability": "external_link"
+        },
+        {
+          "id": "WPD_RECORDS",
+          "title": "Wichita Police: Request a Record / Report",
+          "type": "request_portal",
+          "origin": "City of Wichita",
+          "url": "https://www.wichita.gov/1026/Request-a-Record-Report",
+          "availability": "external_link"
+        }
+      ],
+      "entities": [
+        {
+          "id": "RADER",
+          "type": "person",
+          "label": "Dennis L. Rader"
+        },
+        {
+          "id": "DENNIS_STRING",
+          "type": "metadata_string",
+          "label": "Dennis"
+        },
+        {
+          "id": "CHURCH_ENTITY",
+          "type": "organization",
+          "label": "Christ Lutheran Church"
+        },
+        {
+          "id": "KSAS",
+          "type": "organization",
+          "label": "KSAS-TV"
+        },
+        {
+          "id": "EAGLE",
+          "type": "organization",
+          "label": "The Wichita Eagle"
+        },
+        {
+          "id": "WPD",
+          "type": "agency",
+          "label": "Wichita Police Department"
+        },
+        {
+          "id": "FBI_LAB",
+          "type": "agency",
+          "label": "FBI Laboratory"
+        },
+        {
+          "id": "KBI",
+          "type": "agency",
+          "label": "Kansas Bureau of Investigation laboratory"
+        },
+        {
+          "id": "COUNTY_LAB",
+          "type": "agency",
+          "label": "Sedgwick County Regional Forensic Science Center"
+        },
+        {
+          "id": "COURT",
+          "type": "court",
+          "label": "Eighteenth Judicial District Court, Sedgwick County, Kansas"
+        },
+        {
+          "id": "COMMS",
+          "type": "communications",
+          "label": "2004–2005 BTK correspondence"
+        },
+        {
+          "id": "COMM11",
+          "type": "reported_exhibit",
+          "label": "Communication 11"
+        },
+        {
+          "id": "DISK",
+          "type": "reported_exhibit",
+          "label": "Mailed floppy disk"
+        },
+        {
+          "id": "RTF",
+          "type": "reported_file",
+          "label": "Test A.RTF"
+        },
+        {
+          "id": "CCTV",
+          "type": "reported_recording",
+          "label": "Home Depot surveillance video"
+        },
+        {
+          "id": "SUV",
+          "type": "reported_observation",
+          "label": "Dark SUV"
+        },
+        {
+          "id": "UNKNOWN_PROFILE",
+          "type": "reported_lab_profile",
+          "label": "Common unknown male contributor"
+        },
+        {
+          "id": "FAMILY_REF",
+          "type": "reported_lab_sample",
+          "label": "Court-authorized family reference"
+        },
+        {
+          "id": "RADER_REF",
+          "type": "reported_lab_sample",
+          "label": "Dennis Rader reference oral swabs"
+        },
+        {
+          "id": "INTERVIEW",
+          "type": "reported_recording",
+          "label": "Law-enforcement interview"
+        },
+        {
+          "id": "CALL",
+          "type": "reported_recording",
+          "label": "Nancy Fox case dispatch call"
+        },
+        {
+          "id": "OFFICE_RECORDS",
+          "type": "reported_exhibit_group",
+          "label": "Park City office materials"
+        },
+        {
+          "id": "Q184",
+          "type": "laboratory_specimen",
+          "label": "FBI specimen Q184, October 2004 envelope"
+        },
+        {
+          "id": "CLEARED_LEAD",
+          "type": "cleared_lead",
+          "label": "Separately reported lead ruled out by DNA"
+        },
+        {
+          "id": "OTERO",
+          "type": "incident",
+          "label": "Otero family homicides"
+        },
+        {
+          "id": "BRIGHT",
+          "type": "incident",
+          "label": "Kathryn Bright homicide"
+        },
+        {
+          "id": "VIAN",
+          "type": "incident",
+          "label": "Shirley Vian homicide"
+        },
+        {
+          "id": "FOX",
+          "type": "incident",
+          "label": "Nancy Fox homicide"
+        },
+        {
+          "id": "HEDGE",
+          "type": "incident",
+          "label": "Marine Hedge homicide"
+        },
+        {
+          "id": "WEGERLE",
+          "type": "incident",
+          "label": "Vicki Wegerle homicide"
+        },
+        {
+          "id": "DAVIS",
+          "type": "incident",
+          "label": "Dolores Davis homicide"
+        },
+        {
+          "id": "VICTIM_01",
+          "type": "named_victim",
+          "label": "Joseph Otero"
+        },
+        {
+          "id": "VICTIM_02",
+          "type": "named_victim",
+          "label": "Julie Otero"
+        },
+        {
+          "id": "VICTIM_03",
+          "type": "named_victim",
+          "label": "Josephine Otero"
+        },
+        {
+          "id": "VICTIM_04",
+          "type": "named_victim",
+          "label": "Joseph Otero Jr."
+        },
+        {
+          "id": "VICTIM_05",
+          "type": "named_victim",
+          "label": "Kathryn Bright"
+        },
+        {
+          "id": "VICTIM_06",
+          "type": "named_victim",
+          "label": "Shirley Vian"
+        },
+        {
+          "id": "VICTIM_07",
+          "type": "named_victim",
+          "label": "Nancy Fox"
+        },
+        {
+          "id": "VICTIM_08",
+          "type": "named_victim",
+          "label": "Marine Hedge"
+        },
+        {
+          "id": "VICTIM_09",
+          "type": "named_victim",
+          "label": "Vicki Wegerle"
+        },
+        {
+          "id": "VICTIM_10",
+          "type": "named_victim",
+          "label": "Dolores Davis"
+        }
+      ],
+      "evidence": [
+        {
+          "id": "B-001",
+          "type": "reported_evidence_intake",
+          "description": "KSAS-TV received the February 16, 2005 mailing described as Communication 11. The prosecution reports that Detective Dana Gouge collected the envelope, which held the purple diskette and accompanying items.",
+          "source_id": "STATE",
+          "locator": "PDF p. 42, This Is a Test",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "This Is a Test"
+            },
+            {
+              "source_id": "RCFL",
+              "pdf_page": 13,
+              "section": "BTK vignette, printed p. 11"
+            }
+          ],
+          "limitation": "The filing describes the initial transfer. Exhibit intake logs, full chain-of-custody forms, and the original envelope were not located as downloadable items.",
+          "entity_ids": [
+            "KSAS",
+            "WPD",
+            "DISK",
+            "COMM11"
+          ]
+        },
+        {
+          "id": "B-002",
+          "type": "reported_digital_exam",
+          "description": "The prosecution reports that Detective Robert Stone examined the disk, found a valid file named Test A.RTF, and observed references to Dennis and Christ Lutheran Church in document properties.",
+          "source_id": "STATE",
+          "locator": "PDF p. 42, Disk examination paragraph",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "Disk examination paragraph"
+            },
+            {
+              "source_id": "RCFL",
+              "pdf_page": 13,
+              "section": "BTK vignette"
+            },
+            {
+              "source_id": "FBI_HISTORY",
+              "section": "BTK case paragraphs"
+            }
+          ],
+          "limitation": "Sources describe disk properties and a deleted file differently. The disk image, file bytes, exact fields and recovery method remain unverified.",
+          "entity_ids": [
+            "WPD",
+            "DISK",
+            "RTF",
+            "DENNIS_STRING",
+            "CHURCH_ENTITY"
+          ]
+        },
+        {
+          "id": "B-003",
+          "type": "contemporaneous_public_record",
+          "description": "The verified Internet Archive capture lists Dennis Rader as congregation president on the church’s people page. The capture predates the KSAS mailing.",
+          "source_id": "CHURCH",
+          "locator": "Congregation council officers, President entry",
+          "citations": [
+            {
+              "source_id": "CHURCH",
+              "section": "Congregation council officers, President entry"
+            }
+          ],
+          "limitation": "Confirms the public listing. By itself it cannot identify the document’s editor or the sender.",
+          "entity_ids": [
+            "RADER",
+            "CHURCH_ENTITY"
+          ]
+        },
+        {
+          "id": "B-004",
+          "type": "reported_attribution_lead",
+          "description": "The state filing describes Stone’s online lookup following the disk examination. The lookup returned the church association and generated the named suspect lead.",
+          "source_id": "STATE",
+          "locator": "PDF p. 42, Disk examination and website lookup",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "Disk examination and website lookup"
+            },
+            {
+              "source_id": "RCFL",
+              "pdf_page": 13,
+              "section": "BTK vignette"
+            },
+            {
+              "source_id": "CHURCH",
+              "section": "Congregation council officers"
+            }
+          ],
+          "limitation": "The shared given name and church are attribution clues. A separate evidence stream is needed to corroborate the person’s involvement.",
+          "entity_ids": [
+            "DENNIS_STRING",
+            "CHURCH_ENTITY",
+            "RADER",
+            "WPD"
+          ]
+        },
+        {
+          "id": "B-005",
+          "type": "reported_surveillance",
+          "description": "The prosecution describes January 8 store security video showing a dark SUV that could have been a Jeep Cherokee. After the disk lead, detectives reported seeing a similar vehicle in Rader’s driveway.",
+          "source_id": "STATE",
+          "locator": "PDF p. 40, Security tape description",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 40,
+              "section": "Security tape description"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "Vehicle observation"
+            }
+          ],
+          "limitation": "The person in the store tape was reported unidentifiable. The description supports a vehicle-type comparison only. Original video was not located in the reviewed public sources.",
+          "entity_ids": [
+            "CCTV",
+            "SUV",
+            "RADER"
+          ]
+        },
+        {
+          "id": "B-006",
+          "type": "reported_crime_scene_dna_comparison",
+          "description": "The state’s filing quotes April 2004 county lab findings linking profiles from evidence in the Otero, Fox, and Wegerle cases to a common unknown male contributor.",
+          "source_id": "STATE",
+          "locator": "PDF pp. 42–43, County lab findings continued on the next page",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "pdf_page_end": 43,
+              "section": "County lab findings continued on the next page"
+            }
+          ],
+          "limitation": "The conclusions use inclusion and exclusion language. Underlying electropherograms and original county reports were not acquired.",
+          "entity_ids": [
+            "OTERO",
+            "FOX",
+            "WEGERLE",
+            "COUNTY_LAB",
+            "UNKNOWN_PROFILE"
+          ]
+        },
+        {
+          "id": "B-007",
+          "type": "reported_familial_dna_step",
+          "description": "A court-authorized family reference was delivered to KBI on February 22, 2005. The prosecution reports that the Otero-scene profile could not be excluded as a biological parent of the reference contributor.",
+          "source_id": "STATE",
+          "locator": "PDF p. 42, Reference obtained by court order",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "Reference obtained by court order"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 43,
+              "section": "KBI comparison"
+            },
+            {
+              "source_id": "RCFL",
+              "pdf_page": 13,
+              "section": "DNA and digital evidence overview"
+            }
+          ],
+          "limitation": "A kinship comparison is an investigative lead. Its strength and methods require the underlying laboratory report.",
+          "entity_ids": [
+            "KBI",
+            "FAMILY_REF",
+            "UNKNOWN_PROFILE",
+            "OTERO"
+          ]
+        },
+        {
+          "id": "B-008",
+          "type": "reported_direct_dna_comparison",
+          "description": "The prosecution separately describes oral swabs taken from Rader after arrest. It reports KBI and county laboratory comparisons with earlier crime-scene profiles, including the Otero swabs.",
+          "source_id": "STATE",
+          "locator": "PDF pp. 45–46, DNA section",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 45,
+              "pdf_page_end": 46,
+              "section": "DNA section"
+            }
+          ],
+          "limitation": "Preserve the source’s profile-specific distinctions and reported match or non-exclusion language. The packet contains the filed description of those comparisons.",
+          "entity_ids": [
+            "RADER",
+            "RADER_REF",
+            "KBI",
+            "COUNTY_LAB",
+            "OTERO",
+            "FOX",
+            "WEGERLE"
+          ]
+        },
+        {
+          "id": "B-009",
+          "type": "reported_arrest",
+          "description": "The prosecution places the arrest on February 25, 2005. Police publicly announced the arrest the following day.",
+          "source_id": "STATE",
+          "locator": "PDF p. 43, Arrest",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 43,
+              "section": "Arrest"
+            },
+            {
+              "source_id": "VALADEZ",
+              "pdf_page": 5,
+              "section": "Factual background"
+            },
+            {
+              "source_id": "CNN_PRESS",
+              "section": "Police announcement"
+            }
+          ],
+          "limitation": "Dates distinguish taking custody from the public announcement.",
+          "entity_ids": [
+            "RADER",
+            "WPD"
+          ]
+        },
+        {
+          "id": "B-010",
+          "type": "recorded_statement_excerpt",
+          "description": "The state describes a recorded law-enforcement interview after the arrest. ABC publishes an excerpt of that interview.",
+          "source_id": "STATE",
+          "locator": "PDF p. 47, Rader’s Statement",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 47,
+              "section": "Rader’s Statement"
+            },
+            {
+              "source_id": "VIDEO_ABC_INTERVIEW",
+              "section": "Published excerpt"
+            }
+          ],
+          "limitation": "The public excerpt is edited. The full recording and an official time-coded transcript were not located.",
+          "entity_ids": [
+            "RADER",
+            "INTERVIEW"
+          ]
+        },
+        {
+          "id": "B-011",
+          "type": "reported_search_inventory",
+          "description": "The state describes binders, writings, communications and other media seized from Rader’s Park City office. It reports originals or full-sized versions of multiple communications in the collection.",
+          "source_id": "STATE",
+          "locator": "PDF pp. 87–91, The Mother Lode",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 87,
+              "pdf_page_end": 91,
+              "section": "The Mother Lode"
+            },
+            {
+              "source_id": "RCFL",
+              "pdf_page": 13,
+              "section": "Search warrant execution"
+            }
+          ],
+          "limitation": "The inventory is a reported account. A described office disk should not be merged with the disk mailed to KSAS.",
+          "entity_ids": [
+            "RADER",
+            "OFFICE_RECORDS",
+            "COMM11"
+          ]
+        },
+        {
+          "id": "B-012",
+          "type": "primary_lab_result",
+          "description": "The released FBI Lab report records that no detectable DNA was recovered from the tested flap area of the October 2004 envelope specimen Q184.",
+          "source_id": "VAULT",
+          "locator": "PDF pp. 110–111, December 6, 2004 DNA Analysis Unit I report, lab 041015012 PO MD",
+          "citations": [
+            {
+              "source_id": "VAULT",
+              "pdf_page": 110,
+              "pdf_page_end": 111,
+              "section": "December 6, 2004 DNA Analysis Unit I report, lab 041015012 PO MD"
+            },
+            {
+              "source_id": "SCAN_Q184",
+              "section": "Image of PDF p. 110"
+            }
+          ],
+          "limitation": "The negative result belongs to the tested area of Q184. It does not resolve DNA results from unrelated crime-scene specimens.",
+          "entity_ids": [
+            "FBI_LAB",
+            "Q184"
+          ]
+        },
+        {
+          "id": "B-013",
+          "type": "primary_questioned_document_result",
+          "description": "An FBI questioned-document report says typewriting on specimens Q184–Q186 was inconsistent with previously submitted documents.",
+          "source_id": "VAULT",
+          "locator": "PDF pp. 114–115, October 29, 2004 report",
+          "citations": [
+            {
+              "source_id": "VAULT",
+              "pdf_page": 114,
+              "pdf_page_end": 115,
+              "section": "October 29, 2004 report"
+            }
+          ],
+          "limitation": "This comparison is limited to the submitted items and typewriting comparison described on those pages.",
+          "entity_ids": [
+            "FBI_LAB",
+            "Q184"
+          ]
+        },
+        {
+          "id": "B-014",
+          "type": "excluded_lead",
+          "description": "A Kansas Supreme Court opinion records that a different man was publicly speculated about during the investigation and cleared by DNA testing in December 2004.",
+          "source_id": "VALADEZ",
+          "locator": "PDF pp. 4–5, Factual background, broadcast and testing",
+          "citations": [
+            {
+              "source_id": "VALADEZ",
+              "pdf_page": 4,
+              "pdf_page_end": 5,
+              "section": "Factual background, broadcast and testing"
+            }
+          ],
+          "limitation": "The court opinion describes this as a cleared lead. No same-person or guilt edge should be attached to that person.",
+          "entity_ids": [
+            "CLEARED_LEAD"
+          ]
+        },
+        {
+          "id": "B-015",
+          "type": "formal_charges",
+          "description": "The Complaint/Information sets out ten first-degree murder counts and identifies the charged victims.",
+          "source_id": "COMPLAINT",
+          "locator": "PDF pp. 1–5, Counts One through Ten",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 1,
+              "pdf_page_end": 5,
+              "section": "Counts One through Ten"
+            }
+          ],
+          "limitation": "The complaint records the state’s allegations at filing. Refer to the plea and judgment for adjudication.",
+          "entity_ids": [
+            "RADER",
+            "COURT"
+          ]
+        },
+        {
+          "id": "B-016",
+          "type": "accepted_guilty_plea",
+          "description": "On June 27, 2005 the district court accepted guilty pleas on all ten first-degree murder counts.",
+          "source_id": "PLEA",
+          "locator": "PDF p. 74, Lines 1–16",
+          "citations": [
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Lines 1–16"
+            },
+            {
+              "source_id": "PLEA_MINUTE",
+              "pdf_page": 1,
+              "section": "Record of Trial or Plea"
+            },
+            {
+              "source_id": "JUDGMENT",
+              "pdf_page": 1,
+              "pdf_page_end": 2,
+              "section": "Plea proceedings"
+            }
+          ],
+          "limitation": "The transcript establishes plea and adjudication. It does not independently validate every forensic method described in the prosecution filing.",
+          "entity_ids": [
+            "RADER",
+            "COURT"
+          ]
+        },
+        {
+          "id": "B-017",
+          "type": "sentence",
+          "description": "The court imposed ten consecutive life sentences in August 2005. The signed judgment records the court’s order.",
+          "source_id": "JUDGMENT",
+          "locator": "PDF pp. 3–4, Sentences on Counts One through Ten",
+          "citations": [
+            {
+              "source_id": "JUDGMENT",
+              "pdf_page": 3,
+              "pdf_page_end": 4,
+              "section": "Sentences on Counts One through Ten"
+            },
+            {
+              "source_id": "CNN_SENTENCING",
+              "section": "August 18 sentencing coverage"
+            },
+            {
+              "source_id": "VALADEZ",
+              "pdf_page": 5,
+              "section": "Factual background"
+            }
+          ],
+          "limitation": "The signed journal entry in this packet was filed October 31. Sentencing and filing are separate events.",
+          "entity_ids": [
+            "RADER",
+            "COURT"
+          ]
+        },
+        {
+          "id": "B-018",
+          "type": "evidence_disposition_order",
+          "description": "The court’s order directed destruction of certain investigation swabs, except swabs identifying Rader used in his arrest and conviction, and deferred disposition of other evidence pending appeal and further order.",
+          "source_id": "DISPOSITION",
+          "locator": "PDF pp. 1–2, Court findings and order",
+          "citations": [
+            {
+              "source_id": "DISPOSITION",
+              "pdf_page": 1,
+              "pdf_page_end": 2,
+              "section": "Court findings and order"
+            }
+          ],
+          "limitation": "This is the court’s 2005 direction. The later exhibit inventory and status of particular items remain unverified.",
+          "entity_ids": [
+            "COURT"
+          ]
+        },
+        {
+          "id": "B-019",
+          "type": "reported_renewed_communication",
+          "description": "The prosecution records that the Wichita Eagle handed renewed BTK correspondence to investigators in March 2004. Later filings and the FBI case study describe a series of communications before the arrest.",
+          "source_id": "STATE",
+          "locator": "PDF p. 28, Bill Thomas Killman section",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 28,
+              "section": "Bill Thomas Killman section"
+            },
+            {
+              "source_id": "VAULT",
+              "pdf_page": 11,
+              "section": "FBI investigative summary of resumed contact"
+            },
+            {
+              "source_id": "FBI_CASE_STUDY",
+              "pdf_page": 50,
+              "section": "Media Strategy case vignette"
+            }
+          ],
+          "limitation": "Record receipt, send and publication dates separately. The underlying full packet of original communications was not located.",
+          "entity_ids": [
+            "WPD",
+            "EAGLE",
+            "COMMS",
+            "WEGERLE"
+          ]
+        },
+        {
+          "id": "B-020",
+          "type": "public_archival_video",
+          "description": "The UNT archive dates this news B-roll to the May 3 arraignment. Exterior footage and broadcast close-ups of documents appear in the clip.",
+          "source_id": "VIDEO_UNT",
+          "locator": "00:00–00:50, with document imagery around 00:45",
+          "citations": [
+            {
+              "source_id": "VIDEO_UNT",
+              "section": "00:00–00:50, with document imagery around 00:45"
+            }
+          ],
+          "limitation": "The clip provides contemporaneous visual context. Individual depicted objects need verification from the exhibit or archive shot list.",
+          "entity_ids": [
+            "RADER",
+            "COURT"
+          ]
+        },
+        {
+          "id": "B-021",
+          "type": "government_portrait",
+          "description": "KDOC’s photo view identifies the person depicted as Dennis Rader.",
+          "source_id": "PHOTO_KDOC",
+          "locator": "KDOC image 1",
+          "citations": [
+            {
+              "source_id": "PHOTO_KDOC",
+              "section": "KDOC image 1"
+            }
+          ],
+          "limitation": "Portrait for identification and context. Photograph date is unspecified on the image page.",
+          "entity_ids": [
+            "RADER"
+          ]
+        },
+        {
+          "id": "B-022",
+          "type": "reported_911_recording",
+          "description": "The prosecution describes the dispatch call reporting Nancy Fox’s death. The early investigative timeline and later reporting refer to a recorded call.",
+          "source_id": "STATE",
+          "locator": "PDF p. 15, Nancy Fox",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 15,
+              "section": "Nancy Fox"
+            },
+            {
+              "source_id": "ABC_FAMILIES",
+              "section": "Nancy Fox and recorded call"
+            }
+          ],
+          "limitation": "The original dispatch recording and dispatch log were not acquired.",
+          "entity_ids": [
+            "FOX",
+            "CALL"
+          ]
+        },
+        {
+          "id": "B-023",
+          "type": "reported_ksas_disk_contents",
+          "description": "The prosecution’s evidence summary describes the RTF and accompanying cards and jewelry as parts of the same February 16 mailing.",
+          "source_id": "STATE",
+          "locator": "PDF p. 42, Communication 11 inventory",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "Communication 11 inventory"
+            }
+          ],
+          "limitation": "The inventory gives case-level context. It leaves item-level chain of custody and the file’s original hash unverified.",
+          "entity_ids": [
+            "COMM11",
+            "DISK",
+            "RTF"
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "id": "T01",
+          "date": "1974-01-15",
+          "precision": "day",
+          "event": "Otero family homicide case",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 3,
+              "section": "The Oteros"
+            },
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 1,
+              "pdf_page_end": 2,
+              "section": "Counts One through Four"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "OTERO"
+          ]
+        },
+        {
+          "id": "T02",
+          "date": "1974-04-04",
+          "precision": "day",
+          "event": "Kathryn Bright homicide case",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 8,
+              "section": "Kathryn Bright"
+            },
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 3,
+              "section": "Count Five"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "BRIGHT"
+          ]
+        },
+        {
+          "id": "T03",
+          "date": "1974-10-22",
+          "precision": "day",
+          "event": "An anonymous call to the Wichita Eagle-Beacon leads to an Otero-related letter at the public library",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 12,
+              "section": "October 1974 communication"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [],
+          "entity_ids": [
+            "EAGLE",
+            "OTERO"
+          ]
+        },
+        {
+          "id": "T04",
+          "date": "1977-03-17",
+          "precision": "day",
+          "event": "Shirley Vian homicide case",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 13,
+              "section": "Shirley Vian"
+            },
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 3,
+              "section": "Count Six"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "VIAN"
+          ]
+        },
+        {
+          "id": "T05",
+          "date": "1977-12-08",
+          "precision": "day",
+          "event": "Nancy Fox homicide case",
+          "citations": [
+            {
+              "source_id": "PLEA",
+              "pdf_page": 52,
+              "section": "Count Seven factual basis"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 15,
+              "section": "Nancy Fox"
+            }
+          ],
+          "source_id": "PLEA",
+          "evidence_ids": [
+            "B-022"
+          ],
+          "entity_ids": [
+            "FOX"
+          ]
+        },
+        {
+          "id": "T06",
+          "date": "1985-04-27",
+          "precision": "day",
+          "event": "Marine Hedge homicide case",
+          "citations": [
+            {
+              "source_id": "PLEA",
+              "pdf_page": 58,
+              "section": "Count Eight factual basis"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 21,
+              "section": "Marine Hedge"
+            }
+          ],
+          "source_id": "PLEA",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "HEDGE"
+          ]
+        },
+        {
+          "id": "T07",
+          "date": "1986-09-16",
+          "precision": "day",
+          "event": "Vicki Wegerle homicide case",
+          "citations": [
+            {
+              "source_id": "PLEA",
+              "pdf_page": 9,
+              "section": "Count Nine date"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 23,
+              "section": "Vicki Wegerle"
+            }
+          ],
+          "source_id": "PLEA",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "WEGERLE"
+          ]
+        },
+        {
+          "id": "T08",
+          "date": "1991-01-18",
+          "precision": "day",
+          "event": "Dolores Davis homicide case",
+          "citations": [
+            {
+              "source_id": "PLEA",
+              "pdf_page": 9,
+              "pdf_page_end": 10,
+              "section": "Count Ten dates"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 26,
+              "section": "Dolores Davis"
+            }
+          ],
+          "source_id": "PLEA",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "DAVIS"
+          ],
+          "end_date": "1991-01-19",
+          "date_note": "Count Ten date range. The prosecution describes police response on January 19."
+        },
+        {
+          "id": "T09",
+          "date": "2004-03-19",
+          "precision": "day",
+          "event": "The Wichita Eagle passes renewed correspondence to police",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 28,
+              "section": "Bill Thomas Killman section"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-019"
+          ],
+          "entity_ids": [
+            "COMMS",
+            "EAGLE"
+          ]
+        },
+        {
+          "id": "T10",
+          "date": "2004-04",
+          "precision": "month",
+          "event": "County lab findings link profiles from evidence in three cases",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "pdf_page_end": 43,
+              "section": "County lab findings"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-006"
+          ],
+          "entity_ids": [
+            "OTERO",
+            "FOX",
+            "WEGERLE"
+          ]
+        },
+        {
+          "id": "T11",
+          "date": "2004-12-03",
+          "precision": "day",
+          "event": "DNA testing clears a separately reported lead",
+          "citations": [
+            {
+              "source_id": "VALADEZ",
+              "pdf_page": 5,
+              "section": "Factual background"
+            }
+          ],
+          "source_id": "VALADEZ",
+          "evidence_ids": [
+            "B-014"
+          ],
+          "entity_ids": [
+            "CLEARED_LEAD"
+          ]
+        },
+        {
+          "id": "T12",
+          "date": "2004-12-06",
+          "precision": "day",
+          "event": "FBI issues a negative DNA result for the Q184 envelope flap",
+          "citations": [
+            {
+              "source_id": "VAULT",
+              "pdf_page": 110,
+              "section": "DNA Analysis Unit I report"
+            }
+          ],
+          "source_id": "VAULT",
+          "evidence_ids": [
+            "B-012"
+          ],
+          "entity_ids": [
+            "Q184"
+          ]
+        },
+        {
+          "id": "T13",
+          "date": "2005-01-08",
+          "precision": "day",
+          "event": "Store surveillance date for the reported dark SUV lead",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 40,
+              "section": "Security tape description"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-005"
+          ],
+          "entity_ids": [
+            "CCTV",
+            "SUV"
+          ]
+        },
+        {
+          "id": "T14",
+          "date": "2005-02-06",
+          "precision": "day",
+          "event": "Internet Archive captures the church listing naming Dennis Rader",
+          "citations": [
+            {
+              "source_id": "CHURCH",
+              "section": "Congregation council officers"
+            }
+          ],
+          "source_id": "CHURCH",
+          "evidence_ids": [
+            "B-003"
+          ],
+          "entity_ids": [
+            "CHURCH_ENTITY",
+            "RADER"
+          ],
+          "timestamp": "2005-02-06T04:47:29Z",
+          "date_note": "UTC archive capture timestamp."
+        },
+        {
+          "id": "T15",
+          "date": "2005-02-16",
+          "precision": "day",
+          "event": "KSAS receives the mailing containing a floppy disk",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 42,
+              "section": "This Is a Test"
+            },
+            {
+              "source_id": "RCFL",
+              "pdf_page": 13,
+              "section": "BTK vignette"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-001",
+            "B-023"
+          ],
+          "entity_ids": [
+            "COMM11",
+            "KSAS",
+            "DISK"
+          ]
+        },
+        {
+          "id": "T16",
+          "date": "2005-02-22",
+          "precision": "day",
+          "event": "KBI receives the court-authorized family reference",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 43,
+              "section": "KBI family comparison"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-007"
+          ],
+          "entity_ids": [
+            "FAMILY_REF",
+            "KBI"
+          ]
+        },
+        {
+          "id": "T17",
+          "date": "2005-02-25",
+          "precision": "day",
+          "event": "Rader is arrested. Police collect oral swabs and begin the recorded interview",
+          "citations": [
+            {
+              "source_id": "STATE",
+              "pdf_page": 43,
+              "pdf_page_end": 47,
+              "section": "Arrest through interview"
+            }
+          ],
+          "source_id": "STATE",
+          "evidence_ids": [
+            "B-008",
+            "B-009",
+            "B-010"
+          ],
+          "entity_ids": [
+            "RADER",
+            "WPD",
+            "RADER_REF",
+            "INTERVIEW"
+          ]
+        },
+        {
+          "id": "T18",
+          "date": "2005-02-26",
+          "precision": "day",
+          "event": "Public arrest announcement and dated county lab report",
+          "citations": [
+            {
+              "source_id": "VALADEZ",
+              "pdf_page": 5,
+              "section": "Public announcement"
+            },
+            {
+              "source_id": "STATE",
+              "pdf_page": 45,
+              "section": "County report dated February 26"
+            }
+          ],
+          "source_id": "VALADEZ",
+          "evidence_ids": [
+            "B-008",
+            "B-009"
+          ],
+          "entity_ids": [
+            "WPD",
+            "COUNTY_LAB",
+            "RADER"
+          ]
+        },
+        {
+          "id": "T19",
+          "date": "2005-03-01",
+          "precision": "day",
+          "event": "Ten-count criminal complaint filed",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 1,
+              "pdf_page_end": 5,
+              "section": "Filing stamp and Counts One through Ten"
+            }
+          ],
+          "source_id": "COMPLAINT",
+          "evidence_ids": [
+            "B-015"
+          ],
+          "entity_ids": [
+            "COURT",
+            "RADER"
+          ]
+        },
+        {
+          "id": "T20",
+          "date": "2005-05-03",
+          "precision": "day",
+          "event": "Arraignment date documented by archived news footage metadata",
+          "citations": [
+            {
+              "source_id": "VIDEO_UNT",
+              "section": "Creation date and description"
+            }
+          ],
+          "source_id": "VIDEO_UNT",
+          "evidence_ids": [
+            "B-020"
+          ],
+          "entity_ids": [
+            "COURT",
+            "RADER"
+          ]
+        },
+        {
+          "id": "T21",
+          "date": "2005-06-27",
+          "precision": "day",
+          "event": "Court accepts guilty pleas on all ten counts",
+          "citations": [
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Lines 1–16"
+            }
+          ],
+          "source_id": "PLEA",
+          "evidence_ids": [
+            "B-016"
+          ],
+          "entity_ids": [
+            "COURT",
+            "RADER"
+          ]
+        },
+        {
+          "id": "T22",
+          "date": "2005-08-17",
+          "precision": "day",
+          "event": "Sentencing proceedings begin",
+          "citations": [
+            {
+              "source_id": "JUDGMENT",
+              "pdf_page": 2,
+              "section": "Sentencing proceedings"
+            }
+          ],
+          "source_id": "JUDGMENT",
+          "evidence_ids": [
+            "B-017"
+          ],
+          "entity_ids": [
+            "COURT",
+            "RADER"
+          ]
+        },
+        {
+          "id": "T23",
+          "date": "2005-08-18",
+          "precision": "day",
+          "event": "Court imposes ten consecutive life sentences",
+          "citations": [
+            {
+              "source_id": "JUDGMENT",
+              "pdf_page": 3,
+              "pdf_page_end": 4,
+              "section": "Sentence"
+            },
+            {
+              "source_id": "CNN_SENTENCING",
+              "section": "August 18 broadcast"
+            }
+          ],
+          "source_id": "JUDGMENT",
+          "evidence_ids": [
+            "B-017"
+          ],
+          "entity_ids": [
+            "COURT",
+            "RADER"
+          ]
+        },
+        {
+          "id": "T24",
+          "date": "2005-10-31",
+          "precision": "day",
+          "event": "Judgment and evidence disposition order filed",
+          "citations": [
+            {
+              "source_id": "JUDGMENT",
+              "pdf_page": 1,
+              "section": "Filing stamp"
+            },
+            {
+              "source_id": "DISPOSITION",
+              "pdf_page": 1,
+              "section": "Filing stamp and order"
+            }
+          ],
+          "source_id": "JUDGMENT",
+          "evidence_ids": [
+            "B-017",
+            "B-018"
+          ],
+          "entity_ids": [
+            "COURT",
+            "RADER"
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "from": "KSAS",
+          "type": "received",
+          "to": "COMM11",
+          "evidence_ids": [
+            "B-001"
+          ]
+        },
+        {
+          "from": "WPD",
+          "type": "collected_from_KSAS",
+          "to": "COMM11",
+          "evidence_ids": [
+            "B-001"
+          ]
+        },
+        {
+          "from": "COMM11",
+          "type": "reportedly_contained",
+          "to": "DISK",
+          "evidence_ids": [
+            "B-001",
+            "B-023"
+          ]
+        },
+        {
+          "from": "DISK",
+          "type": "reportedly_contained_file",
+          "to": "RTF",
+          "evidence_ids": [
+            "B-002",
+            "B-023"
+          ]
+        },
+        {
+          "from": "RTF",
+          "type": "associated_with_reported_reference",
+          "to": "DENNIS_STRING",
+          "evidence_ids": [
+            "B-002"
+          ],
+          "qualification": "Exact artifact source and field name unverified."
+        },
+        {
+          "from": "RTF",
+          "type": "associated_with_reported_reference",
+          "to": "CHURCH_ENTITY",
+          "evidence_ids": [
+            "B-002"
+          ]
+        },
+        {
+          "from": "CHURCH_ENTITY",
+          "type": "lists_as_congregation_president",
+          "to": "RADER",
+          "evidence_ids": [
+            "B-003"
+          ]
+        },
+        {
+          "from": "DENNIS_STRING",
+          "type": "contributed_to_candidate_lead",
+          "to": "RADER",
+          "evidence_ids": [
+            "B-002",
+            "B-003",
+            "B-004"
+          ],
+          "qualification": "First name and church do not uniquely identify the editor."
+        },
+        {
+          "from": "CCTV",
+          "type": "reportedly_depicts_vehicle_type",
+          "to": "SUV",
+          "evidence_ids": [
+            "B-005"
+          ]
+        },
+        {
+          "from": "OTERO",
+          "type": "reportedly_yielded_comparison_profile",
+          "to": "UNKNOWN_PROFILE",
+          "evidence_ids": [
+            "B-006"
+          ]
+        },
+        {
+          "from": "FOX",
+          "type": "reportedly_yielded_comparison_profile",
+          "to": "UNKNOWN_PROFILE",
+          "evidence_ids": [
+            "B-006"
+          ]
+        },
+        {
+          "from": "WEGERLE",
+          "type": "reportedly_yielded_comparison_profile",
+          "to": "UNKNOWN_PROFILE",
+          "evidence_ids": [
+            "B-006"
+          ]
+        },
+        {
+          "from": "FAMILY_REF",
+          "type": "used_in_reported_parentage_comparison",
+          "to": "UNKNOWN_PROFILE",
+          "evidence_ids": [
+            "B-007"
+          ]
+        },
+        {
+          "from": "RADER",
+          "type": "provided_reported_reference_swabs",
+          "to": "RADER_REF",
+          "evidence_ids": [
+            "B-008"
+          ]
+        },
+        {
+          "from": "RADER_REF",
+          "type": "used_in_reported_direct_comparison",
+          "to": "UNKNOWN_PROFILE",
+          "evidence_ids": [
+            "B-008"
+          ]
+        },
+        {
+          "from": "RADER",
+          "type": "gave_recorded_interview",
+          "to": "INTERVIEW",
+          "evidence_ids": [
+            "B-010"
+          ]
+        },
+        {
+          "from": "OFFICE_RECORDS",
+          "type": "linked_by_prosecution_inventory_to",
+          "to": "COMMS",
+          "evidence_ids": [
+            "B-011"
+          ]
+        },
+        {
+          "from": "FBI_LAB",
+          "type": "reports_no_detectable_DNA_on_tested_flap",
+          "to": "Q184",
+          "evidence_ids": [
+            "B-012"
+          ]
+        },
+        {
+          "from": "COURT",
+          "type": "accepted_pleas_from",
+          "to": "RADER",
+          "evidence_ids": [
+            "B-016"
+          ]
+        },
+        {
+          "from": "COURT",
+          "type": "sentenced",
+          "to": "RADER",
+          "evidence_ids": [
+            "B-017"
+          ]
+        },
+        {
+          "from": "VICTIM_01",
+          "type": "named_victim_in",
+          "to": "OTERO",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_02",
+          "type": "named_victim_in",
+          "to": "OTERO",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_03",
+          "type": "named_victim_in",
+          "to": "OTERO",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_04",
+          "type": "named_victim_in",
+          "to": "OTERO",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_05",
+          "type": "named_victim_in",
+          "to": "BRIGHT",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_06",
+          "type": "named_victim_in",
+          "to": "VIAN",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_07",
+          "type": "named_victim_in",
+          "to": "FOX",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_08",
+          "type": "named_victim_in",
+          "to": "HEDGE",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_09",
+          "type": "named_victim_in",
+          "to": "WEGERLE",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        },
+        {
+          "from": "VICTIM_10",
+          "type": "named_victim_in",
+          "to": "DAVIS",
+          "evidence_ids": [
+            "B-015",
+            "B-016"
+          ]
+        }
+      ],
+      "counts": [
+        {
+          "count": 1,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_01",
+          "incident_id": "OTERO",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 1,
+              "section": "Count 1"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 5,
+              "section": "Count 1"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 2,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_02",
+          "incident_id": "OTERO",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 2,
+              "section": "Count 2"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 6,
+              "section": "Count 2"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 3,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_03",
+          "incident_id": "OTERO",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 2,
+              "section": "Count 3"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 6,
+              "section": "Count 3"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_04",
+          "incident_id": "OTERO",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 2,
+              "section": "Count 4"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 7,
+              "section": "Count 4"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 5,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_05",
+          "incident_id": "BRIGHT",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 3,
+              "section": "Count 5"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 7,
+              "section": "Count 5"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_06",
+          "incident_id": "VIAN",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 3,
+              "section": "Count 6"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 8,
+              "section": "Count 6"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 7,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_07",
+          "incident_id": "FOX",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 3,
+              "section": "Count 7"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 8,
+              "section": "Count 7"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 8,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_08",
+          "incident_id": "HEDGE",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 4,
+              "section": "Count 8"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 9,
+              "section": "Count 8"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 9,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_09",
+          "incident_id": "WEGERLE",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 4,
+              "section": "Count 9"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 9,
+              "section": "Count 9"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        },
+        {
+          "count": 10,
+          "offense": "first-degree murder",
+          "victim_id": "VICTIM_10",
+          "incident_id": "DAVIS",
+          "outcome": "guilty plea accepted",
+          "citations": [
+            {
+              "source_id": "COMPLAINT",
+              "pdf_page": 4,
+              "section": "Count 10"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 10,
+              "section": "Count 10"
+            },
+            {
+              "source_id": "PLEA",
+              "pdf_page": 74,
+              "section": "Judicial acceptance of pleas"
+            }
+          ]
+        }
+      ],
+      "hypotheses": [
+        {
+          "id": "H1",
+          "statement": "The mailed disk generated a lead pointing to Dennis Rader through a public church listing.",
+          "status": "supported_by_reported_examination_and_contemporaneous_listing",
+          "evidence_ids": [
+            "B-001",
+            "B-002",
+            "B-003",
+            "B-004"
+          ],
+          "limitation": "The archive independently confirms the listing. The original disk and exact location of the recovered strings remain unverified."
+        },
+        {
+          "id": "H2",
+          "statement": "Rader was associated with the forensic profiles cited in the Otero, Fox, and Wegerle investigation.",
+          "status": "supported_in_prosecution_filing",
+          "evidence_ids": [
+            "B-006",
+            "B-007",
+            "B-008"
+          ],
+          "limitation": "The familial comparison, Rader’s own reference swabs, and cross-incident comparison answer different questions. The public filing summarizes each."
+        },
+        {
+          "id": "H3",
+          "statement": "The early surveillance image alone could identify Rader.",
+          "status": "unsupported",
+          "evidence_ids": [
+            "B-005"
+          ],
+          "limitation": "The filing describes an unidentifiable individual and an uncertain vehicle identification."
+        },
+        {
+          "id": "H4",
+          "statement": "The court adjudicated all ten first-degree murder counts.",
+          "status": "established_by_court_record",
+          "evidence_ids": [
+            "B-016",
+            "B-017"
+          ],
+          "limitation": "The outcome followed guilty pleas."
+        }
+      ],
+      "raw_artifact_gaps": [
+        {
+          "artifact": "Mailed diskette forensic image and standalone Test A.RTF",
+          "availability": "public_download_not_located",
+          "why": "Exact metadata, recovery context, image hash and independent re-examination.",
+          "request_via": [
+            "COURT_RECORDS",
+            "WPD_RECORDS"
+          ],
+          "evidence_ids": [
+            "B-001",
+            "B-002"
+          ]
+        },
+        {
+          "artifact": "Original digital examiner notes, exhibit list, intake and custody logs",
+          "availability": "public_download_not_located",
+          "why": "Resolve which artifact held the metadata and trace possession of the media.",
+          "request_via": [
+            "COURT_RECORDS",
+            "WPD_RECORDS"
+          ],
+          "evidence_ids": [
+            "B-001",
+            "B-002",
+            "B-018"
+          ]
+        },
+        {
+          "artifact": "Signed county/KBI case-match and kinship reports, lab worksheets and instrument output",
+          "availability": "reported_in_filing",
+          "why": "Check which profiles were compared, the analysts’ exact conclusions and methods.",
+          "request_via": [
+            "COURT_RECORDS",
+            "WPD_RECORDS"
+          ],
+          "evidence_ids": [
+            "B-006",
+            "B-007",
+            "B-008"
+          ]
+        },
+        {
+          "artifact": "Original store security tape, complete interrogation master, and 1977 dispatch recording/log",
+          "availability": "originals_not_located",
+          "why": "Independent frame or audio review and complete time-coded provenance.",
+          "request_via": [
+            "COURT_RECORDS",
+            "WPD_RECORDS"
+          ],
+          "evidence_ids": [
+            "B-005",
+            "B-010",
+            "B-022"
+          ]
+        },
+        {
+          "artifact": "Full court exhibit inventory, independently authenticated scene-photo originals, physical correspondence and related item copies",
+          "availability": "incomplete_public_coverage",
+          "why": "Connect each original image or document to its exhibit number and custody history.",
+          "request_via": [
+            "COURT_RECORDS",
+            "WPD_RECORDS"
+          ],
+          "evidence_ids": [
+            "B-011",
+            "B-018",
+            "B-019"
+          ]
+        }
+      ],
+      "text_derivatives": [
+        {
+          "path": "ocr/FBI_Vault_pages.jsonl",
+          "parent_source_id": "VAULT",
+          "records": 397,
+          "sha256": "c93c2efd6d0e4e283c43ed6e1d8c0bb17dad881c71ee2012f4a27b5c82aabd46",
+          "note": "OCR is a search aid. Check scan pixels before quoting. Blank and fully redacted pages may have empty or spurious OCR."
+        },
+        {
+          "path": "ocr/State_Evidence_Summary_pages.jsonl",
+          "parent_source_id": "STATE",
+          "records": 92,
+          "sha256": "5678e4a196874fabd25c0d793c375e3ae5dfd9101e341d8231e9d82c7fcddadd",
+          "note": "OCR is a search aid. Check scan pixels before quoting. Blank and fully redacted pages may have empty or spurious OCR."
+        }
+      ]
+    }
+  ]
+}

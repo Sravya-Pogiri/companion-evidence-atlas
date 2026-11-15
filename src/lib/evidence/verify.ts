@@ -51,3 +51,31 @@ export function inTranscript(transcript: string, quote: string): boolean {
   const q = normalizeText(quote).replace(/^["']|["']$/g, "");
   return q.length >= 6 && normalizeText(transcript).includes(q);
 }
+
+/** Court-transcript line numbers (1 to 25 at the start of each line) are layout, not text. */
+function stripLineNumbers(s: string): string {
+  return s.replace(/^[ \t]*\d{1,2}[ \t]+(?=\S)/gm, "");
+}
+
+const squeeze = (s: string) => normalizeText(s).replace(/\s+/g, "");
+
+/**
+ * Like checkQuote, for scanned or transcribed pages: when the quote is not on the cited page
+ * as is, it may still match once transcript line numbers are removed and spacing is ignored
+ * (OCR splits and joins words: "unlaw fully", "custody ofthe"). Every letter must still match
+ * in order; a reworded or invented quote does not pass. Only the cited page is searched.
+ */
+export function checkScannedQuote(
+  pages: PageText[],
+  quote: string,
+  page: number,
+): QuoteCheck & { loose?: boolean } {
+  const strict = checkQuote(pages, quote, page);
+  if (strict.status === "exact") return strict;
+  const on = pages.find((p) => p.page === page);
+  const q = squeeze(quote).replace(/^["']|["']$/g, "");
+  if (on && q.length >= 20 && squeeze(stripLineNumbers(on.text)).includes(q)) {
+    return { status: "exact", page, loose: true };
+  }
+  return strict;
+}
