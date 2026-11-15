@@ -13,8 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
 import { Route as WorkspaceAnalysisRouteImport } from './routes/_workspace.analysis'
 import { Route as WorkspaceHandoffRouteImport } from './routes/_workspace.handoff'
+import { Route as WorkspaceInvestigateRouteImport } from './routes/_workspace.investigate'
 import { Route as WorkspaceLiveRouteImport } from './routes/_workspace.live'
 import { Route as WorkspaceReviewRouteImport } from './routes/_workspace.review'
+import { Route as ApiInvestigateRouteImport } from './routes/api.investigate'
 import { Route as ApiPhotonWebhookRouteImport } from './routes/api.photon.webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -36,6 +38,11 @@ const WorkspaceHandoffRoute = WorkspaceHandoffRouteImport.update({
   path: '/handoff',
   getParentRoute: () => WorkspaceRoute,
 } as any)
+const WorkspaceInvestigateRoute = WorkspaceInvestigateRouteImport.update({
+  id: '/investigate',
+  path: '/investigate',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
 const WorkspaceLiveRoute = WorkspaceLiveRouteImport.update({
   id: '/live',
   path: '/live',
@@ -45,6 +52,11 @@ const WorkspaceReviewRoute = WorkspaceReviewRouteImport.update({
   id: '/review',
   path: '/review',
   getParentRoute: () => WorkspaceRoute,
+} as any)
+const ApiInvestigateRoute = ApiInvestigateRouteImport.update({
+  id: '/api/investigate',
+  path: '/api/investigate',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPhotonWebhookRoute = ApiPhotonWebhookRouteImport.update({
   id: '/api/photon/webhook',
@@ -56,16 +68,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analysis': typeof WorkspaceAnalysisRoute
   '/handoff': typeof WorkspaceHandoffRoute
+  '/investigate': typeof WorkspaceInvestigateRoute
   '/live': typeof WorkspaceLiveRoute
   '/review': typeof WorkspaceReviewRoute
+  '/api/investigate': typeof ApiInvestigateRoute
   '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analysis': typeof WorkspaceAnalysisRoute
   '/handoff': typeof WorkspaceHandoffRoute
+  '/investigate': typeof WorkspaceInvestigateRoute
   '/live': typeof WorkspaceLiveRoute
   '/review': typeof WorkspaceReviewRoute
+  '/api/investigate': typeof ApiInvestigateRoute
   '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRoutesById {
@@ -74,31 +90,50 @@ export interface FileRoutesById {
   '/_workspace': typeof WorkspaceRouteWithChildren
   '/_workspace/analysis': typeof WorkspaceAnalysisRoute
   '/_workspace/handoff': typeof WorkspaceHandoffRoute
+  '/_workspace/investigate': typeof WorkspaceInvestigateRoute
   '/_workspace/live': typeof WorkspaceLiveRoute
   '/_workspace/review': typeof WorkspaceReviewRoute
+  '/api/investigate': typeof ApiInvestigateRoute
   '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/analysis' | '/handoff' | '/live' | '/review' | '/api/photon/webhook'
+    | '/'
+    | '/analysis'
+    | '/handoff'
+    | '/investigate'
+    | '/live'
+    | '/review'
+    | '/api/investigate'
+    | '/api/photon/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/analysis' | '/handoff' | '/live' | '/review' | '/api/photon/webhook'
+    | '/'
+    | '/analysis'
+    | '/handoff'
+    | '/investigate'
+    | '/live'
+    | '/review'
+    | '/api/investigate'
+    | '/api/photon/webhook'
   id:
     | '__root__'
     | '/'
     | '/_workspace'
     | '/_workspace/analysis'
     | '/_workspace/handoff'
+    | '/_workspace/investigate'
     | '/_workspace/live'
     | '/_workspace/review'
+    | '/api/investigate'
     | '/api/photon/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
+  ApiInvestigateRoute: typeof ApiInvestigateRoute
   ApiPhotonWebhookRoute: typeof ApiPhotonWebhookRoute
 }
 
@@ -132,6 +167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceHandoffRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/_workspace/investigate': {
+      id: '/_workspace/investigate'
+      path: '/investigate'
+      fullPath: '/investigate'
+      preLoaderRoute: typeof WorkspaceInvestigateRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
     '/_workspace/live': {
       id: '/_workspace/live'
       path: '/live'
@@ -146,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceReviewRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/api/investigate': {
+      id: '/api/investigate'
+      path: '/api/investigate'
+      fullPath: '/api/investigate'
+      preLoaderRoute: typeof ApiInvestigateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/photon/webhook': {
       id: '/api/photon/webhook'
       path: '/api/photon/webhook'
@@ -159,6 +208,7 @@ declare module '@tanstack/react-router' {
 interface WorkspaceRouteChildren {
   WorkspaceAnalysisRoute: typeof WorkspaceAnalysisRoute
   WorkspaceHandoffRoute: typeof WorkspaceHandoffRoute
+  WorkspaceInvestigateRoute: typeof WorkspaceInvestigateRoute
   WorkspaceLiveRoute: typeof WorkspaceLiveRoute
   WorkspaceReviewRoute: typeof WorkspaceReviewRoute
 }
@@ -166,6 +216,7 @@ interface WorkspaceRouteChildren {
 const WorkspaceRouteChildren: WorkspaceRouteChildren = {
   WorkspaceAnalysisRoute: WorkspaceAnalysisRoute,
   WorkspaceHandoffRoute: WorkspaceHandoffRoute,
+  WorkspaceInvestigateRoute: WorkspaceInvestigateRoute,
   WorkspaceLiveRoute: WorkspaceLiveRoute,
   WorkspaceReviewRoute: WorkspaceReviewRoute,
 }
@@ -177,6 +228,7 @@ const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WorkspaceRoute: WorkspaceRouteWithChildren,
+  ApiInvestigateRoute: ApiInvestigateRoute,
   ApiPhotonWebhookRoute: ApiPhotonWebhookRoute,
 }
 export const routeTree = rootRouteImport

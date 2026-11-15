@@ -14,6 +14,7 @@ const nav = [
   { to: "/analysis", label: "Case Analysis" },
   { to: "/review", label: "Review" },
   { to: "/handoff", label: "Handoff" },
+  { to: "/investigate", label: "Investigate" },
 ] as const;
 
 function Workspace() {
@@ -26,6 +27,7 @@ function Workspace() {
   // tab with its own review notice and status bar.
   const onLive = path === "/live";
   const onAnalysis = path === "/analysis";
+  const onInvestigate = path === "/investigate";
 
   return (
     <div className="workspace-noir dark flex min-h-screen flex-col">
@@ -61,7 +63,7 @@ function Workspace() {
           </select>
         </label>
       </header>
-      {!onLive && !onAnalysis && (
+      {!onLive && !onAnalysis && !onInvestigate && (
         <div
           role="note"
           className="border-b px-6 py-1.5 text-sm text-muted-foreground print:hidden"

@@ -1,5 +1,9 @@
 # Lexora Investigate finding
 
+## Test this claim (Investigate page)
+`POST /investigate-claim` with `{"caseId":"btk","claim":"..."}` and the bearer token runs `src/claim.ts`: a Deep Agents lead investigator plans with `write_todos` and delegates through the `task` tool to two subagents, `timeline-researcher` and `evidence-reviewer`, whose tools (`search_evidence`, `read_evidence_page`, `list_dated_records`, `get_observation`, `list_missing_records`) read the app's stored case data in `src/data/btk` and nothing else. It streams NDJSON `activity` events from the agents' real plan, delegations and tool calls, then a `result` whose citations and dated events are each checked against the stored page text (`checkScannedQuote`) and against the records the tools returned during the run. Requests to Gemini are paced (`GEMINI_RPM`, default 8), fall back across `GEMINI_MODELS` when a model's daily quota ends, and pass Gemini 3 thought signatures back on tool calls. Local run from this folder: `npm run start:local` (reads the repository's `.env`). Tests: `npx tsx --test src/evidence-store.test.ts`.
+
+
 ## Architecture
 `src/investigate.ts` instantiates the actual `deepagents` TypeScript `createDeepAgent`. Node 22 is used because original PDF parsing and FFmpeg frame sampling need a conventional server runtime. The Lovable app calls the service through `src/lib/investigation.functions.ts`, keeping service credentials server-side. Only three immutable synthetic case IDs are accepted. No uploaded/private discovery is processed or exposed by this demo.
 
