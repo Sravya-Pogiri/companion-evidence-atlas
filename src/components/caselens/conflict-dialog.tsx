@@ -1,75 +1,101 @@
-import { ExternalLink, FileText, Video } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { VIDEOS, formatTime, type TimelineItem } from "@/lib/sample-case";
+import { ExternalLink } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { LANE_ICON, PageThumb, PlayableStill } from "@/components/caselens/evidence-media";
+import { mediaFor } from "@/lib/media";
+import { LANES, formatTime, type TimelineItem } from "@/lib/sample-case";
+import { cn } from "@/lib/utils";
 
 interface ConflictDialogProps {
   claim: TimelineItem | null;
   footage: TimelineItem | null;
   onClose: () => void;
+  /** Extra classes for the dialog box, e.g. a scope class for a themed tab. */
+  className?: string;
 }
 
-/** Side by side: the document claim on the left, the footage at that timestamp on the right. */
-export function ConflictDialog({ claim, footage, onClose }: ConflictDialogProps) {
-  const t = footage ? Math.floor(footage.start) : 0;
+/** Compare sources: the record page on the left, the footage at that moment on the right. */
+export function ConflictDialog({ claim, footage, onClose, className }: ConflictDialogProps) {
+  const open = claim !== null && footage !== null;
   return (
-    <Dialog open={claim !== null} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-6xl">
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        className={cn(
+          "max-h-[92vh] max-w-5xl overflow-y-auto border-border bg-card text-foreground",
+          className,
+        )}
+      >
         <DialogHeader>
-          <DialogTitle className="font-serif text-2xl">Possible conflict at about {formatTime(t)}</DialogTitle>
-          <DialogDescription className="text-base">
-            Potential finding. Compare the claim with the footage and decide for yourself.
+          <DialogTitle className="font-serif text-2xl font-medium">
+            Compare sources at about {formatTime(claim?.start ?? 0)}
+          </DialogTitle>
+          <DialogDescription className="text-sm">
+            A possible conflict, not a conclusion. Read both and decide for yourself.
           </DialogDescription>
         </DialogHeader>
         {claim && footage && (
-          <div className="grid gap-6 lg:grid-cols-2">
-            <section className="rounded-lg border bg-card p-5">
-              <h3 className="flex items-center gap-2 font-serif text-xl">
-                <FileText className="size-5" /> Claim in the document
-              </h3>
-              <p className="mt-1 font-mono text-sm text-muted-foreground">{claim.sourceLabel}</p>
-              <blockquote className="mt-4 border-l-2 border-contradiction pl-4 text-lg leading-relaxed">
-                {claim.extractedText}
-              </blockquote>
-              {claim.sourceLink && (
-                <a
-                  href={claim.sourceLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-4 inline-flex items-center gap-1 text-sm text-gold hover:underline"
-                >
-                  Open source <ExternalLink className="size-4" />
-                </a>
-              )}
-            </section>
-            <section className="rounded-lg border bg-card p-5">
-              <h3 className="flex items-center gap-2 font-serif text-xl">
-                <Video className="size-5" /> {VIDEOS.bodycam.label} at about {formatTime(t)}
-              </h3>
-              <div className="mt-4 aspect-video overflow-hidden rounded-md border">
-                <iframe
-                  key={`${VIDEOS.bodycam.id}-${t}`}
-                  className="size-full"
-                  src={`https://www.youtube-nocookie.com/embed/${VIDEOS.bodycam.id}?start=${t}&autoplay=1&mute=1&rel=0`}
-                  title={`${VIDEOS.bodycam.label} starting at ${formatTime(t)}`}
-                  allow="autoplay; encrypted-media; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <p className="mt-3 text-sm text-muted-foreground">{footage.extractedText}</p>
-              {footage.sourceLink && (
-                <a
-                  href={footage.sourceLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-flex items-center gap-1 text-sm text-gold hover:underline"
-                >
-                  Open on YouTube <ExternalLink className="size-4" />
-                </a>
-              )}
-            </section>
+          <div className="grid gap-5 md:grid-cols-2">
+            <SourcePane item={claim} />
+            <SourcePane item={footage} />
           </div>
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function SourcePane({ item }: { item: TimelineItem }) {
+  const media = mediaFor(item);
+  const lane = LANES.find((l) => l.id === item.lane);
+  const Icon = LANE_ICON[item.lane];
+  return (
+    <section className="flex min-w-0 flex-col rounded-lg border border-border bg-muted/40 p-4">
+      <h3 className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+        <Icon className="size-4" aria-hidden /> {lane?.label} · {item.sourceLabel}
+      </h3>
+      <div className="mt-3">
+        {media?.kind === "video" ? (
+          <PlayableStill video={media.video} at={media.at} />
+        ) : media?.kind === "page" ? (
+          <a
+            href={item.sourceLink ?? undefined}
+            target="_blank"
+            rel="noreferrer"
+            className="block aspect-video overflow-hidden rounded-md ring-1 ring-border"
+            aria-label={`Open ${item.sourceLabel}`}
+          >
+            <PageThumb page={media.page} highlight focusTop className="size-full" />
+          </a>
+        ) : (
+          <div className="grid aspect-video place-items-center rounded-md border border-dashed border-missing/70 text-sm text-muted-foreground">
+            No media in the sample record
+          </div>
+        )}
+      </div>
+      <p
+        className={
+          item.flag === "conflict"
+            ? "mt-4 border-l-2 border-contradiction pl-3 text-base leading-relaxed"
+            : "mt-4 text-base leading-relaxed"
+        }
+      >
+        {item.extractedText}
+      </p>
+      {item.sourceLink && (
+        <a
+          href={item.sourceLink}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 inline-flex w-fit items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
+          Open source <ExternalLink className="size-3.5" />
+        </a>
+      )}
+    </section>
   );
 }

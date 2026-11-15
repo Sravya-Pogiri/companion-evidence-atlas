@@ -1,0 +1,105 @@
+/*
+ * Case Analysis tab only. Loaded by src/routes/_workspace.analysis.tsx, never globally.
+ * Every rule is scoped to .lx-analysis, and the theme values are redefined on that element
+ * so Tailwind classes inside the tab (bg-background, text-foreground, border-border, ...)
+ * resolve to the light editorial palette while the rest of the app keeps its dark theme.
+ * Rules sit in Tailwind's named layers so normal utility classes still win.
+ */
+
+@layer base {
+  .lx-analysis {
+    --background: #fafaf8;
+    --foreground: #101b38;
+    --card: #ffffff;
+    --card-foreground: #101b38;
+    --popover: #ffffff;
+    --popover-foreground: #101b38;
+    --primary: #315ef4;
+    --primary-foreground: #ffffff;
+    --secondary: #f5f5f1;
+    --secondary-foreground: #101b38;
+    --muted: #f1f2f4;
+    --muted-foreground: #778198;
+    --accent: #eef2fe;
+    --accent-foreground: #101b38;
+    --contradiction: #b94a48;
+    --corroborate: #32856d;
+    --missing: #b7791f;
+    --related: #315ef4;
+    --destructive: #b94a48;
+    --border: #dadde3;
+    --input: #dadde3;
+    --ring: #315ef4;
+    --sidebar: #f5f5f1;
+    --highlight: #f5e7c6;
+    --underline: #c89426;
+
+    color-scheme: light;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+
+  /* Default border colour inside the tab (the global default resolves to the dark theme). */
+  :where(.lx-analysis, .lx-analysis *) {
+    border-color: var(--border);
+  }
+
+  .lx-analysis :focus-visible {
+    outline: 2px solid #315ef4;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .lx-analysis ::selection {
+    background: #dfe6fd;
+  }
+}
+
+@layer utilities {
+  /* The editorial serif, for the tab's headings and document text only. */
+  .lx-analysis .font-serif {
+    font-family: "Instrument Serif", "Libre Caslon Text", Georgia, serif;
+  }
+
+  .lx-analysis .lx-scroll,
+  .lx-analysis .lx-thread {
+    scrollbar-width: thin;
+    scrollbar-color: #d4d7de transparent;
+  }
+
+  .lx-analysis .lx-flash {
+    animation: lx-analysis-flash 1.6s ease-out;
+    border-radius: 4px;
+  }
+
+  .lx-analysis .lx-progress {
+    animation: lx-analysis-progress 1.3s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lx-analysis .lx-flash,
+    .lx-analysis .lx-progress {
+      animation: none !important;
+    }
+  }
+}
+
+@keyframes lx-analysis-flash {
+  0% {
+    background-color: rgb(49 94 244 / 0.16);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes lx-analysis-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}

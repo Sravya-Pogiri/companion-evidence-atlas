@@ -17,6 +17,8 @@ export interface Attachment {
    * supplies it. A real channel leaves it out until an extraction step exists.
    */
   extractedText?: string;
+  /** A thumbnail to show in the conversation (sample attachments only). */
+  previewUrl?: string;
 }
 
 export interface InboundMessage {

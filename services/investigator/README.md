@@ -1,4 +1,4 @@
-# CaseLens Investigate finding
+# Lexora Investigate finding
 
 ## Architecture
 `src/investigate.ts` instantiates the actual `deepagents` TypeScript `createDeepAgent`. Node 22 is used because original PDF parsing and FFmpeg frame sampling need a conventional server runtime. The Lovable app calls the service through `src/lib/investigation.functions.ts`, keeping service credentials server-side. Only three immutable synthetic case IDs are accepted. No uploaded/private discovery is processed or exposed by this demo.

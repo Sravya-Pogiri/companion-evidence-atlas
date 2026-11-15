@@ -1,13 +1,15 @@
 import { useEffect } from "react";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { LogoMark } from "@/components/caselens/logo";
+import { APP_NAME } from "@/lib/config";
 import { hydrateDecisions } from "@/lib/review-store";
 import { useChannelSync } from "@/lib/use-channel-sync";
 
 export const Route = createFileRoute("/_workspace")({ component: Workspace });
 
 const nav = [
-  { to: "/", label: "Live Case" },
+  { to: "/live", label: "Live Case" },
+  { to: "/analysis", label: "Case Analysis" },
   { to: "/review", label: "Review" },
   { to: "/handoff", label: "Handoff" },
 ] as const;
@@ -17,36 +19,49 @@ function Workspace() {
     hydrateDecisions();
   }, []);
   useChannelSync();
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  // Live Case carries its own notice in the timeline card; Case Analysis is a full-height
+  // tab with its own review notice and status bar.
+  const onLive = path === "/live";
+  const onAnalysis = path === "/analysis";
 
   return (
     <div className="workspace-noir dark flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 flex h-16 items-center print:hidden gap-8 border-b bg-card/90 px-6 backdrop-blur">
-        <Link to="/" className="flex items-center gap-2 text-ivory">
-          <LogoMark className="h-8 w-8 shrink-0" />
-          <span className="font-serif text-2xl font-semibold">CaseLens Text</span>
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-8 border-b bg-background/90 px-6 backdrop-blur print:hidden">
+        <Link to="/" className="flex items-center gap-2 text-foreground">
+          <LogoMark className="h-6 w-6 shrink-0" />
+          <span className="font-serif text-xl font-semibold tracking-wide">{APP_NAME}</span>
         </Link>
-        <nav aria-label="Main" className="flex h-full items-stretch gap-2">
+        <nav aria-label="Main" className="flex h-full items-stretch gap-1">
           {nav.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              activeOptions={{ exact: true }}
-              className="flex items-center border-b-2 border-transparent px-3 text-base font-medium text-muted-foreground transition-colors hover:text-foreground data-[status=active]:border-gold data-[status=active]:text-gold"
+              activeOptions={{ exact: true, includeSearch: false }}
+              className="flex items-center border-b-2 border-transparent px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground data-[status=active]:border-gold data-[status=active]:text-gold"
             >
               {item.label}
             </Link>
           ))}
         </nav>
       </header>
-      <div
-        role="note"
-        className="border-b border-missing/40 bg-missing/10 px-6 py-2 text-sm text-foreground"
-      >
-        Potential findings. Review before use.
-      </div>
-      <main className="workspace-main min-w-0 flex-1 p-6 lg:p-8">
-        <Outlet />
-      </main>
+      {!onLive && !onAnalysis && (
+        <div
+          role="note"
+          className="border-b px-6 py-1.5 text-sm text-muted-foreground print:hidden"
+        >
+          Findings are suggestions. Confirm before use.
+        </div>
+      )}
+      {onAnalysis ? (
+        <main className="min-w-0 flex-1">
+          <Outlet />
+        </main>
+      ) : (
+        <main className="workspace-main min-w-0 flex-1 p-6">
+          <Outlet />
+        </main>
+      )}
     </div>
   );
 }

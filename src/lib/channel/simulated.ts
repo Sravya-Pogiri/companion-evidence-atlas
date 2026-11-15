@@ -1,5 +1,6 @@
 import { appendMessage } from "@/lib/case-store";
 import { sourceLinks } from "@/lib/case-data";
+import { BLURRY_PHOTO } from "@/lib/media";
 import type { ChatMessage } from "@/lib/sample-case";
 import type {
   Attachment,
@@ -29,6 +30,7 @@ export class SimulatedChannel implements ChannelAdapter {
       from: "team",
       text,
       ...(attachment ? { attachment: ICON_FOR[attachment.kind] } : {}),
+      ...(attachment?.previewUrl ? { preview: attachment.previewUrl } : {}),
     });
     await this.handler?.(message);
   }
@@ -69,11 +71,12 @@ export const SAMPLE_ATTACHMENTS: SampleAttachment[] = [
     key: "still-frame",
     chip: "Still frame",
     kind: "image",
-    name: "Still frame from the bodycam, about 0:50",
-    mimeType: "image/png",
-    url: "https://www.youtube.com/watch?v=Z6z35SUVpdQ&t=50s",
+    name: "Still frame from the dashcam, about 0:53",
+    mimeType: "image/jpeg",
+    url: "https://www.youtube.com/watch?v=xqvFJ8yzDfw&t=53s",
+    previewUrl: "/frames/dashcam-0053.jpg",
     extractedText:
-      "Still frame exported from the public bodycam video at about 0:50. The Mustang's left turn signal lamp appears lit.",
+      "Still frame exported from the public dashcam video at about 0:53. The red Mustang waits at the intersection before turning left; its rear lamps are lit. A single still cannot tell a brake lamp from a blinking signal.",
   },
   {
     key: "blurry",
@@ -81,6 +84,7 @@ export const SAMPLE_ATTACHMENTS: SampleAttachment[] = [
     kind: "image",
     name: "Photo, too dark to read (synthetic)",
     mimeType: "image/jpeg",
+    previewUrl: BLURRY_PHOTO,
     extractedText: "Photo of a dark, blurred scene. Nothing in it is legible.",
   },
 ];

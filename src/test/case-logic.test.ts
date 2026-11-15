@@ -20,7 +20,7 @@ describe("sample case logic", () => {
 
   it("finds what is on the timeline at the playhead", () => {
     const ids = itemsAt(ITEMS, 50).map((i) => i.id);
-    expect(ids).toContain("bodycam-approach");
+    expect(ids).toContain("dashcam-approach");
     expect(ids).toContain("complaint-reason");
     expect(ids).not.toContain("activation-missing");
   });
@@ -37,7 +37,7 @@ describe("sample case logic", () => {
     expect(ids[0]).toBe("complaint-reason");
     expect(ids).toContain("dispatch-missing");
     expect(ids).toContain("activation-missing");
-    expect(ids).not.toContain("bodycam-approach");
+    expect(ids).not.toContain("dashcam-approach");
   });
 
   it("hands off only confirmed items", () => {

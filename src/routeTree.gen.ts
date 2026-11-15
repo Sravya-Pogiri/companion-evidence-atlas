@@ -9,24 +9,36 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
-import { Route as WorkspaceIndexRouteImport } from './routes/_workspace.index'
+import { Route as WorkspaceAnalysisRouteImport } from './routes/_workspace.analysis'
 import { Route as WorkspaceHandoffRouteImport } from './routes/_workspace.handoff'
+import { Route as WorkspaceLiveRouteImport } from './routes/_workspace.live'
 import { Route as WorkspaceReviewRouteImport } from './routes/_workspace.review'
 import { Route as ApiPhotonWebhookRouteImport } from './routes/api.photon.webhook'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/_workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WorkspaceIndexRoute = WorkspaceIndexRouteImport.update({
-  id: '/',
-  path: '/',
+const WorkspaceAnalysisRoute = WorkspaceAnalysisRouteImport.update({
+  id: '/analysis',
+  path: '/analysis',
   getParentRoute: () => WorkspaceRoute,
 } as any)
 const WorkspaceHandoffRoute = WorkspaceHandoffRouteImport.update({
   id: '/handoff',
   path: '/handoff',
+  getParentRoute: () => WorkspaceRoute,
+} as any)
+const WorkspaceLiveRoute = WorkspaceLiveRouteImport.update({
+  id: '/live',
+  path: '/live',
   getParentRoute: () => WorkspaceRoute,
 } as any)
 const WorkspaceReviewRoute = WorkspaceReviewRouteImport.update({
@@ -41,46 +53,64 @@ const ApiPhotonWebhookRoute = ApiPhotonWebhookRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof WorkspaceIndexRoute
+  '/': typeof IndexRoute
+  '/analysis': typeof WorkspaceAnalysisRoute
   '/handoff': typeof WorkspaceHandoffRoute
+  '/live': typeof WorkspaceLiveRoute
   '/review': typeof WorkspaceReviewRoute
   '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/analysis': typeof WorkspaceAnalysisRoute
   '/handoff': typeof WorkspaceHandoffRoute
+  '/live': typeof WorkspaceLiveRoute
   '/review': typeof WorkspaceReviewRoute
-  '/': typeof WorkspaceIndexRoute
   '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_workspace': typeof WorkspaceRouteWithChildren
+  '/_workspace/analysis': typeof WorkspaceAnalysisRoute
   '/_workspace/handoff': typeof WorkspaceHandoffRoute
+  '/_workspace/live': typeof WorkspaceLiveRoute
   '/_workspace/review': typeof WorkspaceReviewRoute
-  '/_workspace/': typeof WorkspaceIndexRoute
   '/api/photon/webhook': typeof ApiPhotonWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/handoff' | '/review' | '/api/photon/webhook'
+  fullPaths:
+    '/' | '/analysis' | '/handoff' | '/live' | '/review' | '/api/photon/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/handoff' | '/review' | '/' | '/api/photon/webhook'
+  to:
+    '/' | '/analysis' | '/handoff' | '/live' | '/review' | '/api/photon/webhook'
   id:
     | '__root__'
+    | '/'
     | '/_workspace'
+    | '/_workspace/analysis'
     | '/_workspace/handoff'
+    | '/_workspace/live'
     | '/_workspace/review'
-    | '/_workspace/'
     | '/api/photon/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
   ApiPhotonWebhookRoute: typeof ApiPhotonWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_workspace': {
       id: '/_workspace'
       path: ''
@@ -88,11 +118,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_workspace/': {
-      id: '/_workspace/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof WorkspaceIndexRouteImport
+    '/_workspace/analysis': {
+      id: '/_workspace/analysis'
+      path: '/analysis'
+      fullPath: '/analysis'
+      preLoaderRoute: typeof WorkspaceAnalysisRouteImport
       parentRoute: typeof WorkspaceRoute
     }
     '/_workspace/handoff': {
@@ -100,6 +130,13 @@ declare module '@tanstack/react-router' {
       path: '/handoff'
       fullPath: '/handoff'
       preLoaderRoute: typeof WorkspaceHandoffRouteImport
+      parentRoute: typeof WorkspaceRoute
+    }
+    '/_workspace/live': {
+      id: '/_workspace/live'
+      path: '/live'
+      fullPath: '/live'
+      preLoaderRoute: typeof WorkspaceLiveRouteImport
       parentRoute: typeof WorkspaceRoute
     }
     '/_workspace/review': {
@@ -120,15 +157,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface WorkspaceRouteChildren {
+  WorkspaceAnalysisRoute: typeof WorkspaceAnalysisRoute
   WorkspaceHandoffRoute: typeof WorkspaceHandoffRoute
+  WorkspaceLiveRoute: typeof WorkspaceLiveRoute
   WorkspaceReviewRoute: typeof WorkspaceReviewRoute
-  WorkspaceIndexRoute: typeof WorkspaceIndexRoute
 }
 
 const WorkspaceRouteChildren: WorkspaceRouteChildren = {
+  WorkspaceAnalysisRoute: WorkspaceAnalysisRoute,
   WorkspaceHandoffRoute: WorkspaceHandoffRoute,
+  WorkspaceLiveRoute: WorkspaceLiveRoute,
   WorkspaceReviewRoute: WorkspaceReviewRoute,
-  WorkspaceIndexRoute: WorkspaceIndexRoute,
 }
 
 const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
@@ -136,6 +175,7 @@ const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   WorkspaceRoute: WorkspaceRouteWithChildren,
   ApiPhotonWebhookRoute: ApiPhotonWebhookRoute,
 }

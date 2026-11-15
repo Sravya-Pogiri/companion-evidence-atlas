@@ -11,4 +11,4 @@ app.post('/investigate',async(req,res)=>{
  const controller=new AbortController();res.on('close',()=>{if(!res.writableEnded)controller.abort();});
  try{const result=await investigate(req.body.caseId,check=>res.write(JSON.stringify({type:'check',check})+'\n'),controller.signal);res.end(JSON.stringify({type:'result',result})+'\n');}catch(e){console.error('Investigation failed',e);res.end(JSON.stringify({type:'error',...safeError(e)})+'\n');}
 });
-app.listen(Number(process.env['PORT']??8787),'0.0.0.0',()=>console.log('CaseLens investigator listening'));
+app.listen(Number(process.env['PORT']??8787),'0.0.0.0',()=>console.log('Lexora investigator listening'));

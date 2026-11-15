@@ -32,9 +32,9 @@ function llm(over: Partial<AgentLlm> = {}): AgentLlm {
     }),
     compare: async () => ({
       verdict: "conflict",
-      relatedId: "bodycam-approach",
+      relatedId: "dashcam-approach",
       reason:
-        "The note says the signal came on at the turn, while the bodycam appears to show it on during the approach.",
+        "The note says the signal came on at the turn, while the dashcam appears to show it on during the approach.",
       confidence: 0.8,
     }),
     ...over,
@@ -73,14 +73,14 @@ describe("message pipeline", () => {
     expect(item).toMatchObject({
       status: "filed",
       flag: "conflict",
-      relatedId: "bodycam-approach",
+      relatedId: "dashcam-approach",
     });
     expect(item?.filedAt).toBeTruthy();
     expect(r.state.pendingId).toBeNull();
     const text = r.replies[0]?.text ?? "";
     expect(text).toContain("Possible conflict");
     expect(text).toContain("Team voice note");
-    expect(text).toContain("Officer bodycam");
+    expect(text).toContain("Dashcam (public video");
   });
 
   it("files an agreeing item neutrally and cites the source it lines up with", async () => {
@@ -88,7 +88,7 @@ describe("message pipeline", () => {
     const agrees = llm({
       compare: async () => ({
         verdict: "agrees",
-        relatedId: "bodycam-approach",
+        relatedId: "dashcam-approach",
         reason: "Both appear to show the signal lit.",
         confidence: 0.9,
       }),
@@ -96,9 +96,9 @@ describe("message pipeline", () => {
     const r = await send(asked.state, "Y", agrees);
     expect(r.state.items.find((i) => i.id === "item-a1")).toMatchObject({
       flag: "agrees",
-      relatedId: "bodycam-approach",
+      relatedId: "dashcam-approach",
     });
-    expect(r.replies[0]?.text).toContain("consistent with Officer bodycam");
+    expect(r.replies[0]?.text).toContain("consistent with Dashcam");
   });
 
   it("flags a gap without needing a related item", async () => {
@@ -160,7 +160,7 @@ describe("message pipeline", () => {
     const unsure = llm({
       compare: async () => ({
         verdict: "conflict",
-        relatedId: "bodycam-approach",
+        relatedId: "dashcam-approach",
         reason: "Maybe.",
         confidence: 0.2,
       }),
@@ -193,7 +193,7 @@ describe("message pipeline", () => {
     const bad = llm({
       compare: async () => ({
         verdict: "conflict",
-        relatedId: "bodycam-approach",
+        relatedId: "dashcam-approach",
         reason: "The officer lied and the stop was illegal.",
         confidence: 0.9,
       }),

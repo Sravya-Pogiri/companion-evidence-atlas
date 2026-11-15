@@ -75,7 +75,7 @@
 }
 
 @layer base {
-  html { font-size: 18px; }
+  html { font-size: 16px; scroll-behavior: smooth; }
   * { border-color: var(--color-border); }
   body {
     background-color: var(--color-background);
@@ -85,28 +85,46 @@
   }
 }
 
-/* Workspace tokens. */
+/* Workspace tokens: a dark neutral base. Gold is kept for the primary action, the active tab,
+   the playhead and outgoing messages. Evidence colors: red conflict, green agrees, orange missing. */
 :root {
-  --background: oklch(0.152 0.009 285); --foreground: oklch(0.935 0.005 85);
-  --card: oklch(0.195 0.012 285); --card-foreground: var(--foreground);
-  --popover: oklch(0.215 0.012 285); --popover-foreground: var(--foreground);
-  --gold: oklch(0.747 0.088 80); --primary: var(--gold); --primary-foreground: var(--background);
-  --secondary: oklch(0.245 0.012 285); --secondary-foreground: var(--foreground);
-  --muted: var(--secondary); --muted-foreground: oklch(0.675 0.012 285);
-  --accent: oklch(0.25 0.025 80); --accent-foreground: var(--foreground);
-  --contradiction: oklch(0.632 0.192 24); --corroborate: oklch(0.635 0.132 157);
-  --missing: oklch(0.69 0.194 45); --related: oklch(0.55 0.194 268);
+  --background: #0f0f12; --foreground: #ececef;
+  --card: #17171c; --card-foreground: var(--foreground);
+  --popover: #1c1c22; --popover-foreground: var(--foreground);
+  --gold: #c9a86a; --primary: var(--gold); --primary-foreground: #14120d;
+  --secondary: #202027; --secondary-foreground: var(--foreground);
+  --muted: #202027; --muted-foreground: #9a9aa6;
+  --accent: #24242c; --accent-foreground: var(--foreground);
+  --contradiction: #e5484d; --corroborate: #30a46c; --missing: #f76b15; --related: #7c8cff;
   --destructive: var(--contradiction); --destructive-foreground: var(--foreground);
-  --border: oklch(1 0 0 / .06); --input: oklch(1 0 0 / .13); --ring: var(--gold);
-  --navy: oklch(0.16 0.01 285); --navy-2: oklch(0.28 0.025 285); --ivory: var(--foreground);
-  --workspace-vignette: inset 0 0 170px oklch(0 0 0 / .25);
-  --workspace-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='none' d='M0 0h180v180H0z'/%3E%3Cpath filter='url(%23noise)' opacity='.4' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+  --border: rgb(255 255 255 / 0.08); --input: rgb(255 255 255 / 0.12); --ring: var(--gold);
+  --navy: #0f0f12; --navy-2: #2a2a33; --ivory: var(--foreground);
+  --paper: #f4f1ea; --ink: #23211c;
+  --landing: #0b0d14;
 }
 .workspace-noir { background: var(--background); color: var(--foreground); isolation: isolate; letter-spacing: 0; }
-.workspace-noir .text-navy { color: var(--foreground); }.workspace-noir .text-navy-2 { color: var(--gold); }
+.workspace-noir .text-navy { color: var(--foreground); }
+.workspace-noir .text-navy-2 { color: var(--foreground); }
 .workspace-main { position: relative; isolation: isolate; }
-.workspace-main::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-image: var(--workspace-grain); opacity: .075; box-shadow: var(--workspace-vignette); }
-.workspace-noir span[class*="rounded-full"][class*="text-xs"], .workspace-noir span[class*="uppercase"][class*="text-[10px]"] { font-family: var(--font-mono); }
+
+/* Motion. Subtle, and off for people who ask for reduced motion. */
+@keyframes lx-slide-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes lx-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lx-draw { to { stroke-dashoffset: 0; } }
+@keyframes lx-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes lx-pop { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: none; } }
+@keyframes lx-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.lx-slide-in { animation: lx-slide-in 0.35s ease-out both; }
+.lx-fade { animation: lx-fade 0.25s ease-out both; }
+.lx-pulse { animation: lx-pulse 2.4s ease-in-out infinite; }
+.lx-draw { stroke-dasharray: var(--len, 600); stroke-dashoffset: var(--len, 600); animation: lx-draw 0.9s ease-out forwards; animation-delay: var(--delay, 0s); }
+@media (prefers-reduced-motion: reduce) {
+  .lx-slide-in, .lx-fade, .lx-pulse, .lx-draw, .lx-rise, .lx-pop { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+  html { scroll-behavior: auto !important; }
+}
+
+/* Thin scrollbars inside the phone thread. */
+.lx-thread { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 0.15) transparent; }
 
 /* Handoff prints on white paper with dark text. */
 @media print {
@@ -117,4 +135,32 @@
     background: #fff !important; color: #111 !important;
   }
   .workspace-main::before { display: none; }
+}
+
+/* Landing: deep navy-black with a faint vignette and grain. */
+.lx-landing { background: var(--landing); color: #ecebe6; position: relative; isolation: isolate; }
+.lx-landing::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 30%, transparent 55%, rgb(0 0 0 / 0.55) 100%);
+}
+.lx-landing::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.lx-card { box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.65), 0 2px 6px rgb(0 0 0 / 0.35); }
+.lx-rise { animation: lx-rise 0.7s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--delay, 0s); }
+.lx-pop { animation: lx-pop 0.35s cubic-bezier(.2,.9,.3,1.3) both; animation-delay: var(--delay, 0s); }
+
+/* Collage: a stacked grid on narrow screens, a layered board from lg up. */
+.lx-collage { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lx-collage > [data-card="phone"] { grid-column: span 2; max-width: 300px; justify-self: center; width: 100%; }
+@media (min-width: 1024px) {
+  .lx-collage { display: block; position: relative; height: clamp(520px, 74vh, 620px); }
+  .lx-collage > [data-card] { position: absolute; }
+  .lx-collage > [data-card="complaint"] { left: 0; top: 4%; width: 44%; rotate: -4deg; z-index: 3; }
+  .lx-collage > [data-card="bodycam"] { left: 47%; top: 0; width: 33%; rotate: 5deg; z-index: 1; }
+  .lx-collage > [data-card="dashcam"] { right: 0; top: 13%; width: 52%; rotate: 2deg; z-index: 2; }
+  .lx-collage > [data-card="phone"] { left: 7%; bottom: 0; width: 36%; max-width: 250px; rotate: -2deg; z-index: 5; }
+  .lx-collage > [data-card="opinion"] { left: 49%; bottom: 13%; width: 23%; rotate: 3deg; z-index: 4; }
+  .lx-collage > [data-card="audio"] { right: 0; bottom: 4%; width: 30%; rotate: -2deg; z-index: 4; }
 }
