@@ -16,7 +16,7 @@ export function WorkspaceFooter() {
               type="button"
               onClick={replay}
               disabled={replaying}
-              className="inline-flex h-7 items-center gap-1.5 rounded-md bg-primary px-3 text-[13px] font-medium text-white transition-colors hover:bg-[#2550e0] disabled:opacity-60"
+              className="inline-flex h-7 items-center gap-1.5 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/85 disabled:opacity-60"
             >
               <Play className="size-3 fill-current" /> {replaying ? "Replaying…" : "Replay"}
             </button>
@@ -29,14 +29,14 @@ export function WorkspaceFooter() {
                 focusItem("complaint-reason");
                 setView("findings");
               }}
-              className="inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-white px-3 text-[13px] font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-60"
+              className="inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-card px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-60"
             >
               <RotateCcw className="size-3" /> Restart
             </button>
           </>
         )}
       </div>
-      <p className="hidden truncate text-[13px] text-muted-foreground sm:block">
+      <p className="hidden truncate text-sm text-muted-foreground sm:block">
         Every finding links back to its source. Nothing leaves draft status without attorney review.
       </p>
     </footer>

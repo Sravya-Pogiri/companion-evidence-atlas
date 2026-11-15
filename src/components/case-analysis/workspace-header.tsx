@@ -31,21 +31,21 @@ export function WorkspaceHeader({
             <Menu className="size-4" />
           </button>
         )}
-        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-[15px]">
+        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-base">
           <Link to="/analysis" className="shrink-0 text-muted-foreground hover:text-foreground">
             Case analysis
           </Link>
-          <span className="text-[#c3c8d2]">/</span>
+          <span className="text-muted-foreground/50">/</span>
           <span className="truncate font-medium text-foreground">{SAMPLE_CASE.name}</span>
         </nav>
       </div>
-      <div className="flex shrink-0 items-center gap-2 text-[13px]">
+      <div className="flex shrink-0 items-center gap-2 text-sm">
         {awaiting !== undefined && (
           <span className="hidden items-center gap-1.5 text-muted-foreground md:flex">
             <span
               className={cn(
                 "size-1.5 rounded-full",
-                awaiting > 0 ? "bg-[#c89426]" : "bg-corroborate",
+                awaiting > 0 ? "bg-missing" : "bg-corroborate",
               )}
             />
             {awaiting > 0 ? `${awaiting} awaiting review` : "All findings reviewed"}
@@ -54,7 +54,7 @@ export function WorkspaceHeader({
         <span className="hidden rounded-md border border-border px-2 py-0.5 text-muted-foreground sm:inline">
           Public-record demo
         </span>
-        <span className="rounded-md border border-border px-2 py-0.5 font-mono text-[12px] text-muted-foreground">
+        <span className="rounded-md border border-border px-2 py-0.5 font-mono text-[13px] text-muted-foreground">
           {mode === "photon" ? "iMessage · Photon" : "Simulated line"}
         </span>
         {actions}
