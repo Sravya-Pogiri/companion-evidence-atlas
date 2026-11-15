@@ -12,7 +12,8 @@
   "claim extraction": 0,
   "claim verification": 0.5,
   "cross-check": 0,
-  "total": 0.5
+  "total": 0.5,
+  "signal check": 10.7
  },
  "sources": [
   {
@@ -340,6 +341,20 @@
     "method": "none",
     "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
    }
+  },
+  {
+   "id": "dashcam-signal-001",
+   "origin": "video",
+   "claim": "The red car's rear lamps from about 0:44 to 0:46 could not be read reliably enough to say whether a turn signal is flashing.",
+   "at": {
+    "source": "dashcam",
+    "t": 44
+   },
+   "verification": {
+    "status": "failed",
+    "method": "frame-sequence-check",
+    "note": "Not visible enough: measurement and vision read agree on only left 7/12, right 12/12 (or no regular on/off pattern)."
+   }
   }
  ],
  "findings": [
@@ -383,6 +398,11 @@
   "  frame description: 0s",
   "  claim extraction: 0s",
   "  claim verification: 0.5s",
-  "  cross-check: 0s"
+  "  cross-check: 0s",
+  "signal check: 12 consecutive frames 44.17-46s of dashcam",
+  "  measured left: off on on off off on on on off off on on | right steady: true | left transitions: 5 | period ~0.75s",
+  "  vision left:   lit lit lit lit lit lit lit lit lit lit lit lit",
+  "  agreement with measurement: left 7/12, right 12/12",
+  "  no finding: lamps not visible enough to tell"
  ]
 }

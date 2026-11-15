@@ -40,7 +40,7 @@ export type VerificationStatus = "passed" | "fixed" | "failed" | "unchecked";
 
 export interface Verification {
   status: VerificationStatus;
-  method: "quote-on-page" | "quote-in-transcript" | "second-vision-check" | "none";
+  method: "quote-on-page" | "quote-in-transcript" | "second-vision-check" | "frame-sequence-check" | "none";
   note?: string;
 }
 
