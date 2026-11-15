@@ -79,7 +79,7 @@ export function DatedCaseLive({ caseId }: { caseId: string }) {
             </p>
             <ul className="mt-4 space-y-3">
               {flagged.map((item) => {
-                const n = /-f(\d+)$/.exec(item.id)?.[1];
+                const n = /-f(\d+)(?:-s\d+)?$/.exec(item.id)?.[1];
                 const finding = n ? data.findings[Number(n) - 1] : undefined;
                 return (
                   <li

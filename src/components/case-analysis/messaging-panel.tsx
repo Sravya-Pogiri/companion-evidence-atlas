@@ -3,6 +3,7 @@ import { FileText, Mic, Paperclip, Play, Send, X } from "lucide-react";
 import { FrameThumb, PageThumb } from "@/components/caselens/evidence-media";
 import { channel } from "@/lib/agent/runtime";
 import { useCase } from "@/lib/case-store";
+import { DEFAULT_CASE_ID } from "@/lib/cases";
 import {
   SAMPLE_ATTACHMENTS,
   newAttachmentId,
@@ -20,7 +21,7 @@ import { Citations } from "./source-citation";
  * texts from their phones and this mirrors the server's conversation.
  */
 export function MessagingPanel() {
-  const { messages, items, busy, mode } = useCase();
+  const { messages, items, busy, mode, caseId } = useCase();
   const { replaying, focusItem } = useWorkspace();
   const [text, setText] = useState("");
   const [staged, setStaged] = useState<SampleAttachment | null>(null);
@@ -91,7 +92,12 @@ export function MessagingPanel() {
         )}
       </ol>
 
-      {mode === "photon" ? (
+      {caseId !== DEFAULT_CASE_ID ? (
+        <p className="border-t border-border px-4 py-3 text-[13px] text-muted-foreground">
+          A sample conversation for this public-record case. Filing new evidence by text runs on the
+          Rosales footage case.
+        </p>
+      ) : mode === "photon" ? (
         <p className="border-t border-border px-4 py-3 text-[13px] text-muted-foreground">
           The team texts {CASE_LINE} from their phones. New evidence lands on the timeline here.
         </p>

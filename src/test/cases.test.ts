@@ -31,9 +31,15 @@ describe("the case list", () => {
 describe.each(PUBLIC_CASES)("items built from $name", (c) => {
   const items = buildItems(c);
 
-  it("has the dated events, the findings and one open-prompts item, all filed", () => {
+  // A finding with two sides is one flagged comparison; with three sides it is two.
+  const comparisons = c.findings.reduce((n, f) => n + f.sides.length - 1, 0);
+
+  it("has the dated events, each side of every finding, and one open-prompts item, all filed", () => {
     expect(items.filter((i) => i.lane === "events")).toHaveLength(c.timeline.length);
-    expect(items.filter((i) => i.flag === "conflict")).toHaveLength(c.findings.length);
+    expect(items.filter((i) => i.flag === "conflict")).toHaveLength(comparisons);
+    expect(items.filter((i) => i.id.includes("-f"))).toHaveLength(
+      c.findings.reduce((n, f) => n + f.sides.length, 0),
+    );
     expect(items.filter((i) => i.flag === "missing")).toHaveLength(1);
     expect(items.every((i) => i.status === "filed")).toBe(true);
   });
@@ -57,7 +63,7 @@ describe.each(PUBLIC_CASES)("items built from $name", (c) => {
 
   it("puts the findings and open prompts on Review, and not the plain events", () => {
     const queue = reviewQueue(items);
-    expect(queue).toHaveLength(c.findings.length + 1);
+    expect(queue).toHaveLength(comparisons + 1);
     expect(queue[0]?.flag).toBe("conflict");
   });
 

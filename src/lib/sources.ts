@@ -46,7 +46,7 @@ export interface Source {
   video?: VideoId;
 }
 
-export const SOURCES: Source[] = [
+const ROSALES_SOURCES: Source[] = [
   {
     id: "summary",
     kind: "summary",
@@ -229,7 +229,7 @@ export const SOURCES: Source[] = [
 ];
 
 /** Where each sample timeline item is found. Items filed from messages cite the message. */
-export const ITEM_CITATIONS: Record<string, Citation[]> = {
+const ROSALES_ITEM_CITATIONS: Record<string, Citation[]> = {
   "dashcam-approach": [{ source: "dashcam", t: 45 }],
   "turn-left": [{ source: "dashcam", t: 58 }],
   "bodycam-after-stop": [{ source: "bodycam", t: 80 }],
@@ -254,7 +254,7 @@ export interface Entity {
 }
 
 /** A small index of names that appear in the sample documents, curated by hand. */
-export const ENTITIES: Entity[] = [
+const ROSALES_ENTITIES: Entity[] = [
   {
     name: "Mario Rosales",
     type: "Person",
@@ -324,6 +324,34 @@ export const ENTITIES: Entity[] = [
     cites: [{ source: "opinion", para: "p1-2" }],
   },
 ];
+
+// What the workspace reads is whichever case is on screen. It starts as the Rosales case, and
+// setSourceBundle swaps in another case's documents (see case-sources.ts). These are live
+// bindings, so every reader sees the current case. Nothing computes from them at load time.
+export let SOURCES: Source[] = ROSALES_SOURCES;
+export let ITEM_CITATIONS: Record<string, Citation[]> = ROSALES_ITEM_CITATIONS;
+export let ENTITIES: Entity[] = ROSALES_ENTITIES;
+
+/** Where the workspace opens: a document, and the finding in focus. */
+export let HOME: { sourceId: string; focusId: string | null } = {
+  sourceId: "complaint",
+  focusId: "complaint-reason",
+};
+
+/** Show another case's documents, or the Rosales ones again (null). */
+export function setSourceBundle(
+  b: {
+    sources: Source[];
+    itemCitations: Record<string, Citation[]>;
+    entities: Entity[];
+    home: { sourceId: string; focusId: string | null };
+  } | null,
+): void {
+  SOURCES = b?.sources ?? ROSALES_SOURCES;
+  ITEM_CITATIONS = b?.itemCitations ?? ROSALES_ITEM_CITATIONS;
+  ENTITIES = b?.entities ?? ROSALES_ENTITIES;
+  HOME = b?.home ?? { sourceId: "complaint", focusId: "complaint-reason" };
+}
 
 export function findSource(id: string | undefined): Source | undefined {
   return id ? SOURCES.find((s) => s.id === id) : undefined;

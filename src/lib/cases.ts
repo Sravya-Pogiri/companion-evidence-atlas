@@ -1,4 +1,7 @@
 import { PUBLIC_CASES, type PublicCase } from "@/lib/case-library";
+import { eventId, gapId, sideId } from "@/lib/case-ids";
+import { buildBundle, promptIntro } from "@/lib/case-sources";
+import { setSourceBundle } from "@/lib/sources";
 import {
   CONVERSATION,
   ITEMS,
@@ -71,10 +74,10 @@ function headline(text: string, max = 96): string {
 
 const STEP = 10;
 
-/** Dated events first (in order), then the findings a person should look at. All filed. */
+/** Dated events first (in order), then each side of every finding, then the open prompts. All filed. */
 export function buildItems(c: PublicCase): TimelineItem[] {
   const events: TimelineItem[] = c.timeline.map((t, i) => ({
-    id: `${c.id}-t${i + 1}`,
+    id: eventId(c.id, i + 1),
     lane: "events",
     start: i * STEP,
     end: i * STEP + STEP - 2,
@@ -87,41 +90,54 @@ export function buildItems(c: PublicCase): TimelineItem[] {
     when: t.date,
   }));
 
-  const findings: TimelineItem[] = c.findings.map((f, i) => ({
-    id: `${c.id}-f${i + 1}`,
-    lane: "documents",
-    start: i * STEP,
-    end: i * STEP + STEP - 2,
-    label: f.title.replace(/[.]+$/, "") || "Sources differ",
-    extractedText: [f.explanation, ...f.sides.map((s) => `${s.label}: ${s.text}`)].join(" "),
-    sourceLink: c.primarySource.url,
-    sourceLabel: c.primarySource.label,
-    status: "filed",
-    flag: "conflict",
-    when: "From the public sources",
-  }));
+  // Each side of a finding is an item. The first side is the claim the others are set against:
+  // it is flagged and points at the second side. Any further side is flagged and points back at
+  // the first. So a finding with two sides gives one flagged item, and one with three gives two.
+  let n = 0;
+  const sides: TimelineItem[] = c.findings.flatMap((f, fi) =>
+    f.sides.map((side, si): TimelineItem => {
+      const flagged = si !== 1;
+      const label =
+        si === 0
+          ? f.title.replace(/[.]+$/, "") || "Sources differ"
+          : si === 1
+            ? side.label
+            : `${f.title.replace(/[.]+$/, "")} (${side.label})`;
+      const k = 72 + n++;
+      return {
+        id: sideId(c.id, fi + 1, si),
+        lane: "documents",
+        start: k,
+        end: k + 1,
+        label,
+        extractedText: flagged
+          ? [f.explanation, ...f.sides.map((x) => `${x.label}: ${x.text}`)].join(" ")
+          : side.text,
+        sourceLink: c.primarySource.url,
+        sourceLabel: `${side.label} (${side.cite.replace(/^Per /, "per ")})`,
+        status: "filed",
+        flag: flagged ? "conflict" : "agrees",
+        relatedId: sideId(c.id, fi + 1, si === 0 ? 1 : 0),
+        when: "From the public sources",
+      };
+    }),
+  );
 
   const list = c.checklist.length > 0 ? c.checklist : c.questions;
   const gap: TimelineItem = {
-    id: `${c.id}-gap`,
+    id: gapId(c.id),
     lane: "documents",
-    start: 0,
-    end: STEP - 2,
+    start: 88,
+    end: 89,
     label: c.checklistTitle ?? "Open questions for the defense team",
-    extractedText: [
-      // Only the checklist cases carry a note about the checklist itself.
-      c.checklist.length > 0 && c.note
-        ? c.note
-        : "Questions the public sources leave open. Each is a prompt for the team, not a finding.",
-      ...list.map((q, i) => `${i + 1}. ${q}`),
-    ].join(" "),
+    extractedText: [promptIntro(c), ...list.map((q, i) => `${i + 1}. ${q}`)].join(" "),
     sourceLink: c.primarySource.url,
     sourceLabel: c.primarySource.label,
     status: "filed",
     flag: "missing",
     when: "Prompts, not findings",
   };
-  return [...events, ...findings, gap];
+  return [...events, ...sides, gap];
 }
 
 const ATTACHMENT: Record<string, NonNullable<ChatMessage["attachment"]>> = {
@@ -147,16 +163,22 @@ export function buildConversation(c: PublicCase): ChatMessage[] {
     add({
       from: "agent",
       text: `Possible conflict: ${f.title} ${f.explanation} Compare: ${who}. Review?`,
-      itemId: `${c.id}-f${i + 1}`,
+      itemId: sideId(c.id, i + 1, 0),
     });
   });
   add({ from: "team", text: "What's missing?" });
   add({
     from: "agent",
     text: `Possible gaps: ${c.checklistTitle ?? "open questions for the defense team"}. See Review.`,
-    itemId: `${c.id}-gap`,
+    itemId: gapId(c.id),
   });
   return out;
+}
+
+/** Point the Case Analysis tab's documents at a case. Rosales uses its own built-in ones. */
+export function applyCaseSources(id: string): void {
+  const pc = publicCase(id);
+  setSourceBundle(pc ? buildBundle(pc) : null);
 }
 
 /** The app's starting items and conversation for a case. */

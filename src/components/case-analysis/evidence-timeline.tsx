@@ -59,7 +59,8 @@ export function EvidenceTimeline() {
               )}
             >
               <span className="pl-2 pt-1 font-mono text-[12px] text-muted-foreground">
-                {item.end - item.start >= 80 ? "throughout" : `~${formatTime(item.start)}`}
+                {item.when ??
+                  (item.end - item.start >= 80 ? "throughout" : `~${formatTime(item.start)}`)}
               </span>
               <span className="flex justify-center pt-[7px]">
                 <span

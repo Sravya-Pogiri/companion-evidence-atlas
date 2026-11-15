@@ -1,16 +1,17 @@
 import { Play, RotateCcw } from "lucide-react";
 import { resetCase, useCase } from "@/lib/case-store";
+import { DEFAULT_CASE_ID } from "@/lib/cases";
 import { resetDecisions } from "@/lib/review-store";
 import { useWorkspace } from "./context";
 
 /** Bottom bar: replay controls (simulated line only) and the review promise. */
 export function WorkspaceFooter() {
-  const { mode } = useCase();
+  const { mode, caseId } = useCase();
   const { replay, replaying, resetDemo, focusItem, setView } = useWorkspace();
   return (
     <footer className="flex h-11 shrink-0 items-center justify-between gap-4 border-t border-border bg-background px-4 sm:px-5 print:hidden">
       <div className="flex items-center gap-2">
-        {mode === "simulated" && (
+        {mode === "simulated" && caseId === DEFAULT_CASE_ID && (
           <>
             <button
               type="button"

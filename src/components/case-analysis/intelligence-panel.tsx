@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, MessageSquare } from "lucide-react";
 import { ConflictDialog } from "@/components/caselens/conflict-dialog";
 import { useCase } from "@/lib/case-store";
+import { DEFAULT_CASE_ID } from "@/lib/cases";
 import { CASE_LINE } from "@/lib/config";
 import type { TimelineItem } from "@/lib/sample-case";
 import { ENTITIES, SOURCES, type EntityType } from "@/lib/sources";
@@ -162,11 +163,15 @@ function IngestView() {
 const TYPES: EntityType[] = ["Person", "Place", "Date", "Organization"];
 
 function EntitiesView() {
+  const { caseId } = useCase();
+  const byHand = caseId === DEFAULT_CASE_ID;
   return (
     <div className="space-y-6">
       <p className="text-[14px] leading-relaxed text-muted-foreground">
-        A small index of names that appear in the sample documents, prepared by hand. Mentions are
-        marked in the open document while this step is selected.
+        {byHand
+          ? "A small index of names that appear in the sample documents, prepared by hand."
+          : "A small index of the people, places and dates that appear in this case's documents."}{" "}
+        Mentions are marked in the open document while this step is selected.
       </p>
       {TYPES.map((type) => {
         const list = ENTITIES.filter((e) => e.type === type);

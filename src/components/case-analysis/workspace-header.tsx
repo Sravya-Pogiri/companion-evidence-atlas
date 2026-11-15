@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
-import { useCase } from "@/lib/case-store";
-import { SAMPLE_CASE } from "@/lib/sample-case";
+import { useActiveCase, useCase } from "@/lib/case-store";
 import { cn } from "@/lib/utils";
 
 /** Slim breadcrumb bar at the top of the Case Analysis tab. */
@@ -18,6 +17,7 @@ export function WorkspaceHeader({
   actions?: ReactNode;
 }) {
   const { mode } = useCase();
+  const { name } = useActiveCase();
   return (
     <header className="flex h-[50px] shrink-0 items-center justify-between gap-4 border-b border-border bg-background px-4 sm:px-5 print:hidden">
       <div className="flex min-w-0 items-center gap-2">
@@ -36,7 +36,7 @@ export function WorkspaceHeader({
             Case analysis
           </Link>
           <span className="text-[#c3c8d2]">/</span>
-          <span className="truncate font-medium text-foreground">{SAMPLE_CASE.name}</span>
+          <span className="truncate font-medium text-foreground">{name}</span>
         </nav>
       </div>
       <div className="flex shrink-0 items-center gap-2 text-[13px]">

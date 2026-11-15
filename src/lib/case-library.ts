@@ -191,7 +191,7 @@ export const PUBLIC_CASES: PublicCase[] = [
     ],
     checklistTitle: null,
     checklist: [],
-    note: "In a real deployment, each finding would cite a transcript page or a video timestamp. Here, the citations point to the Registry's public summary because CaseLens has not processed the original records.",
+    note: "In a real deployment, each finding would cite a transcript page or a video timestamp.",
   },
   {
     id: "mcmillian",
@@ -306,8 +306,7 @@ export const PUBLIC_CASES: PublicCase[] = [
     findings: [
       {
         title: "Conflicting accounts for the same period.",
-        explanation:
-          "The sources cannot all be accurate. CaseLens would group them on one timeline and flag the conflict for attorney review. It would not resolve the conflict itself.",
+        explanation: "The sources cannot all be accurate.",
         sides: [
           {
             label: "Prosecution",
@@ -484,6 +483,6 @@ export const PUBLIC_CASES: PublicCase[] = [
       "Request for independent re-examination by a qualified expert",
       "Request for funding to retain a qualified defense expert",
     ],
-    note: "CaseLens does not evaluate forensic science itself. It is designed to put conflicting conclusions side by side, link each to its source, and prompt the right verification steps for attorneys and qualified experts.",
+    note: null,
   },
 ];

@@ -1,12 +1,14 @@
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { useCase } from "@/lib/case-store";
+import { DEFAULT_CASE_ID } from "@/lib/cases";
 import { useWorkspace } from "./context";
 
 /** Top-bar demo controls: Play demo, Pause or Resume, and Reset while a demo is running. */
 export function DemoControls() {
-  const { mode } = useCase();
+  const { mode, caseId } = useCase();
   const { demo, playDemo, pauseDemo, resetDemo } = useWorkspace();
-  if (mode === "photon") return null;
+  // The scripted demo is the Rosales one.
+  if (mode === "photon" || caseId !== DEFAULT_CASE_ID) return null;
   const playing = demo === "playing";
   return (
     <div className="flex items-center gap-1.5">

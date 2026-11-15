@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCase } from "@/lib/case-store";
 import { cn } from "@/lib/utils";
 import { WorkspaceProvider, useWorkspace } from "./context";
 import { DemoControls } from "./demo-controls";
@@ -15,8 +16,10 @@ import { WorkspaceHeader } from "./workspace-header";
  * /analysis route only), so nothing here changes the rest of the app.
  */
 export function CaseAnalysis() {
+  const { caseId } = useCase();
   return (
-    <WorkspaceProvider>
+    // Keyed by case, so choosing another case starts the tab on that case's own documents.
+    <WorkspaceProvider key={caseId}>
       <CaseAnalysisLayout />
     </WorkspaceProvider>
   );

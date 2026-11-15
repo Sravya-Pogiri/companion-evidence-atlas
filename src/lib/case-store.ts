@@ -1,7 +1,14 @@
 import { useMemo, useSyncExternalStore } from "react";
 import type { PipelineState } from "@/lib/agent/pipeline";
 import { setItemDueOnServer } from "@/lib/deadlines.functions";
-import { CASE_LIST, DEFAULT_CASE_ID, caseData, caseMeta, type CaseMeta } from "@/lib/cases";
+import {
+  CASE_LIST,
+  DEFAULT_CASE_ID,
+  caseData,
+  caseMeta,
+  applyCaseSources,
+  type CaseMeta,
+} from "@/lib/cases";
 import { CONVERSATION, ITEMS, type ChatMessage, type TimelineItem } from "@/lib/sample-case";
 
 // The live case: timeline items and the conversation. It starts from the sample data and
@@ -80,10 +87,12 @@ export function selectCase(id: string): void {
   const meta = caseMeta(id);
   if (meta.id === state.caseId) return;
   const { items, messages } = caseData(meta.id);
+  applyCaseSources(meta.id); // the Case Analysis documents follow the case
   setCase({ caseId: meta.id, items, messages, pendingId: null, pendingFor: null, busy: false });
 }
 
 export function resetCase(): void {
+  applyCaseSources(DEFAULT_CASE_ID);
   state = INITIAL;
   listeners.forEach((l) => l());
 }
