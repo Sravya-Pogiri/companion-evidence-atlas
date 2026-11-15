@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "simulate": "node --env-file-if-exists=.env scripts/run-ts.mjs scripts/simulate-photon.ts"
   },
   "overrides": {
     "rolldown": "1.2.1"

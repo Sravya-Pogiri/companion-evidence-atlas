@@ -1,6 +1,7 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
 import { parseInboundEvent, verifyWebhook } from "@/lib/channel/photon-events";
+import { parseTeamNumbers } from "@/lib/channel/allowlist";
 import { PhotonChannel } from "@/lib/channel/photon.server";
 import type { InboundMessage } from "@/lib/channel/types";
 
@@ -101,7 +102,7 @@ describe("Photon inbound event mapping", () => {
     });
     expect(r).toEqual({
       ok: true,
-      message: { text: "Y", attachments: [] },
+      message: { text: "Y", attachments: [], sender: "+15550001111" },
       context: { spaceId: "spc_1", senderId: "agt_1", parentMessageId: "msg_1" },
     });
   });
@@ -134,7 +135,7 @@ describe("Photon inbound event mapping", () => {
     });
     expect(r).toEqual({
       ok: true,
-      message: { text: "Hello", attachments: [] },
+      message: { text: "Hello", attachments: [], sender: "+15550001111" },
       context: { spaceId: "spc_1", senderId: "agt_1", parentMessageId: "msg_real" },
     });
   });
@@ -186,7 +187,10 @@ describe("PhotonChannel", () => {
 
   function setup(fetchImpl: typeof fetch) {
     const log: unknown[] = [];
-    const channel = new PhotonChannel(config, (m) => log.push(m), fetchImpl);
+    const channel = new PhotonChannel(config, (m) => log.push(m), fetchImpl, {
+      team: parseTeamNumbers("+1 (555) 000-1111"),
+      batchMs: 0,
+    });
     const received: InboundMessage[] = [];
     channel.onMessage(async (m) => {
       received.push(m);
@@ -197,8 +201,14 @@ describe("PhotonChannel", () => {
   it("hands an inbound text to the agent and records it in the conversation", async () => {
     const { channel, log, received } = setup(vi.fn() as unknown as typeof fetch);
     expect(await channel.handleInbound(event)).toEqual({});
+    await channel.flush();
     expect(received).toEqual([
-      { text: "What's missing?", attachments: [], conversationId: "spc_1" },
+      {
+        text: "What's missing?",
+        attachments: [],
+        conversationId: "spc_1",
+        sender: "+15550001111",
+      },
     ]);
     expect(log).toEqual([{ from: "team", text: "What's missing?" }]);
   });
@@ -302,7 +312,8 @@ describe("PhotonChannel", () => {
       const { channel, received } = setup(vi.fn() as unknown as typeof fetch);
       await channel.handleInbound(from("spc_A", "msg_A", "hello"));
       await channel.handleInbound(from("spc_B", "msg_B", "hello"));
-      expect(received.map((m) => m.conversationId)).toEqual(["spc_A", "spc_B"]);
+      await channel.flush();
+      expect(received.map((m) => m.conversationId).sort()).toEqual(["spc_A", "spc_B"]);
     });
 
     it("never sends a reply that names no conversation, even when someone has texted", async () => {

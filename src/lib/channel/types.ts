@@ -4,6 +4,9 @@
 
 export type AttachmentKind = "image" | "audio" | "video" | "document";
 
+/** An error whose message is already in plain words and safe to text back to a person. */
+export class PlainError extends Error {}
+
 export interface Attachment {
   id: string;
   kind: AttachmentKind;
@@ -19,6 +22,8 @@ export interface Attachment {
   extractedText?: string;
   /** A thumbnail to show in the conversation (sample attachments only). */
   previewUrl?: string;
+  /** Set when the file could not be downloaded or read, in plain words. The pipeline passes it on. */
+  readError?: string;
 }
 
 export interface InboundMessage {
@@ -29,6 +34,8 @@ export interface InboundMessage {
    * Replies are sent back to that conversation, and a "Y" only counts from the one it was asked of.
    */
   conversationId?: string;
+  /** Who sent it (an E.164 phone number or an iMessage email), when the channel knows. Never shown in the page. */
+  sender?: string;
 }
 
 export interface ReplyMeta {

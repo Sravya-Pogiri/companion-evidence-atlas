@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { handleMessage, whatsDue, type AgentLlm, type PipelineState } from "@/lib/agent/pipeline";
+import { parseTeamNumbers } from "@/lib/channel/allowlist";
 import { PhotonChannel } from "@/lib/channel/photon.server";
 import { loadCalendar } from "@/lib/server/calendar.server";
 import { runReminderCheck, type ReminderHost } from "@/lib/server/reminders.server";
@@ -191,7 +192,13 @@ describe("What's due? over text", () => {
       end: 15,
       confidence: 0.9,
     }));
-    const model = { describe, compare: vi.fn() } as unknown as AgentLlm;
+    const compare = vi.fn(async () => ({
+      verdict: "unclear",
+      relatedId: null,
+      reason: "",
+      confidence: 0.1,
+    }));
+    const model = { describe, compare } as unknown as AgentLlm;
     const r = await handleMessage(
       state(),
       { text: "The filing deadline for the reply is Monday afternoon", attachments: [] },
@@ -199,11 +206,12 @@ describe("What's due? over text", () => {
       NOW,
     );
     expect(describe).toHaveBeenCalled();
-    expect(r.replies[0]?.text).toContain("Reply Y");
+    expect(r.replies[0]?.text).toContain("Reply CONFIRM or DISMISS");
   });
 });
 
 describe("texting everyone on the line", () => {
+  const team = { team: parseTeamNumbers("+15550001111"), batchMs: 0 };
   const config = { apiKey: "pho_sk_test", projectId: "pho_prj_1", webhookSecret: "whsec_x" };
   const from = (space: string) => ({
     data: {
@@ -211,7 +219,7 @@ describe("texting everyone on the line", () => {
         id: `msg_${space}`,
         status: "received",
         content: { type: "text", format: "plain", text: "hello" },
-        sentBy: { kind: "human", id: "usr" },
+        sentBy: { kind: "human", id: "usr", handle: "+15550001111" },
         receivedBy: { kind: "agent", id: "agt" },
         space: { id: space, kind: "direct" },
       },
@@ -225,6 +233,7 @@ describe("texting everyone on the line", () => {
       config,
       (m) => log.push(m),
       fetchMock as unknown as typeof fetch,
+      team,
     );
     channel.onMessage(async () => {});
     await channel.handleInbound(from("spc_A"));
@@ -242,7 +251,7 @@ describe("texting everyone on the line", () => {
 
   it("reaches nobody, and sends nothing, when no one has texted the line", async () => {
     const fetchMock = vi.fn();
-    const channel = new PhotonChannel(config, () => {}, fetchMock as unknown as typeof fetch);
+    const channel = new PhotonChannel(config, () => {}, fetchMock as unknown as typeof fetch, team);
     expect(await channel.notifyAll("hello")).toEqual({ recipients: 0, accepted: 0 });
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -251,7 +260,7 @@ describe("texting everyone on the line", () => {
     const errors = vi.spyOn(console, "error").mockImplementation(() => {});
     let n = 0;
     const fetchMock = vi.fn(async () => new Response("{}", { status: n++ === 0 ? 200 : 403 }));
-    const channel = new PhotonChannel(config, () => {}, fetchMock as unknown as typeof fetch);
+    const channel = new PhotonChannel(config, () => {}, fetchMock as unknown as typeof fetch, team);
     channel.onMessage(async () => {});
     await channel.handleInbound(from("spc_A"));
     await channel.handleInbound(from("spc_B"));

@@ -83,7 +83,7 @@ describe.each(PUBLIC_CASES)("conversation built from $name", (c) => {
   it("links its messages only to items that exist, and walks evidence in then findings out", () => {
     const ids = new Set(items.map((i) => i.id));
     for (const m of messages) if (m.itemId) expect(ids.has(m.itemId), m.itemId).toBe(true);
-    expect(messages.some((m) => /^File this as /.test(m.text))).toBe(true);
+    expect(messages.some((m) => /^Found: /.test(m.text))).toBe(true);
     expect(messages.filter((m) => m.text.startsWith("Possible conflict"))).toHaveLength(
       c.findings.length,
     );

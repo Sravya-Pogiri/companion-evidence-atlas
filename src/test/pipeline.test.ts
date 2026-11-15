@@ -63,28 +63,50 @@ describe("message pipeline", () => {
       sourceLabel: "Team voice note",
     });
     expect(r.state.pendingId).toBe("item-a1");
-    expect(r.replies[0]?.text).toBe("File this as Dashcam: signal at the turn? Reply Y.");
+    const text = r.replies[0]?.text ?? "";
+    expect(text).toMatch(/^Found: Dashcam: signal at the turn\. /);
+    expect(text).toMatch(/Reply CONFIRM or DISMISS\.$/);
   });
 
-  it("files on Y and cites both sources when it finds a conflict", async () => {
+  it("cross-checks when it proposes: a possible conflict cites both sources, nothing is filed yet", async () => {
     const asked = await send(seed(), "", llm(), [note]);
-    const r = await send(asked.state, "Y", llm());
-    const item = r.state.items.find((i) => i.id === "item-a1");
-    expect(item).toMatchObject({
-      status: "filed",
-      flag: "conflict",
-      relatedId: "dashcam-approach",
-    });
-    expect(item?.filedAt).toBeTruthy();
-    expect(r.state.pendingId).toBeNull();
-    const text = r.replies[0]?.text ?? "";
+    const text = asked.replies[0]?.text ?? "";
     expect(text).toContain("Possible conflict");
     expect(text).toContain("Team voice note");
     expect(text).toContain("Dashcam (public video");
+    expect(asked.state.items.find((i) => i.id === "item-a1")).toMatchObject({
+      status: "pending",
+      flag: "conflict",
+      relatedId: "dashcam-approach",
+    });
+  });
+
+  it("CONFIRM adds it to the case record with the flag it was proposed with", async () => {
+    const asked = await send(seed(), "", llm(), [note]);
+    for (const word of ["CONFIRM", "confirm", "Confirm.", "Y"]) {
+      const r = await send(asked.state, word, llm());
+      const item = r.state.items.find((i) => i.id === "item-a1");
+      expect(item).toMatchObject({
+        status: "filed",
+        flag: "conflict",
+        relatedId: "dashcam-approach",
+      });
+      expect(item?.filedAt).toBeTruthy();
+      expect(r.state.pendingId).toBeNull();
+      expect(r.replies[0]?.text).toBe("Added to the case record.");
+    }
+  });
+
+  it("DISMISS drops it, in any case", async () => {
+    const asked = await send(seed(), "", llm(), [note]);
+    for (const word of ["DISMISS", "dismiss", "Dismiss!", "N"]) {
+      const r = await send(asked.state, word, llm());
+      expect(r.state.items).toEqual(ITEMS);
+      expect(r.replies[0]?.text).toBe("Dismissed.");
+    }
   });
 
   it("files an agreeing item neutrally and cites the source it lines up with", async () => {
-    const asked = await send(seed(), "", llm(), [note]);
     const agrees = llm({
       compare: async () => ({
         verdict: "agrees",
@@ -93,7 +115,7 @@ describe("message pipeline", () => {
         confidence: 0.9,
       }),
     });
-    const r = await send(asked.state, "Y", agrees);
+    const r = await send(seed(), "", agrees, [note]);
     expect(r.state.items.find((i) => i.id === "item-a1")).toMatchObject({
       flag: "agrees",
       relatedId: "dashcam-approach",
@@ -102,7 +124,6 @@ describe("message pipeline", () => {
   });
 
   it("flags a gap without needing a related item", async () => {
-    const asked = await send(seed(), "", llm(), [note]);
     const gap = llm({
       compare: async () => ({
         verdict: "missing",
@@ -111,7 +132,7 @@ describe("message pipeline", () => {
         confidence: 0.8,
       }),
     });
-    const r = await send(asked.state, "Y", gap);
+    const r = await send(seed(), "", gap, [note]);
     expect(r.state.items.find((i) => i.id === "item-a1")?.flag).toBe("missing");
     expect(r.replies[0]?.text).toContain("Possible gap");
   });
@@ -156,7 +177,6 @@ describe("message pipeline", () => {
   });
 
   it("does not flag when the comparison is unsure, and says so", async () => {
-    const asked = await send(seed(), "", llm(), [note]);
     const unsure = llm({
       compare: async () => ({
         verdict: "conflict",
@@ -165,16 +185,17 @@ describe("message pipeline", () => {
         confidence: 0.2,
       }),
     });
-    const r = await send(asked.state, "yes", unsure);
+    const r = await send(seed(), "", unsure, [note]);
     expect(r.state.items.find((i) => i.id === "item-a1")).toMatchObject({
-      status: "filed",
+      status: "pending",
       flag: "agrees",
     });
     expect(r.replies[0]?.text).toContain("can't tell");
+    const filed = await send(r.state, "yes", unsure);
+    expect(filed.state.items.find((i) => i.id === "item-a1")?.status).toBe("filed");
   });
 
   it("ignores a related id that is not on the timeline", async () => {
-    const asked = await send(seed(), "", llm(), [note]);
     const made = llm({
       compare: async () => ({
         verdict: "conflict",
@@ -183,13 +204,12 @@ describe("message pipeline", () => {
         confidence: 0.9,
       }),
     });
-    const r = await send(asked.state, "Y", made);
+    const r = await send(seed(), "", made, [note]);
     expect(r.state.items.find((i) => i.id === "item-a1")?.flag).toBe("agrees");
     expect(r.replies[0]?.text).toContain("can't tell");
   });
 
   it("replaces model wording that states a legal conclusion", async () => {
-    const asked = await send(seed(), "", llm(), [note]);
     const bad = llm({
       compare: async () => ({
         verdict: "conflict",
@@ -198,7 +218,7 @@ describe("message pipeline", () => {
         confidence: 0.9,
       }),
     });
-    const r = await send(asked.state, "Y", bad);
+    const r = await send(seed(), "", bad, [note]);
     const text = r.replies[0]?.text ?? "";
     expect(text).not.toMatch(/lied|illegal/i);
     expect(text).toContain("Possible conflict");
@@ -215,7 +235,7 @@ describe("message pipeline", () => {
       }),
     });
     const r = await send(seed(), "", bad, [note]);
-    expect(r.replies[0]?.text).toBe("File this as Team voice note? Reply Y.");
+    expect(r.replies[0]?.text).toContain("Found: Team voice note.");
   });
 
   it("reports a model failure in plain words and files nothing", async () => {
@@ -229,16 +249,16 @@ describe("message pipeline", () => {
     expect(r.state.items).toEqual(ITEMS);
   });
 
-  it("files even if the comparison fails, but says it is not flagged", async () => {
-    const asked = await send(seed(), "", llm(), [note]);
+  it("still proposes if the comparison fails, but says it will not be flagged", async () => {
     const down = llm({
       compare: async () => {
         throw new Error("The analysis service is busy.");
       },
     });
-    const r = await send(asked.state, "Y", down);
-    expect(r.state.items.find((i) => i.id === "item-a1")?.status).toBe("filed");
-    expect(r.replies[0]?.text).toContain("not flagged");
+    const r = await send(seed(), "", down, [note]);
+    expect(r.state.items.find((i) => i.id === "item-a1")?.status).toBe("pending");
+    expect(r.replies[0]?.text).toContain("won't be flagged");
+    expect(r.replies[0]?.text).toMatch(/Reply CONFIRM or DISMISS\.$/);
   });
 
   it("drops an unconfirmed item on N and when a new attachment arrives", async () => {
@@ -250,8 +270,18 @@ describe("message pipeline", () => {
     expect(again.state.pendingId).toBe("item-a2");
   });
 
-  it("handles Y with nothing pending", async () => {
-    expect((await send(seed(), "Y", llm())).replies[0]?.text).toContain("nothing waiting");
+  it("handles CONFIRM and DISMISS with nothing pending", async () => {
+    expect((await send(seed(), "confirm", llm())).replies[0]?.text).toContain("nothing waiting");
+    expect((await send(seed(), "DISMISS", llm())).replies[0]?.text).toContain("nothing waiting");
+  });
+
+  it("passes on why a file could not be read, and files nothing", async () => {
+    const r = await send(seed(), "", llm(), [
+      { id: "a4", kind: "audio", name: "Voice", readError: "I can't transcribe voice notes yet." },
+    ]);
+    expect(r.replies[0]?.text).toContain("I can't transcribe voice notes yet.");
+    expect(r.replies[0]?.text).toContain("Nothing was added");
+    expect(r.state.pendingId).toBeNull();
   });
 
   it("can't read an attachment that has no text yet", async () => {
@@ -277,7 +307,7 @@ describe("message pipeline", () => {
   it("answers What changed since yesterday? using filing times", async () => {
     expect(whatsChanged(ITEMS, NOW)).toBe("Nothing new has been filed since yesterday.");
     const asked = await send(seed(), "", llm(), [note]);
-    const filed = await send(asked.state, "Y", llm());
+    const filed = await send(asked.state, "confirm", llm());
     const r = await send(filed.state, "what changed since yesterday?", llm());
     expect(r.replies[0]?.text).toContain("1 item was filed");
     expect(r.replies[0]?.text).toContain("possible conflict");
@@ -317,7 +347,8 @@ describe("text notes as evidence", () => {
     });
     const r = await send(seed(), text, model);
     expect(seen).toBe(`Text note from the case team | ${text} | `);
-    expect(r.replies[0]?.text).toBe("File this as Dashcam: signal at 0:55? Reply Y.");
+    expect(r.replies[0]?.text).toMatch(/^Found: Dashcam: signal at 0:55\. /);
+    expect(r.replies[0]?.text).toMatch(/Reply CONFIRM or DISMISS\.$/);
     const item = r.state.items.find((i) => i.id === r.state.pendingId);
     expect(item).toMatchObject({
       status: "pending",
@@ -327,16 +358,17 @@ describe("text notes as evidence", () => {
     expect(item?.extractedText).toBe(text);
   });
 
-  it("files the note on Y and compares it with the rest of the case", async () => {
+  it("compares the note with the rest of the case when it is proposed, and files it on CONFIRM", async () => {
     const asked = await send(seed(), text, llm());
-    const r = await send(asked.state, "Y", llm());
+    expect(asked.replies[0]?.text).toContain("Text note from the case team");
+    const r = await send(asked.state, "CONFIRM", llm());
     expect(
       r.state.items.find((i) => i.sourceLabel === "Text note from the case team"),
     ).toMatchObject({
       status: "filed",
       flag: "conflict",
     });
-    expect(r.replies[0]?.text).toContain("Text note from the case team");
+    expect(r.replies[0]?.text).toBe("Added to the case record.");
   });
 
   it("does not treat short texts or questions as notes", async () => {

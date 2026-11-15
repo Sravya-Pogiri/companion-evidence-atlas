@@ -191,12 +191,12 @@ export const SAMPLE_ITEMS: TimelineItem[] = [
 // Seed transcript: what the team and the agent already said before the live demo starts.
 export const SAMPLE_CONVERSATION: ChatMessage[] = [
   { id: "m1", from: "team", attachment: "video", text: "Dashcam clip, from 0:45", itemId: "dashcam-approach" },
-  { id: "m2", from: "agent", text: "File this as Dashcam: Mustang approaches, left signal appears on? Reply Y.", itemId: "dashcam-approach" },
-  { id: "m3", from: "team", text: "Y" },
+  { id: "m2", from: "agent", text: "Found: Dashcam: Mustang approaches, left signal appears on. Reply CONFIRM or DISMISS.", itemId: "dashcam-approach" },
+  { id: "m3", from: "team", text: "CONFIRM" },
   { id: "m4", from: "team", attachment: "document", text: "Complaint, page 24", itemId: "complaint-reason" },
-  { id: "m5", from: "agent", text: "Filed. Possible conflict: the complaint says failure to signal, and the dashcam appears to show the left signal on at about 0:45. Review?", itemId: "complaint-reason" },
+  { id: "m5", from: "agent", text: "Added to the case record. Possible conflict: the complaint says failure to signal, and the dashcam appears to show the left signal on at about 0:45. A person should review it.", itemId: "complaint-reason" },
   { id: "m6", from: "team", attachment: "video", text: "Bodycam clip, from 1:20", itemId: "bodycam-after-stop" },
-  { id: "m7", from: "agent", text: "Filed. The bodycam starts after the stop, so it does not show the approach or the turn.", itemId: "bodycam-after-stop" },
+  { id: "m7", from: "agent", text: "Added to the case record. The bodycam starts after the stop, so it does not show the approach or the turn.", itemId: "bodycam-after-stop" },
   { id: "m8", from: "team", text: "What's missing?" },
   { id: "m9", from: "agent", text: "Possible gaps: no dispatch audio in the record, and the signal activation point is not shown (opinion, page 11).", itemId: "activation-missing" },
 ];

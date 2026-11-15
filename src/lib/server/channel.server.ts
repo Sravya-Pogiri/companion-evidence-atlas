@@ -3,12 +3,16 @@
 //   CASELENS_CHANNEL=simulated   (default) the page runs the conversation itself.
 //   CASELENS_CHANNEL=photon      iMessage through Photon. Needs PHOTON_API_KEY, PHOTON_PROJECT_ID
 //                                and PHOTON_WEBHOOK_SECRET. If any is missing it falls back to simulated.
+//   TEAM_NUMBERS                 who may text the line (phone numbers, comma separated). Empty lets nobody in.
+//   PHOTON_BATCH_MS              how long to wait for more messages before answering (default 5000).
 //
 // The state is in this server process's memory (kept across dev reloads). It is lost on restart,
 // and a serverless host may run more than one copy. That is fine for a demo, not for production.
 import { gatewayLlm } from "@/lib/agent/llm.server";
 import type { PipelineState } from "@/lib/agent/pipeline";
 import { connectAgent } from "@/lib/agent/runner";
+import { readAttachment } from "@/lib/agent/extract.server";
+import { parseTeamNumbers } from "@/lib/channel/allowlist";
 import { PhotonChannel } from "@/lib/channel/photon.server";
 import type { Decisions } from "@/lib/deadlines";
 import { cachedCaseDeadline, loadCalendar } from "./calendar.server";
@@ -50,6 +54,12 @@ export function getPhotonRuntime(): PhotonRuntime | null {
   if (channelInfo().mode !== "photon") return null;
   if (g.__caselensPhoton) return g.__caselensPhoton;
 
+  const team = parseTeamNumbers(process.env["TEAM_NUMBERS"]);
+  if (team.size === 0) {
+    console.warn("photon: TEAM_NUMBERS is empty, so every sender will be turned away.");
+  }
+  const batchMs = Number(process.env["PHOTON_BATCH_MS"] ?? 5000);
+
   const state: ServerCaseState = {
     items: ITEMS,
     messages: CONVERSATION,
@@ -68,6 +78,12 @@ export function getPhotonRuntime(): PhotonRuntime | null {
         ...state.messages,
         { ...m, id: `s${state.messages.length + 1}-${Date.now().toString(36)}` },
       ];
+    },
+    fetch,
+    {
+      team,
+      batchMs: Number.isFinite(batchMs) && batchMs >= 0 ? batchMs : 5000,
+      reader: readAttachment,
     },
   );
   connectAgent(channel, gatewayLlm, {

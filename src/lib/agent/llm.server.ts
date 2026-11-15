@@ -1,7 +1,8 @@
 // Server only. The model calls behind the pipeline, shared by the browser's server functions
 // (agent.functions.ts) and the Photon webhook, which runs the pipeline on the server.
-import { COMPARE_SYSTEM, DESCRIBE_SYSTEM } from "@/lib/agent/gateway.server";
+import { ANSWER_SYSTEM, COMPARE_SYSTEM, DESCRIBE_SYSTEM } from "@/lib/agent/gateway.server";
 import { askJson } from "@/lib/ai/provider.server";
+import { answerQuestion, QaMemory, type AnswerFn } from "@/lib/agent/qa";
 import type {
   AgentLlm,
   CompareInput,
@@ -72,8 +73,38 @@ export async function compareWithGateway(data: CompareInput): Promise<CompareOut
   };
 }
 
+/** Words an answer from the retrieved passages. Throws GatewayError when the model cannot answer. */
+export const answerWithGateway: AnswerFn = async (input) => {
+  const passages = input.passages
+    .map((p, i) => `[${p.cite}]\n${str(p.text, 900)}`.replace(/^/, `${i + 1}. `))
+    .join("\n\n");
+  const history = input.history.length
+    ? `Earlier questions from this person:\n${input.history.map((t) => `- ${str(t.question, 200)}`).join("\n")}\n\n`
+    : "";
+  const user = `${history}Question: ${str(input.question, 400)}\n\nPassages:\n${passages}`;
+  // The model now and then returns something that is not valid JSON. Ask once more before giving up.
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const a = (await askJson(ANSWER_SYSTEM, `${user}${" ".repeat(attempt)}`)) as Record<
+        string,
+        unknown
+      >;
+      return str(a["answer"], 800);
+    } catch (e) {
+      lastError = e;
+      if (!(e instanceof Error) || !/could not read/.test(e.message)) break;
+    }
+  }
+  throw lastError;
+};
+
+const g = globalThis as { __caselensQa?: QaMemory };
+const qaMemory = (g.__caselensQa ??= new QaMemory());
+
 /** The pipeline's model, used where the pipeline runs on the server. */
 export const gatewayLlm: AgentLlm = {
   describe: (input) => describeWithGateway(clampDescribeInput(input)),
   compare: (input) => compareWithGateway(clampCompareInput(input)),
+  ask: (question, who) => answerQuestion(question, who, qaMemory, answerWithGateway),
 };

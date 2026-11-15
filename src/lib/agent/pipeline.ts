@@ -57,6 +57,12 @@ export interface CompareOutput {
 export interface AgentLlm {
   describe(input: DescribeInput): Promise<DescribeOutput>;
   compare(input: CompareInput): Promise<CompareOutput>;
+  /**
+   * Answer a question from the stored case files, with inline citations. Only the server has the
+   * files, so the page's simulated channel leaves this out and falls back to the help text.
+   * `who` is the conversation, so follow-up questions can use that person's recent questions.
+   */
+  ask?(question: string, who: string): Promise<string>;
 }
 
 export interface PipelineState {
@@ -166,18 +172,16 @@ export async function handleMessage(
   if (attachment) return proposeFiling(state, message, attachment, llm, who);
 
   const t = norm(message.text);
-  if (/^(y|yes|yep|yeah)$/.test(t)) return confirmFiling(state, llm, now, who);
-  if (/^(n|no|nope)$/.test(t)) return skipFiling(state, who);
-  if (/\bwhat(?:'s|s| is| are)?\s+missing\b/.test(t))
-    return say(state, { text: whatsMissing(state.items) });
+  if (CONFIRM.test(t)) return confirmFiling(state, who, now);
+  if (DISMISS.test(t)) return skipFiling(state, who);
+  if (isMissingCommand(t)) return say(state, { text: whatsMissing(state.items) });
   if (/\bwhat(?:'s| has| have)?\s+changed\b/.test(t))
     return say(state, { text: whatsChanged(state.items, now) });
   // Whole-message only, so a note that happens to say "deadline" is still treated as a note.
-  if (/^(?:what(?:'s| is| are)?\s+(?:due|coming up)|(?:upcoming |any )?deadlines?)$/.test(t))
-    return say(state, { text: whatsDue(state, now) });
+  if (DUE.test(t)) return say(state, { text: whatsDue(state, now) });
 
   // A longer statement (not a question) is evidence in its own right: a note from the case
-  // team, filed through the same propose-then-Y flow as an attachment. Over a text-only
+  // team, filed through the same propose-then-confirm flow as an attachment. Over a text-only
   // channel this is the way to get evidence in.
   if (isNote(message.text)) {
     const note: Attachment = {
@@ -189,16 +193,64 @@ export async function handleMessage(
     return proposeFiling(state, { text: "", attachments: [note] }, note, llm, who);
   }
 
+  // Anything else is a question about the case. Pending proposals wait; a question doesn't cancel one.
+  if (llm.ask && message.text.trim()) {
+    try {
+      return say(state, { text: await llm.ask(message.text.trim(), who) });
+    } catch (e) {
+      return say(state, { text: `I can't answer that right now. ${errorText(e)}` });
+    }
+  }
+
   const pending = ownPending(state, who);
   if (pending) {
     return say(state, {
-      text: `I'm still waiting on "${pending.label}". Reply Y to file it, or N to skip it.`,
+      text: `I'm still waiting on "${pending.label}". Reply CONFIRM to add it to the case record, or DISMISS.`,
       itemId: pending.id,
     });
   }
   return say(state, {
     text: `Send me evidence, or a short note with a time like "dashcam shows the signal at 0:55", and I'll suggest where it goes on the timeline. You can also ask "What's missing?" or "What changed since yesterday?"`,
   });
+}
+
+const CONFIRM = /^(?:y|yes|yep|yeah|confirm(?:ed)?(?: it)?|please confirm)$/;
+const DISMISS = /^(?:n|no|nope|dismiss(?:ed)?(?: it)?|please dismiss)$/;
+const DUE = /^(?:what(?:'s| is| are)?\s+(?:due|coming up)|(?:upcoming |any )?deadlines?)$/;
+
+function editDistance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = row[0]!;
+    row[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = row[j]!;
+      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = tmp;
+    }
+  }
+  return row[b.length]!;
+}
+
+/** "What's missing?", "whats mising", "any gaps in the file?": short, and about what is missing. */
+export function isMissingCommand(normalized: string): boolean {
+  const words = normalized.split(/\s+/).filter(Boolean);
+  if (words.length === 0 || words.length > 8) return false;
+  return words.some(
+    (w) => w === "gap" || w === "gaps" || (w.length >= 6 && editDistance(w, "missing") <= 2),
+  );
+}
+
+/** Any of the fixed commands, so a batch of texts can be kept apart from free text. */
+export function isCommand(text: string): boolean {
+  const t = norm(text);
+  return (
+    CONFIRM.test(t) ||
+    DISMISS.test(t) ||
+    isMissingCommand(t) ||
+    /\bwhat(?:'s| has| have)?\s+changed\b/.test(t) ||
+    DUE.test(t)
+  );
 }
 
 const NOTE_MIN_WORDS = 4;
@@ -218,12 +270,21 @@ function ownPending(state: PipelineState, who: string): TimelineItem | undefined
 
 const NOT_YOURS = "That one is waiting on someone else's reply, so I haven't changed it.";
 
-function isNote(text: string): boolean {
+const QUESTION_START =
+  /^(?:what|who|whom|whose|when|where|why|how|which|did|does|do|is|are|was|were|can|could|would|should|has|have|had|tell me|show me|explain|describe|summari[sz]e|list|any|anything|and what|what about|how about)\b/i;
+
+/** A question, with or without the question mark (people dictate and skip it). */
+export function isQuestion(text: string): boolean {
   const t = text.trim();
-  return !t.endsWith("?") && t.split(/\s+/).length >= NOTE_MIN_WORDS;
+  return t.endsWith("?") || QUESTION_START.test(t);
 }
 
-// ---------- attachment in: describe and propose ----------
+function isNote(text: string): boolean {
+  const t = text.trim();
+  return !isQuestion(t) && t.split(/\s+/).length >= NOTE_MIN_WORDS;
+}
+
+// ---------- attachment in: describe, cross-check and propose ----------
 
 async function proposeFiling(
   state: PipelineState,
@@ -244,8 +305,11 @@ async function proposeFiling(
     .filter(Boolean)
     .join("\n");
   if (!extracted) {
+    const why = attachment.readError
+      ? `${sentence(attachment.readError)} `
+      : `I can't read "${attachment.name}" yet, so I can't tell what it shows. `;
     return say(base, {
-      text: `I can't read "${attachment.name}" yet, so I can't tell what it shows. Nothing was filed. Add a short note saying what it is and when.${extra}`,
+      text: `${why}Nothing was added. Add a short note saying what it is and when.${extra}`,
     });
   }
 
@@ -259,7 +323,7 @@ async function proposeFiling(
     });
   } catch (e) {
     return say(base, {
-      text: `I can't tell what "${attachment.name}" shows right now. ${errorText(e)} Nothing was filed.${extra}`,
+      text: `I can't tell what "${attachment.name}" shows right now. ${errorText(e)} Nothing was added.${extra}`,
     });
   }
 
@@ -272,7 +336,7 @@ async function proposeFiling(
     !cleanLabel(described.description)
   ) {
     return say(base, {
-      text: `I can't tell what "${attachment.name}" shows or where it belongs on the timeline. Nothing was filed. Try sending it again with a short note on what it is and when.${extra}`,
+      text: `I can't tell what "${attachment.name}" shows or where it belongs on the timeline. Nothing was added. Try sending it again with a short note on what it is and when.${extra}`,
     });
   }
 
@@ -283,7 +347,7 @@ async function proposeFiling(
     ? cleanLabel(attachment.name)
     : cleanLabel(described.description);
 
-  const item: TimelineItem = {
+  const suggested: TimelineItem = {
     id: `item-${attachment.id}`,
     lane,
     start,
@@ -295,19 +359,27 @@ async function proposeFiling(
     status: "pending",
     flag: "agrees",
   };
+
+  // Cross-check it against what is already on the record now, so the person sees any possible
+  // conflict before they decide. The result rides on the suggested item until they confirm.
+  const check = await crossCheck(suggested, filedItems(items), llm);
+  const item: TimelineItem = { ...suggested, ...check.patch };
   return say(
     { items: [...items, item], pendingId: item.id, pendingFor: who },
-    { text: `File this as ${label}? Reply Y.${extra}`, itemId: item.id },
+    {
+      text: `Found: ${label}. ${check.note} Reply CONFIRM or DISMISS.${extra}`,
+      itemId: item.id,
+    },
   );
 }
 
-// ---------- Y / N ----------
+// ---------- CONFIRM / DISMISS ----------
 
 function skipFiling(state: PipelineState, who: string): PipelineResult {
   const pending = ownPending(state, who);
   if (!pending) {
     const other = state.pendingId !== null && (state.pendingFor ?? "") !== who;
-    return say(state, { text: other ? NOT_YOURS : "There is nothing waiting to be filed." });
+    return say(state, { text: other ? NOT_YOURS : "There is nothing waiting to be confirmed." });
   }
   return say(
     {
@@ -315,49 +387,51 @@ function skipFiling(state: PipelineState, who: string): PipelineResult {
       pendingId: null,
       pendingFor: null,
     },
-    { text: "Okay, I did not file it." },
+    { text: "Dismissed." },
+  );
+}
+
+function confirmFiling(state: PipelineState, who: string, now: Date): PipelineResult {
+  const pending = ownPending(state, who);
+  if (!pending) {
+    const other = state.pendingId !== null && (state.pendingFor ?? "") !== who;
+    return say(state, { text: other ? NOT_YOURS : "There is nothing waiting to be confirmed." });
+  }
+  const filed: TimelineItem = { ...pending, status: "filed", filedAt: now.toISOString() };
+  return say(
+    { items: replaceItem(state.items, filed), pendingId: null, pendingFor: null },
+    { text: "Added to the case record.", itemId: filed.id },
   );
 }
 
 const VERDICTS = new Set<string>(["agrees", "conflict", "missing", "unclear"]);
 
-async function confirmFiling(
-  state: PipelineState,
+/** The model's comparison, checked by code. Returns what to store on the item and what to say. */
+async function crossCheck(
+  item: TimelineItem,
+  others: TimelineItem[],
   llm: AgentLlm,
-  now: Date,
-  who: string,
-): Promise<PipelineResult> {
-  const pending = ownPending(state, who);
-  if (!pending) {
-    const other = state.pendingId !== null && (state.pendingFor ?? "") !== who;
-    return say(state, { text: other ? NOT_YOURS : "There is nothing waiting to be filed." });
-  }
-
-  const filed: TimelineItem = { ...pending, status: "filed", filedAt: now.toISOString() };
-  const others = filedItems(state.items).filter((i) => i.id !== filed.id);
-  let next: PipelineState = {
-    items: replaceItem(state.items, filed),
-    pendingId: null,
-    pendingFor: null,
-  };
-
+): Promise<{ patch: Partial<TimelineItem>; note: string }> {
   if (others.length === 0) {
-    return say(next, {
-      text: "Filed. There is nothing else on the timeline to compare it with yet.",
-      itemId: filed.id,
-    });
+    return { patch: {}, note: "There is nothing else on the timeline to compare it with yet." };
   }
 
   let result: CompareOutput;
   try {
-    result = await llm.compare({ item: toBrief(filed), others: others.map(toBrief) });
+    result = await llm.compare({ item: toBrief(item), others: others.map(toBrief) });
   } catch (e) {
-    return say(next, {
-      text: `Filed. I couldn't check it against the other items just now. ${errorText(e)} It is not flagged, so a person should compare it.`,
-      itemId: filed.id,
-    });
+    return {
+      patch: {},
+      note: `I couldn't check it against the other items just now. ${errorText(e)} It won't be flagged, so a person should compare it.`,
+    };
   }
 
+  if (!result) {
+    return {
+      patch: {},
+      note: "I couldn't check it against the other items just now. It won't be flagged, so a person should compare it.",
+    };
+  }
   const related = others.find((i) => i.id === result.relatedId);
   const verdict = VERDICTS.has(result.verdict) ? (result.verdict as Flag | "unclear") : "unclear";
   const confident = result.confidence >= MIN_CONFIDENCE;
@@ -366,22 +440,13 @@ async function confirmFiling(
     confident && verdict !== "unclear" && (verdict === "missing" || related !== undefined);
 
   if (!usable) {
-    return say(next, {
-      text: "Filed. I can't tell whether it agrees with or conflicts with the other items, so I haven't flagged it. A person should take a look.",
-      itemId: filed.id,
-    });
+    return {
+      patch: {},
+      note: "I can't tell whether it agrees with or conflicts with the other items, so it won't be flagged. A person should take a look.",
+    };
   }
 
   const flag = verdict as Flag;
-  next = {
-    ...next,
-    items: replaceItem(next.items, {
-      ...filed,
-      flag,
-      ...(related ? { relatedId: related.id } : {}),
-    }),
-  };
-
   const neutral: Record<Flag, string> = {
     conflict: "The two sources may describe this differently.",
     agrees: "The two sources appear to line up.",
@@ -389,15 +454,14 @@ async function confirmFiling(
   };
   const reason =
     hasConclusion(result.reason) || !result.reason.trim() ? neutral[flag] : sentence(result.reason);
-  const both = related ? `${filed.sourceLabel} and ${related.sourceLabel}` : filed.sourceLabel;
-
-  const text =
+  const both = related ? `${item.sourceLabel} and ${related.sourceLabel}` : item.sourceLabel;
+  const note =
     flag === "conflict"
-      ? `Filed. Possible conflict: ${reason} Compare ${both}. Review?`
+      ? `Possible conflict: ${reason} Compare ${both}.`
       : flag === "missing"
-        ? `Filed. Possible gap: ${reason} See ${both}.`
-        : `Filed. It appears consistent with ${related!.sourceLabel}. ${reason}`;
-  return say(next, { text, itemId: filed.id });
+        ? `Possible gap: ${reason} See ${both}.`
+        : `It appears consistent with ${related!.sourceLabel}. ${reason}`;
+  return { patch: { flag, ...(related ? { relatedId: related.id } : {}) }, note };
 }
 
 // ---------- commands ----------

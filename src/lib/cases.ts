@@ -154,9 +154,9 @@ export function buildConversation(c: PublicCase): ChatMessage[] {
 
   for (const e of c.evidence.slice(0, 2)) {
     add({ from: "team", attachment: ATTACHMENT[e.icon] ?? "document", text: e.name });
-    add({ from: "agent", text: `File this as ${e.name}: ${e.desc} Reply Y.` });
-    add({ from: "team", text: "Y" });
-    add({ from: "agent", text: "Filed." });
+    add({ from: "agent", text: `Found: ${e.name}. ${e.desc} Reply CONFIRM or DISMISS.` });
+    add({ from: "team", text: "CONFIRM" });
+    add({ from: "agent", text: "Added to the case record." });
   }
   c.findings.forEach((f, i) => {
     const who = f.sides.map((s) => s.label).join(" and ");
