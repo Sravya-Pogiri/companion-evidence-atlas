@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getChannelState } from "@/lib/channel.functions";
+import { ACTIVE_CASE } from "@/lib/active-case";
 import { getCase, setCase } from "@/lib/case-store";
 
 const POLL_MS = 2000;
@@ -10,6 +11,8 @@ const POLL_MS = 2000;
  */
 export function useChannelSync(): void {
   useEffect(() => {
+    // The server and the Photon channel hold the Rosales case only.
+    if (ACTIVE_CASE !== "rosales") return;
     let stopped = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
 

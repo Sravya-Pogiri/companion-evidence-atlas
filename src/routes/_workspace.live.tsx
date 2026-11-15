@@ -40,12 +40,12 @@ export const Route = createFileRoute("/_workspace/live")({
   component: LiveCase,
 });
 
-/** The moment the sample case opens on: the possible conflict. */
-const CONFLICT_MOMENT = 45;
+/** Where the case opens: the first verified video moment, or the BTK case's mailed disk. */
+const OPEN_AT = SAMPLE_CASE.openAt;
 
 function LiveCase() {
   const { demo } = Route.useSearch();
-  const [playhead, setPlayhead] = useState(CONFLICT_MOMENT);
+  const [playhead, setPlayhead] = useState(OPEN_AT);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [compare, setCompare] = useState<{ claim: TimelineItem; footage: TimelineItem } | null>(
     null,
@@ -58,7 +58,7 @@ function LiveCase() {
     if (!demo || getCase().mode === "photon") return;
     setDemoRunning(true);
     setSelectedId(null);
-    setPlayhead(CONFLICT_MOMENT);
+    setPlayhead(OPEN_AT);
     const controller = startDemo(() => setDemoRunning(false));
     return () => controller.stop();
   }, [demo]);
@@ -137,8 +137,7 @@ function LiveCase() {
               </div>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              Drag the playhead to move through the case. Times on the public sample are
-              approximate.
+              {SAMPLE_CASE.axisNote}
             </p>
           </section>
 
@@ -219,6 +218,9 @@ function kindOf(item: TimelineItem): string {
   if (item.flag === "missing") return "Gap";
   if (item.lane === "dashcam" || item.lane === "bodycam") return "Observational";
   if (item.lane === "documents") return item.flag === "conflict" ? "As alleged" : "From the record";
+  if (item.lane === "court") return "Court record";
+  if (item.lane === "investigation") return "As reported";
+  if (item.lane === "incidents") return "Charged incident";
   return "Observational";
 }
 
@@ -317,6 +319,17 @@ function MomentPanel({
               <PageThumb page={media.page} highlight focusTop className="size-full" />
               <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-px font-mono text-[13px] text-white">
                 p.{media.page.page}
+              </span>
+            </a>
+          ) : focus.flag !== "missing" ? (
+            <a
+              href={focus.sourceLink ?? undefined}
+              target="_blank"
+              rel="noreferrer"
+              className="grid aspect-video place-items-center rounded-md border border-white/10 text-sm text-muted-foreground hover:border-white/25"
+            >
+              <span className="flex items-center gap-2">
+                <LaneIcon className="size-4" aria-hidden /> No preview · open the source
               </span>
             </a>
           ) : (

@@ -1,7 +1,7 @@
 import { sourceLinks } from "@/lib/case-data";
 import { normalizeText } from "@/lib/evidence/verify";
 import type { VideoId } from "@/lib/media";
-import { ANALYSIS_CLAIMS, ITEMS } from "@/lib/sample-case";
+import { ANALYSIS_CLAIMS, BTK, ITEMS } from "@/lib/sample-case";
 
 // The sources of the public sample case and the text the workspace shows for them.
 // Document text is copied from the public PDFs (complaint page 24; opinion pages 1 and 11),
@@ -48,7 +48,7 @@ export interface Source {
   video?: VideoId;
 }
 
-export const SOURCES: Source[] = [
+const ROSALES_SOURCES: Source[] = [
   {
     id: "summary",
     kind: "summary",
@@ -255,7 +255,7 @@ function analysisCitations(): Record<string, Citation[]> {
     out[itemId] = claims.map((c): Citation => {
       if ("t" in c.at) return { source: c.at.source, t: c.at.t };
       const quote = c.exactQuote ?? "";
-      const paragraphs = SOURCES.find((s) => s.id === c.at.source)?.blocks?.flatMap((b) => b.paragraphs) ?? [];
+      const paragraphs = ROSALES_SOURCES.find((s) => s.id === c.at.source)?.blocks?.flatMap((b) => b.paragraphs) ?? [];
       const hit = quote ? paragraphs.find((p) => normalizeText(p.text).includes(normalizeText(quote))) : undefined;
       if (!hit) return { source: c.at.source };
       if (hit.text.includes(quote)) hit.marks = [...(hit.marks ?? []), { phrase: quote, itemId }];
@@ -265,12 +265,17 @@ function analysisCitations(): Record<string, Citation[]> {
   // A missing record cites the referenced-but-absent source when the viewer lists it.
   for (const item of ITEMS) {
     const id = item.id.startsWith("missing-") ? item.id.slice("missing-".length) : null;
-    if (id && SOURCES.some((s) => s.id === id)) out[item.id] = [{ source: id }];
+    if (id && ROSALES_SOURCES.some((s) => s.id === id)) out[item.id] = [{ source: id }];
   }
   return out;
 }
 
-export const ITEM_CITATIONS: Record<string, Citation[]> = { ...SAMPLE_CITATIONS, ...analysisCitations() };
+/** The open case's sources (see active-case.ts). */
+export const SOURCES: Source[] = BTK?.sources ?? ROSALES_SOURCES;
+
+export const ITEM_CITATIONS: Record<string, Citation[]> = BTK
+  ? BTK.citations
+  : { ...SAMPLE_CITATIONS, ...analysisCitations() };
 
 export type EntityType = "Person" | "Place" | "Date" | "Organization";
 
@@ -284,7 +289,7 @@ export interface Entity {
 }
 
 /** A small index of names that appear in the sample documents, curated by hand. */
-export const ENTITIES: Entity[] = [
+const ROSALES_ENTITIES: Entity[] = [
   {
     name: "Mario Rosales",
     type: "Person",
@@ -354,6 +359,8 @@ export const ENTITIES: Entity[] = [
     cites: [{ source: "opinion", para: "p1-2" }],
   },
 ];
+
+export const ENTITIES: Entity[] = BTK?.entities ?? ROSALES_ENTITIES;
 
 export function findSource(id: string | undefined): Source | undefined {
   return id ? SOURCES.find((s) => s.id === id) : undefined;

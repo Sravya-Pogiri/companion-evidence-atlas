@@ -77,10 +77,12 @@ export function nearestFrame(v: VideoId, at: number): Frame {
 
 /** The still or page that belongs to an item, when the sample has one. */
 export function mediaFor(
-  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame">,
+  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame" | "page">,
 ): ItemMedia | null {
   const known = BY_ITEM[item.id];
   if (known) return known;
+  // A rendered image of the cited page that came with the item.
+  if (item.page) return { kind: "page", page: item.page };
   // Items from the evidence analysis carry their own verified frame.
   if (item.frame && (item.lane === "dashcam" || item.lane === "bodycam")) {
     return { ...(video(item.lane, item.start) as Extract<ItemMedia, { kind: "video" }>), frame: item.frame };

@@ -11,7 +11,7 @@ import {
 import { useCase, useFiledItems } from "@/lib/case-store";
 import { startDemo, type DemoController } from "@/lib/demo";
 import { useDecisions, type Decisions } from "@/lib/review-store";
-import { reviewQueue, type TimelineItem } from "@/lib/sample-case";
+import { BTK, reviewQueue, type TimelineItem } from "@/lib/sample-case";
 import { ITEM_CITATIONS, findSource, type Citation } from "@/lib/sources";
 
 // UI state shared by the workspace columns. Case data itself stays in the case store and
@@ -67,7 +67,7 @@ export function citationsFor(item: TimelineItem): Citation[] {
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<View>("findings");
-  const [sourceId, setSourceId] = useState("complaint");
+  const [sourceId, setSourceId] = useState(BTK ? "STATE" : "complaint");
   const [focusId, setFocusId] = useState<string | null>("complaint-reason");
   const [flash, setFlash] = useState<Flash | null>(null);
   const [videoTime, setVideoTimes] = useState<Record<string, number>>({ dashcam: 45, bodycam: 80 });

@@ -1,5 +1,17 @@
 import { useState } from "react";
-import { AudioLines, Camera, Car, FileText, Flag, Play, type LucideIcon } from "lucide-react";
+import {
+  AudioLines,
+  CalendarDays,
+  Camera,
+  Car,
+  CircleDashed,
+  FileText,
+  Flag,
+  Landmark,
+  Play,
+  Search,
+  type LucideIcon,
+} from "lucide-react";
 import { embedUrl, nearestFrame, type PageImage, type VideoId } from "@/lib/media";
 import { VIDEOS, formatTime, type Lane } from "@/lib/sample-case";
 import { cn } from "@/lib/utils";
@@ -10,6 +22,10 @@ export const LANE_ICON: Record<Lane, LucideIcon> = {
   dispatch: AudioLines,
   documents: FileText,
   events: Flag,
+  incidents: CalendarDays,
+  investigation: Search,
+  court: Landmark,
+  gaps: CircleDashed,
 };
 
 /** A real frame with an optional duration badge. */

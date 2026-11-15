@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { LogoMark } from "@/components/caselens/logo";
+import { ACTIVE_CASE, CASE_OPTIONS, switchCase, type CaseId } from "@/lib/active-case";
 import { APP_NAME } from "@/lib/config";
 import { hydrateDecisions } from "@/lib/review-store";
 import { useChannelSync } from "@/lib/use-channel-sync";
 
-export const Route = createFileRoute("/_workspace")({ component: Workspace });
+// Rendered in the browser only: which case is open is read there (see active-case.ts).
+export const Route = createFileRoute("/_workspace")({ ssr: false, component: Workspace });
 
 const nav = [
   { to: "/live", label: "Live Case" },
@@ -44,6 +46,20 @@ function Workspace() {
             </Link>
           ))}
         </nav>
+        <label className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
+          <span className="max-md:sr-only">Case</span>
+          <select
+            value={ACTIVE_CASE}
+            onChange={(e) => switchCase(e.target.value as CaseId)}
+            className="h-8 max-w-[15rem] rounded-md border border-white/15 bg-background px-2 text-sm text-foreground outline-none hover:border-white/25 focus:border-gold/60"
+          >
+            {CASE_OPTIONS.map((c) => (
+              <option key={c.id} value={c.id} title={c.kind}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
       </header>
       {!onLive && !onAnalysis && (
         <div

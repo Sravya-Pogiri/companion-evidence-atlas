@@ -6,6 +6,7 @@ import {
   AXIS_END,
   LANES,
   findItem,
+  formatTick,
   formatTime,
   shortLabel,
   type Lane,
@@ -224,7 +225,7 @@ export function Timeline({
               )}
               style={{ left: pct(t) }}
             >
-              {formatTime(t)}
+              {formatTick(t)}
             </span>
           ))}
         </div>

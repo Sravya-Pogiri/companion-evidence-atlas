@@ -1,11 +1,23 @@
 import { DEMO_CASE, sourceLinks } from "@/lib/case-data";
+import { ACTIVE_CASE } from "@/lib/active-case";
+import { btkAxisLabel, btkTickLabel, buildBtkCase, BTK_LANES } from "@/lib/cases/btk";
 import { loadAnalysis, seedFromAnalysis } from "@/lib/evidence/seed";
 
 // One data set feeds Live Case, Review, and Handoff. Public sample only:
 // Rosales v. Terrell (public footage and filings). Times on the shared axis are
 // approximate because the exact second of each moment is not pinned.
 
-export type Lane = "bodycam" | "dashcam" | "dispatch" | "documents" | "events";
+export type Lane =
+  | "bodycam"
+  | "dashcam"
+  | "dispatch"
+  | "documents"
+  | "events"
+  // Lanes of the BTK case (dates, not seconds).
+  | "incidents"
+  | "investigation"
+  | "court"
+  | "gaps";
 export type Flag = "agrees" | "conflict" | "missing";
 export type ItemStatus = "pending" | "filed";
 export type ReviewDecision = "confirmed" | "dismissed" | "follow-up";
@@ -30,6 +42,8 @@ export interface TimelineItem {
   filedAt?: string;
   /** A verified still for this item (from the evidence analysis), under /public. */
   frame?: string;
+  /** A rendered image of the cited page, under /public. */
+  page?: { src: string; page: number; file: string };
 }
 
 export interface ChatMessage {
@@ -44,13 +58,18 @@ export interface ChatMessage {
 
 export const AXIS_END = 90;
 
-export const LANES: { id: Lane; label: string }[] = [
+/** The BTK case, when it is the open case (see active-case.ts). */
+export const BTK = ACTIVE_CASE === "btk" ? buildBtkCase() : null;
+
+const ROSALES_LANES: { id: Lane; label: string }[] = [
   { id: "bodycam", label: "Bodycam" },
   { id: "dashcam", label: "Dashcam" },
   { id: "dispatch", label: "Dispatch audio" },
   { id: "documents", label: "Documents" },
   { id: "events", label: "Events" },
 ];
+
+export const LANES: { id: Lane; label: string }[] = BTK ? BTK_LANES : ROSALES_LANES;
 
 export const VIDEOS = {
   bodycam: { id: "Z6z35SUVpdQ", label: "Officer bodycam" },
@@ -64,12 +83,34 @@ const SEED = (() => {
   return analysis ? seedFromAnalysis(analysis, 90) : null;
 })();
 export const FROM_ANALYSIS = SEED !== null;
-export const SAMPLE_CASE = {
-  name: DEMO_CASE.name,
-  number: DEMO_CASE.id,
-  // Says where the case data comes from: verified AI analysis, or the hand-written demo.
-  label: FROM_ANALYSIS ? "AI analysis (verified) · public sources" : "Hand-written demo · public footage",
-} as const;
+// The first verified video moment, where the Live Case opens (else the approach at 0:45).
+const FIRST_VIDEO = SEED?.items
+  .filter((i) => (i.lane === "dashcam" || i.lane === "bodycam") && i.frame)
+  .sort((a, b) => a.start - b.start)[0];
+export const SAMPLE_CASE: {
+  name: string;
+  number: string;
+  label: string;
+  /** Where the playhead starts. */
+  openAt: number;
+  /** The line under the timeline about what the axis means. */
+  axisNote: string;
+} = BTK
+  ? {
+      name: "State of Kansas v. Rader",
+      number: "05 CR 498",
+      label: "Public evidence packet · citations checked",
+      openAt: BTK.openAt,
+      axisNote: "Drag the playhead to move through the case. Entries are in date order, evenly spaced and not to scale (1974 to 2005).",
+    }
+  : {
+      name: DEMO_CASE.name,
+      number: DEMO_CASE.id,
+      // Says where the case data comes from: verified AI analysis, or the hand-written demo.
+      label: FROM_ANALYSIS ? "AI analysis (verified) · public sources" : "Hand-written demo · public footage",
+      openAt: FIRST_VIDEO?.start ?? 45,
+      axisNote: "Drag the playhead to move through the case. Times on the public sample are approximate.",
+    };
 
 // Times on the shared axis follow the public dashcam (the approach is at about 0:45 and the
 // turn at about 0:58 in that video). The bodycam starts after the stop, so it sits later.
@@ -147,12 +188,20 @@ export const DECISION_LABEL: Record<ReviewDecision, string> = {
   "follow-up": "Needs follow-up",
 };
 
+/** A point on the shared axis: m:ss for the video case, the entry's date for the BTK case. */
 export function formatTime(seconds: number): string {
+  if (BTK) return btkAxisLabel(seconds);
   const s = Math.max(0, Math.round(seconds));
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
+/** A tick label on the axis. */
+export function formatTick(seconds: number): string {
+  return BTK ? btkTickLabel(seconds) : formatTime(seconds);
+}
+
 export function formatRange(item: Pick<TimelineItem, "start" | "end">): string {
+  if (BTK) return formatTime((item.start + item.end) / 2);
   return `~${formatTime(item.start)} to ~${formatTime(item.end)}`;
 }
 
@@ -202,6 +251,6 @@ export function findItem(items: TimelineItem[], id: string | undefined): Timelin
   return id ? items.find((i) => i.id === id) : undefined;
 }
 
-export const ITEMS: TimelineItem[] = SEED?.items ?? SAMPLE_ITEMS;
-export const CONVERSATION: ChatMessage[] = SEED?.conversation ?? SAMPLE_CONVERSATION;
-export const ANALYSIS_CLAIMS = SEED?.claimsByItem ?? {};
+export const ITEMS: TimelineItem[] = BTK?.items ?? SEED?.items ?? SAMPLE_ITEMS;
+export const CONVERSATION: ChatMessage[] = BTK?.conversation ?? SEED?.conversation ?? SAMPLE_CONVERSATION;
+export const ANALYSIS_CLAIMS = BTK ? {} : (SEED?.claimsByItem ?? {});

@@ -88,7 +88,8 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
       end: Math.min(axisEnd, start + ("t" in c.at ? 6 : 8)),
       label: c.claim.replace(/\.$/, ""),
       short: shortOf(c.claim.replace(/\.$/, "")),
-      extractedText: `AI-generated, verified. ${c.exactQuote ? `${c.claim} ("${c.exactQuote}")` : c.claim}`,
+      // The claim leads (panels show the first sentence); the label follows it.
+      extractedText: `${c.exactQuote ? `${c.claim} ("${c.exactQuote}")` : c.claim} AI-generated, verified.`,
       sourceLink: sourceLink(a, c),
       sourceLabel: sourceLabel(a, c),
       status: "filed",
