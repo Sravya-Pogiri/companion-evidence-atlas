@@ -754,6 +754,66 @@
     }
   };
 
+
+  /* ------------------------------------------------------------------------
+     HERO EVIDENCE BOARD — connector lines between the cards, from their real
+     positions (redrawn on resize), a staggered entrance, and hover highlights.
+     ------------------------------------------------------------------------ */
+  function initEvidenceBoard() {
+    const wrap = $("#evBoardWrap"), board = $("#evBoard"), svg = $("#evLines");
+    if (!wrap || !board || !svg) return;
+    const LINKS = [
+      ["complaint", "dashcam", "t-red"],
+      ["dashcam", "opinion", "t-green"],
+      ["complaint", "officer", "t-blue"],
+      ["officer", "place", "t-blue"],
+      ["bodycam", "officer", "t-blue"],
+      ["complaint", "dispatch", "t-orange"],
+      ["bodycam", "dispatch", "t-orange"]
+    ];
+    const NS = "http://www.w3.org/2000/svg";
+    const card = (id) => board.querySelector(`.eb-card[data-id="${id}"]`);
+    $$(".eb-card", board).forEach((c, i) => c.style.setProperty("--i", i));
+    // Each card's pin: the top centre of the card as laid out, rotation included.
+    const pin = (el, box) => {
+      const r = el.querySelector(".eb-card__pin").getBoundingClientRect();
+      return [r.left + r.width / 2 - box.left, r.top + r.height / 2 - box.top];
+    };
+    const draw = () => {
+      const box = board.getBoundingClientRect();
+      if (!box.width) return;
+      svg.setAttribute("viewBox", `0 0 ${box.width} ${box.height}`);
+      svg.textContent = "";
+      LINKS.forEach(([a, b, tone]) => {
+        const A = card(a), B = card(b);
+        if (!A || !B || !A.offsetParent || !B.offsetParent) return;
+        const [x1, y1] = pin(A, box), [x2, y2] = pin(B, box);
+        const line = document.createElementNS(NS, "line");
+        line.setAttribute("x1", x1); line.setAttribute("y1", y1);
+        line.setAttribute("x2", x2); line.setAttribute("y2", y2);
+        line.setAttribute("class", `eb__line ${tone}`);
+        line.dataset.a = a; line.dataset.b = b;
+        line.style.setProperty("--len", Math.hypot(x2 - x1, y2 - y1).toFixed(1));
+        svg.appendChild(line);
+      });
+    };
+    // Hover: the card lifts (CSS) and its lines brighten.
+    board.addEventListener("pointerover", (e) => {
+      const c = e.target.closest(".eb-card");
+      if (!c) return;
+      $$(".eb__line", svg).forEach(l => l.classList.toggle("is-hot", l.dataset.a === c.dataset.id || l.dataset.b === c.dataset.id));
+    });
+    board.addEventListener("pointerleave", () => $$(".eb__line", svg).forEach(l => l.classList.remove("is-hot")));
+    draw();
+    new ResizeObserver(() => draw()).observe(board);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+    if (prefersReducedMotion.matches) return;
+    // Entrance: cards fade and slide in one after another, then the lines draw in.
+    wrap.classList.add("js-anim");
+    const play = () => requestAnimationFrame(() => requestAnimationFrame(() => { draw(); wrap.classList.add("is-in"); }));
+    new IntersectionObserver(([en], ob) => { if (en.isIntersecting) { ob.disconnect(); play(); } }, { threshold: 0.2 }).observe(wrap);
+  }
+
   /* ------------------------------------------------------------------------
      9. HERO FOCUS LENS — blurred document texture sharpened under the cursor
      ------------------------------------------------------------------------ */
@@ -1231,6 +1291,7 @@
     initSimulator();
     initEvidence();
     initHeroLens();
+    initEvidenceBoard();
     initNav();
     initSplit();        // must precede reveal so split titles get observed
     initReveal();
