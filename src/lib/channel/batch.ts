@@ -1,11 +1,13 @@
-import { isCommand } from "@/lib/agent/pipeline";
+import { isCommand, isQuestion } from "@/lib/agent/pipeline";
 import type { InboundMessage } from "./types";
 
 // People send a photo and then a caption, or two questions in a row, a second apart. Messages that
 // arrive close together are handled as one batch and answered with one text.
 //
 // This turns a batch (in arrival order) into the messages the pipeline should see:
-//   - plain texts that come before an attachment become that attachment's caption,
+//   - plain texts next to an attachment, before or after it, become its caption (a photo and its
+//     caption usually arrive as two messages, in either order),
+//   - a question is never taken as a caption,
 //   - other plain texts next to each other become one message,
 //   - commands (CONFIRM, DISMISS, "what's missing") stay on their own, in order.
 
@@ -26,6 +28,7 @@ export function mergeBatch(batch: InboundMessage[]): InboundMessage[] {
 
   for (const m of batch) {
     const text = m.text.trim();
+    const last = out[out.length - 1];
     if (m.attachments.length > 0) {
       const caption = [...pending, text].filter(Boolean).join(" ");
       pending = [];
@@ -35,6 +38,12 @@ export function mergeBatch(batch: InboundMessage[]): InboundMessage[] {
     } else if (isCommand(text)) {
       flushText();
       out.push({ ...carry, text, attachments: [] });
+    } else if (isQuestion(text)) {
+      flushText();
+      out.push({ ...carry, text, attachments: [] });
+    } else if (last && last.attachments.length > 0 && pending.length === 0) {
+      // A caption that arrived just after its photo.
+      last.text = [last.text, text].filter(Boolean).join(" ");
     } else {
       pending.push(text);
     }

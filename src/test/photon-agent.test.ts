@@ -64,15 +64,34 @@ describe("message batches", () => {
     expect(out[0]?.attachments).toHaveLength(1);
   });
 
-  it("joins neighbouring free texts and keeps commands apart, in order", () => {
+  it("attaches a caption that arrives after its photo", () => {
+    const out = mergeBatch([m("", photo), m("Dashcam, from 0:45")]);
+    expect(out).toHaveLength(1);
+    expect(out[0]?.text).toBe("Dashcam, from 0:45");
+    expect(out[0]?.attachments).toHaveLength(1);
+  });
+
+  it("does not take a question as a caption", () => {
+    const out = mergeBatch([m("", photo), m("why were they pulled over?")]);
+    expect(out.map((x) => [x.text, x.attachments.length])).toEqual([
+      ["", 1],
+      ["why were they pulled over?", 0],
+    ]);
+  });
+
+  it("joins neighbouring free texts, and keeps questions and commands apart, in order", () => {
     const out = mergeBatch([
+      m("Dashcam shows the left signal"),
+      m("coming on at 0:55"),
       m("what about the bodycam?"),
       m("and the dashcam?"),
       m("confirm"),
       m("what's missing"),
     ]);
     expect(out.map((x) => x.text)).toEqual([
-      "what about the bodycam? and the dashcam?",
+      "Dashcam shows the left signal coming on at 0:55",
+      "what about the bodycam?",
+      "and the dashcam?",
       "confirm",
       "what's missing",
     ]);
