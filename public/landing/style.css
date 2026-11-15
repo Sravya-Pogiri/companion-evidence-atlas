@@ -948,7 +948,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgba
 /* ==========================================================================
    v5 — Case archive: scroll-driven 3D casebook (casebook.js) + static fallback
    ========================================================================== */
-.cb { position: relative; background: radial-gradient(120% 80% at 50% 40%, #2A1F17 0%, #120D0A 70%); color: var(--fg-2); }
+.cb { position: relative; background: radial-gradient(120% 80% at 50% 40%, #0E1A3A 0%, var(--navy-deep) 70%); color: var(--fg-2); }
 .cb__stage { position: relative; padding: clamp(72px, 8vw, 112px) var(--gutter); }
 .cb__canvas { display: none; }
 .cb__head { position: relative; z-index: 3; text-align: center; max-width: 760px; margin: 0 auto clamp(40px, 5vw, 64px); }
