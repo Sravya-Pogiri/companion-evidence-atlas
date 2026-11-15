@@ -9,15 +9,10 @@ export const Route = createFileRoute("/_workspace/investigate")({
 });
 
 function Investigate() {
-  if (ACTIVE_CASE !== "btk")
-    return (
-      <div className="mx-auto max-w-2xl rounded-xl border bg-card p-6">
-        <h1 className="font-serif text-2xl font-medium">Test a claim</h1>
-        <p className="mt-2 text-muted-foreground">
-          Claim investigations run on the State v. Rader case, whose records carry many dated entries. Switch the case in the
-          top bar to State v. Rader (BTK) to use it.
-        </p>
-      </div>
-    );
-  return <InvestigationStudio caseId="btk" caseName="State of Kansas v. Rader, 05 CR 498" />;
+  // The studio remounts per case, so a run from one case never shows on the other.
+  return ACTIVE_CASE === "btk" ? (
+    <InvestigationStudio key="btk" caseId="btk" caseName="State of Kansas v. Rader, 05 CR 498" />
+  ) : (
+    <InvestigationStudio key="rosales" caseId="rosales" caseName="Rosales v. Terrell, No. 25-30650" />
+  );
 }

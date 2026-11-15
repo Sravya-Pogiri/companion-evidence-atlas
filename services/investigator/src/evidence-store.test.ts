@@ -37,3 +37,13 @@ test('claim requests are validated', () => {
   assert.equal(claimRequest.safeParse({ caseId: 'btk', claim: 'A full sentence claim.', extra: 1 }).success, false);
   assert.equal(claimRequest.safeParse({ caseId: 'btk', claim: 'A full sentence claim.' }).success, true);
 });
+
+test('the Rosales store holds the filings, the bodycam transcript and checked frames', () => {
+  const r = loadCase('rosales');
+  assert.ok(r.pages.has('rosales:COMPLAINT:p24') && r.pages.has('rosales:OPINION:p11'));
+  assert.match(r.pages.get('rosales:BODYCAM:m08')!.text, /failed the signal, so we stopped you/);
+  assert.equal(r.pages.get('rosales:BODYCAM:m08')!.location, 'bodycam 8:00–9:00');
+  assert.ok(r.pages.get('rosales:DASHCAM:t0094')!.text.startsWith('Frame at dashcam 1:34'));
+  assert.equal(searchPages(r, 'left turn signal activated video')[0]!.evidence_id, 'rosales:OPINION:p11');
+  assert.deepEqual(observation(r, 'bodycam-audio-053')!.cited_pages, ['rosales:BODYCAM:m08']);
+});

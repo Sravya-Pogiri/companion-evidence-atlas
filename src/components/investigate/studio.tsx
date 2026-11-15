@@ -20,12 +20,20 @@ import { cn } from "@/lib/utils";
 // Everything shown comes from the investigator's stream: its plan, delegations, tool calls and
 // verification. Quotes are shown as evidence only when the service found them on the stored page.
 
-const SUGGESTIONS = [
-  "The church web page naming Dennis Rader was online before the disk was mailed to KSAS.",
-  "Rader's DNA was compared with crime-scene evidence before his arrest.",
-  "The sentence was imposed on the same day the judgment was filed.",
-  "The mailed diskette was logged into evidence before its recorded collection time.",
-];
+const SUGGESTIONS: Record<string, string[]> = {
+  btk: [
+    "The church web page naming Dennis Rader was online before the disk was mailed to KSAS.",
+    "Rader's DNA was compared with crime-scene evidence before his arrest.",
+    "The sentence was imposed on the same day the judgment was filed.",
+    "The mailed diskette was logged into evidence before its recorded collection time.",
+  ],
+  rosales: [
+    "The officer told Rosales the stop was for failure to signal.",
+    "The Mustang's left turn signal was on before it turned.",
+    "The passenger was allowed to record the stop on her phone.",
+    "A dispatch audio recording of the stop is in the record.",
+  ],
+};
 
 const AGENTS: { name: AgentName; role: string; tone: string }[] = [
   { name: "Lead Investigator", role: "Plans, delegates, compares, decides", tone: "text-gold border-gold/40" },
@@ -59,7 +67,8 @@ const TIME_TYPE: Record<string, { label: string; tone: string }> = {
 type Phase = "idle" | "running" | "done" | "error";
 
 export function InvestigationStudio({ caseId, caseName }: { caseId: string; caseName: string }) {
-  const [claim, setClaim] = useState(SUGGESTIONS[0]!);
+  const suggestions = SUGGESTIONS[caseId] ?? [];
+  const [claim, setClaim] = useState(suggestions[0] ?? "");
   const [phase, setPhase] = useState<Phase>("idle");
   const [events, setEvents] = useState<Activity[]>([]);
   const [result, setResult] = useState<ClaimResult | null>(null);
@@ -139,7 +148,8 @@ export function InvestigationStudio({ caseId, caseName }: { caseId: string; case
           <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold">Investigation studio</p>
           <h1 className="mt-1 font-serif text-[1.9rem] font-medium leading-tight">Test a claim</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {caseName} · a lead investigator and two subagents built with LangChain Deep Agents research the stored records; every quote is checked against them.
+            {caseName} · a lead investigator and two subagents built with LangChain Deep Agents research the stored records
+            {caseId === "rosales" ? " (filings, bodycam transcript, checked video frames)" : ""}; every quote is checked against them.
           </p>
         </div>
         <ul className="flex flex-wrap gap-2" aria-label="Agents">
@@ -191,7 +201,7 @@ export function InvestigationStudio({ caseId, caseName }: { caseId: string; case
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-[13px]">
           <span className="text-muted-foreground">Try:</span>
-          {SUGGESTIONS.map((s) => (
+          {suggestions.map((s) => (
             <button
               key={s}
               type="button"
@@ -431,7 +441,7 @@ function CitationList({
                 className={cn("w-full rounded-lg border p-3 text-left transition-colors hover:border-white/25", selected === c ? "border-gold/60 bg-gold/[0.06]" : "border-white/[0.08]")}
               >
                 <span className="flex items-center justify-between gap-2 text-[12px] text-muted-foreground">
-                  <span className="truncate">{c.source_title} · {where(c.page)}</span>
+                  <span className="truncate">{c.source_title} · {c.location || where(c.page)}</span>
                   <ShieldCheck className="size-3.5 shrink-0 text-[#5fd39a]" aria-label="verified" />
                 </span>
                 <span className="mt-1 block font-serif text-[15px] leading-snug">“{c.quote}”</span>
@@ -461,6 +471,8 @@ function citationForEvent(result: ClaimResult | null, e: TimelineEvent): ClaimCi
     context: page?.context.includes(e.quote) ? page.context : e.quote,
     url: page?.url ?? null,
     method: page?.method ?? "",
+    location: e.location ?? "",
+    frame: page?.frame ?? null,
   };
 }
 
@@ -506,7 +518,7 @@ function TimelinePanel({ result, onSelect, selected }: { result: ClaimResult | n
                     {!e.verified && <span className="rounded border border-white/15 px-1.5 py-px text-[11px] text-muted-foreground">not verified</span>}
                   </span>
                   <span className="mt-1 block text-[14px]">{e.label}</span>
-                  <span className="mt-0.5 block truncate text-[12px] text-muted-foreground">{e.source_title}{e.page !== null ? ` · ${where(e.page)}` : ""}</span>
+                  <span className="mt-0.5 block truncate text-[12px] text-muted-foreground">{e.source_title}{e.location ? ` · ${e.location}` : e.page !== null ? ` · ${where(e.page)}` : ""}</span>
                   {flagged && (
                     <span className="mt-1.5 flex items-start gap-1.5 text-[12.5px] text-[#ff9a5c]">
                       <AlertTriangle className="mt-0.5 size-3.5 shrink-0" aria-hidden /> {e.discrepancy}
@@ -535,14 +547,19 @@ function SourceViewer({ citation }: { citation: ClaimCitation | null }) {
     );
   const runs = segment(citation.context, [{ phrase: citation.quote, kind: "finding", id: "q" }]);
   const exact = runs.some((r) => r.mark);
-  const image = citation.source_id && citation.page > 0 ? `/pages/btk/${citation.source_id.toLowerCase()}-p${citation.page}.jpg` : null;
+  // A frame record shows its still; a BTK page shows its rendered page image when there is one.
+  const image = citation.frame
+    ? citation.frame
+    : citation.evidence_id.startsWith("btk:") && citation.page > 0
+      ? `/pages/btk/${citation.source_id.toLowerCase()}-p${citation.page}.jpg`
+      : null;
   return (
     <section key={`${citation.evidence_id}-${citation.quote}`} className="lx-fade rounded-xl border bg-card p-5 xl:sticky xl:top-[4.75rem] xl:max-h-[calc(100vh-6rem)] xl:overflow-y-auto" aria-label="Source">
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Source · stored record</p>
       <h2 className="mt-1 font-serif text-lg font-medium leading-snug">{citation.source_title}</h2>
       <p className="mt-0.5 flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">
         <span className="font-mono">{citation.evidence_id}</span>
-        <span>{where(citation.page)}</span>
+        <span>{citation.location || where(citation.page)}</span>
         {citation.method && <span className="rounded border border-white/10 px-1.5">{citation.method.replace(/-/g, " ")}</span>}
       </p>
       <p className={cn("mt-3 flex items-start gap-1.5 text-[12.5px]", citation.verified ? "text-[#5fd39a]" : "text-[#ff9a5c]")}>

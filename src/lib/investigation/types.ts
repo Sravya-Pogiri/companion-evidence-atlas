@@ -22,6 +22,8 @@ export interface ClaimCitation {
   source_id: string;
   source_title: string;
   page: number;
+  /** Where the record sits: "PDF p.42", "bodycam 8:00–9:00", "recorded metadata". */
+  location: string;
   quote: string;
   role: "supports" | "challenges" | "context";
   verified: boolean;
@@ -29,6 +31,8 @@ export interface ClaimCitation {
   context: string;
   url: string | null;
   method: string;
+  /** A still, for frame records. */
+  frame: string | null;
 }
 
 export interface TimelineEvent {
@@ -42,6 +46,7 @@ export interface TimelineEvent {
   check: string;
   source_title: string;
   page: number | null;
+  location: string | null;
 }
 
 export interface ClaimResult {

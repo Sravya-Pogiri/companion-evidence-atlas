@@ -10,7 +10,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-export const CLAIM_CASES = ['btk'] as const;
+export const CLAIM_CASES = ['btk', 'rosales'] as const;
 export type ClaimCaseId = (typeof CLAIM_CASES)[number];
 
 const DATA = resolve(import.meta.dirname, '../../../src/data');
@@ -48,10 +48,14 @@ export interface StoredPage {
   sourceId: string;
   sourceTitle: string;
   page: number;
+  /** Where the record sits, for people: "PDF p.42", "bodycam 8:00–9:00", "recorded metadata". */
+  location: string;
   method: string;
   text: string;
   /** Where the original record can be opened. */
   url: string | null;
+  /** A still for frame records. */
+  frame?: string;
 }
 
 export interface CaseStore {
@@ -59,8 +63,12 @@ export interface CaseStore {
   title: string;
   question: string;
   pages: Map<string, StoredPage>;
-  packet: Packet['cases'][number];
   sourceTitle(id: string): string;
+  /** How observation ids look in this case, for the tool description. */
+  observationHint: string;
+  dated(): unknown;
+  observation(id: string): ({ evidence_id: string; cited_pages: string[] } & Record<string, unknown>) | null;
+  missing(): unknown;
 }
 
 const cache = new Map<ClaimCaseId, CaseStore>();
@@ -74,6 +82,57 @@ function pdfUrl(src: PacketSource | undefined, page: number): string | null {
 export function loadCase(caseId: ClaimCaseId): CaseStore {
   const hit = cache.get(caseId);
   if (hit) return hit;
+  const store = caseId === 'rosales' ? loadRosales() : loadBtk();
+  cache.set(caseId, store);
+  return store;
+}
+
+/** Rosales: the stored records built by scripts/evidence/rosales-store.py, and its analysis. */
+function loadRosales(): CaseStore {
+  const data = JSON.parse(readFileSync(resolve(DATA, 'rosales', 'evidence-store.json'), 'utf8')) as {
+    title: string;
+    question: string;
+    records: StoredPage[];
+    dated: unknown[];
+    missing: unknown[];
+  };
+  const analysis = JSON.parse(readFileSync(resolve(DATA, 'rosales', 'analysis.json'), 'utf8')) as {
+    claims: { id: string; origin: string; claim: string; exactQuote?: string; at: { source: string; page?: number; paragraph?: number; t?: number }; verification: { status: string; note?: string } }[];
+  };
+  const pages = new Map(data.records.map((r) => [r.evidenceId, r]));
+  const recordFor = (c: (typeof analysis.claims)[number]) =>
+    c.at.page !== undefined
+      ? `rosales:${c.at.source.toUpperCase()}:p${c.at.page}`
+      : c.origin === 'transcript'
+        ? `rosales:BODYCAM:m${String(Math.floor((c.at.t ?? 0) / 60)).padStart(2, '0')}`
+        : `rosales:${c.at.source.toUpperCase()}:t${String(Math.round(c.at.t ?? 0)).padStart(4, '0')}`;
+  return {
+    caseId: 'rosales',
+    title: data.title,
+    question: data.question,
+    pages,
+    sourceTitle: (id) => [...pages.values()].find((p) => p.sourceId === id)?.sourceTitle ?? id,
+    observationHint: 'claim ids from the case analysis, e.g. complaint-016, opinion-045, bodycam-audio-052, dashcam-063',
+    dated: () => ({ moments: data.dated, note: 'Each video has its own clock; the dashcam and bodycam are not synced. The filings give no clock times.' }),
+    observation: (id) => {
+      const c = analysis.claims.find((x) => x.id === id.replace(/^rosales:/, ''));
+      if (!c) return null;
+      return {
+        evidence_id: `rosales:${c.id}`,
+        kind: c.origin,
+        claim: c.claim,
+        quote: c.exactQuote ?? null,
+        analysis_check: `${c.verification.status}${c.verification.note ? `: ${c.verification.note}` : ''}`,
+        cited_pages: pages.has(recordFor(c)) ? [recordFor(c)] : [],
+      };
+    },
+    missing: () => data.missing,
+  };
+}
+
+/** BTK: the evidence packet, its analysis and the stored page text. */
+function loadBtk(): CaseStore {
+  const caseId = 'btk' as const;
   const packet = (JSON.parse(readFileSync(resolve(DATA, caseId, 'packet.json'), 'utf8')) as Packet).cases[0]!;
   const stored = JSON.parse(readFileSync(resolve(DATA, caseId, 'pages.json'), 'utf8')) as {
     pages: Record<string, Record<string, string>>;
@@ -90,6 +149,7 @@ export function loadCase(caseId: ClaimCaseId): CaseStore {
         sourceId,
         sourceTitle: sources.get(sourceId)?.title ?? sourceId,
         page,
+        location: sourceId === 'CHURCH' ? 'archived page' : sourceId === 'CAPTIONS_UNT' ? 'captions file' : `PDF p.${page}`,
         method: stored.methods[`${sourceId}:${page}`] ?? '',
         text,
         url: sourceId === 'CHURCH' || sourceId === 'CAPTIONS_UNT' ? (sources.get(sourceId)?.url ?? null) : pdfUrl(sources.get(sourceId), page),
@@ -110,22 +170,26 @@ export function loadCase(caseId: ClaimCaseId): CaseStore {
     ].filter(Boolean);
     if (lines.length <= 2) continue;
     const evidenceId = `${caseId}:${s.id}:meta`;
-    pages.set(evidenceId, { evidenceId, sourceId: s.id, sourceTitle: s.title, page: 0, method: 'packet metadata', text: lines.join('\n'), url: s.url });
+    pages.set(evidenceId, { evidenceId, sourceId: s.id, sourceTitle: s.title, page: 0, location: 'recorded metadata', method: 'packet metadata', text: lines.join('\n'), url: s.url });
   }
   const store: CaseStore = {
     caseId,
     title: `${packet.title}, ${packet.case_number}`,
     question: packet.question,
     pages,
-    packet,
     sourceTitle: (id) => sources.get(id)?.title ?? id,
+    observationHint: "the packet's observation ids, B-001 to B-023",
+    dated: () => btkDated(store, packet),
+    observation: (id) => btkObservation(store, packet, id),
+    missing: () => packet.raw_artifact_gaps.map((g) => ({ artifact: g.artifact, availability: g.availability, why: g.why, related: g.evidence_ids.map((x) => `${caseId}:${x}`) })),
   };
-  cache.set(caseId, store);
   return store;
 }
 
+type BtkCase = Packet['cases'][number];
+
 /** Evidence ids of the stored pages a packet citation points to. */
-export function pageIdsFor(store: CaseStore, c: Citation): string[] {
+function pageIdsFor(store: CaseStore, c: Citation): string[] {
   if (!c.pdf_page) return store.pages.has(`${store.caseId}:${c.source_id}:p1`) ? [`${store.caseId}:${c.source_id}:p1`] : [];
   const out: string[] = [];
   for (let p = c.pdf_page; p <= (c.pdf_page_end ?? c.pdf_page); p++) {
@@ -167,9 +231,13 @@ export function searchPages(store: CaseStore, query: string, limit = 6) {
   });
 }
 
-/** Dated records: the case timeline plus the dates on the records themselves. */
+/** Dated records for the case (BTK: its timeline plus the dates on the records themselves). */
 export function datedRecords(store: CaseStore) {
-  const entries = store.packet.timeline.map((t) => ({
+  return store.dated();
+}
+
+function btkDated(store: CaseStore, packet: BtkCase) {
+  const entries = packet.timeline.map((t) => ({
     evidence_id: `${store.caseId}:${t.id}`,
     date: t.date,
     end_date: t.end_date ?? null,
@@ -180,7 +248,7 @@ export function datedRecords(store: CaseStore) {
     timestamp: t.timestamp ?? null,
     cited_pages: t.citations.flatMap((c) => pageIdsFor(store, c)),
   }));
-  const recordDates = store.packet.sources.flatMap((s) => {
+  const recordDates = packet.sources.flatMap((s) => {
     const out: { evidence_id: string; date: string; precision: string; kind: string; event: string }[] = [];
     const first = [...store.pages.values()].find((p) => p.sourceId === s.id);
     const id = first?.evidenceId ?? `${store.caseId}:${s.id}`;
@@ -194,7 +262,11 @@ export function datedRecords(store: CaseStore) {
 }
 
 export function observation(store: CaseStore, id: string) {
-  const e = store.packet.evidence.find((x) => x.id === id);
+  return store.observation(id);
+}
+
+function btkObservation(store: CaseStore, packet: BtkCase, id: string) {
+  const e = packet.evidence.find((x) => x.id === id.replace(/^btk:/, ''));
   if (!e) return null;
   return {
     evidence_id: `${store.caseId}:${e.id}`,
@@ -207,5 +279,5 @@ export function observation(store: CaseStore, id: string) {
 }
 
 export function missingRecords(store: CaseStore) {
-  return store.packet.raw_artifact_gaps.map((g) => ({ artifact: g.artifact, availability: g.availability, why: g.why, related: g.evidence_ids.map((id) => `${store.caseId}:${id}`) }));
+  return store.missing();
 }

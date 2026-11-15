@@ -11,6 +11,7 @@
 import { createDeepAgent } from 'deepagents';
 import { ChatOpenAI } from '@langchain/openai';
 import { tool } from '@langchain/core/tools';
+import { ToolMessage } from '@langchain/core/messages';
 import { createMiddleware, todoListMiddleware, toolStrategy } from 'langchain';
 import { z } from 'zod';
 import { randomUUID } from 'node:crypto';
@@ -25,7 +26,7 @@ export const claimRequest = z
   })
   .strict();
 
-export const TIME_TYPES = ['incident', 'collection', 'receipt_or_log', 'examination_or_test', 'report_issued', 'filing', 'hearing', 'arrest', 'announcement', 'archive_capture', 'other'] as const;
+export const TIME_TYPES = ['incident', 'collection', 'receipt_or_log', 'examination_or_test', 'report_issued', 'filing', 'hearing', 'arrest', 'announcement', 'archive_capture', 'seen_in_video', 'spoken_on_recording', 'other'] as const;
 
 const findingSchema = z.object({
   finding: z.enum(['supported', 'challenged', 'ambiguous', 'insufficient_evidence']),
@@ -34,7 +35,7 @@ const findingSchema = z.object({
     .array(
       z.object({
         evidence_id: z.string().describe('Evidence id of the stored page the quote is from, e.g. btk:STATE:p42'),
-        date: z.string().describe('The date as the record gives it, ISO form where possible (YYYY-MM-DD or YYYY-MM)'),
+        date: z.string().describe('The date as the record gives it, ISO form where possible (YYYY-MM-DD or YYYY-MM); for a video, the camera and time, e.g. "bodycam 8:00"'),
         time_type: z.enum(TIME_TYPES),
         label: z.string().describe('What happened at this time, in a few words'),
         quote: z.string().describe('Exact words from that page that give this date'),
@@ -72,6 +73,8 @@ export interface VerifiedCitation {
   source_id: string;
   source_title: string;
   page: number;
+  /** Where the record sits, for people: "PDF p.42", "bodycam 8:00–9:00", "recorded metadata". */
+  location: string;
   quote: string;
   role: 'supports' | 'challenges' | 'context';
   verified: boolean;
@@ -80,6 +83,7 @@ export interface VerifiedCitation {
   context: string;
   url: string | null;
   method: string;
+  frame: string | null;
 }
 
 export interface ClaimResult {
@@ -88,13 +92,28 @@ export interface ClaimResult {
   claim: string;
   finding: AgentFinding['finding'];
   explanation: string;
-  timeline_events: (AgentFinding['timeline_events'][number] & { verified: boolean; check: string; source_title: string; page: number | null })[];
+  timeline_events: (AgentFinding['timeline_events'][number] & { verified: boolean; check: string; source_title: string; page: number | null; location: string | null })[];
   citations: VerifiedCitation[];
   open_questions: string[];
   agent_activity: Activity[];
   verification: { citations: number; verified: number; events: number; events_verified: number; note: string };
   model: string;
   duration_s: number;
+}
+
+/** Every evidence_id inside a tool result, for the record of what the tools returned. */
+function idsIn(value: unknown): string[] {
+  const out: string[] = [];
+  const walk = (v: unknown) => {
+    if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object')
+      for (const [k, x] of Object.entries(v)) {
+        if (k === 'evidence_id' && typeof x === 'string') out.push(x);
+        else walk(x);
+      }
+  };
+  walk(value);
+  return [...new Set(out)];
 }
 
 // ---------- model access: paced, with daily-quota fallback ----------
@@ -198,8 +217,24 @@ export async function investigateClaim(
 
   // Records each tool returned during the run: citations must come from these.
   const returned = new Set<string>();
+  // Each subagent gets a tool budget per run, and an identical repeated call is not run again:
+  // a weaker model can otherwise keep searching without ever reporting.
+  const TOOL_BUDGET = Number(process.env['INVESTIGATOR_TOOL_BUDGET'] ?? 10);
   const toolsFor = (agent: AgentName) => {
+    let used = 0;
+    const done = new Set<string>();
     const run = async <T>(title: string, args: unknown, fn: () => T, ids: (r: T) => string[]): Promise<string> => {
+      const key = `${title}|${JSON.stringify(args)}`;
+      if (done.has(key)) {
+        push({ agent, kind: 'tool', title: `${title} (repeat, not run again)`, status: 'done' });
+        return JSON.stringify({ note: 'You already ran this exact call; use its earlier result. If you have enough, write your report now.' });
+      }
+      if (used >= TOOL_BUDGET) {
+        push({ agent, kind: 'tool', title: `Tool budget reached (${TOOL_BUDGET} calls)`, detail: `${agent} was told to report with what it has.`, status: 'done' });
+        return JSON.stringify({ note: `Tool budget reached (${TOOL_BUDGET} calls). Stop searching and write your report now from what you have found, with exact quotes and evidence ids.` });
+      }
+      used++;
+      done.add(key);
       const ref = randomUUID();
       push({ agent, kind: 'tool', title, detail: JSON.stringify(args), status: 'running', ref });
       try {
@@ -225,7 +260,11 @@ export async function investigateClaim(
         async ({ evidence_id }) =>
           run(`Read ${evidence_id}`, { evidence_id }, () => {
             const p = store.pages.get(evidence_id);
-            if (!p) throw new Error(`No stored page ${evidence_id} in this case. Use search_evidence to find evidence ids.`);
+            if (!p) {
+              const src = /^[a-z]+:([A-Z0-9_]+):/.exec(evidence_id)?.[1];
+              const stored = src ? [...store.pages.keys()].filter((k) => k.startsWith(`${store.caseId}:${src}:`)) : [];
+              throw new Error(`No stored page ${evidence_id} in this case.${stored.length ? ` Stored records of ${src}: ${stored.join(', ')}.` : ' Use search_evidence to find evidence ids.'}`);
+            }
             return { evidence_id, source: p.sourceTitle, page: p.page, text_method: p.method, text: p.text.slice(0, 7000) };
           }, (r) => [r.evidence_id]),
         {
@@ -234,9 +273,9 @@ export async function investigateClaim(
           schema: z.object({ evidence_id: z.string() }).strict(),
         },
       ),
-      tool(async () => run('Listed dated records', {}, () => datedRecords(store), (r) => r.entries.map((e) => e.evidence_id)), {
+      tool(async () => run('Listed dated records', {}, () => datedRecords(store), (r) => idsIn(r)), {
         name: 'list_dated_records',
-        description: 'The case timeline entries (with date precision and the pages they cite) and the dates on the records themselves (filing, hearing, archive capture). Dates here come from the packet; confirm them on a page before relying on them.',
+        description: "The case's dated records: timeline entries and the dates on the records (filing, hearing, archive capture), or for a video case the checked moments on each camera's clock. These are summaries: confirm a date or moment on its record before quoting it.",
         schema: z.object({}).strict(),
       }),
       tool(
@@ -248,7 +287,7 @@ export async function investigateClaim(
           }, (r) => [r.evidence_id, ...r.cited_pages]),
         {
           name: 'get_observation',
-          description: "One of the packet's cited observations (B-001 to B-023): description, stated limitation, and the stored pages it cites.",
+          description: `One observation of this case (${store.observationHint}): what it says, its check, and the stored records it rests on.`,
           schema: z.object({ id: z.string() }).strict(),
         },
       ),
@@ -260,7 +299,7 @@ export async function investigateClaim(
     ];
   };
 
-  const rules = `Rules: use only the tools; they read stored public records of ${store.title}. Quote only words copied exactly from read_evidence_page text (OCR mistakes included). Give every date with its type: the date something happened, the date it was received or logged, the date of a test or report, a filing or hearing date, an archive capture time. A report or filing date is not the date of the event it describes. list_dated_records and search snippets are summaries: to quote a date, read the page, or the source's recorded metadata (evidence ids ending in :meta, e.g. an archive capture time or a filing date). Never state conclusions about guilt, legality or case strategy; describe what the records say. Be concise.`;
+  const rules = `Rules: use only the tools; they read stored public records of ${store.title}. Quote only words copied exactly from read_evidence_page text (OCR mistakes included). Give every date with its type: the date something happened, the date it was received or logged, the date of a test or report, a filing or hearing date, an archive capture time; a moment seen in a video or spoken on a recording with its camera time. Each video has its own clock: never treat a dashcam time and a bodycam time as the same clock. Transcript and frame records are machine-generated; the PDF pages are the filings' own text. A report or filing date is not the date of the event it describes. list_dated_records and search snippets are summaries: to quote a date, read the page, or the source's recorded metadata (evidence ids ending in :meta, e.g. an archive capture time or a filing date). Never state conclusions about guilt, legality or case strategy; describe what the records say. Be concise.`;
   const timelineResearcher = {
     name: 'timeline-researcher',
     description: 'Finds the dated records that bear on a claim, with exact passages and the type of each time (event, receipt/log, test/report, filing, capture). Give it the claim and what to look for.',
@@ -280,7 +319,15 @@ Try to show the claim is wrong or unsettled. Search for contrary records, ambigu
   const readOnly = createMiddleware({
     name: 'case_scoped_read_only',
     wrapToolCall: async (request, handler) => {
-      if (!allowed.has(request.toolCall.name) && !request.toolCall.name.startsWith('extract')) throw new Error(`Tool not permitted: ${request.toolCall.name}`);
+      if (!allowed.has(request.toolCall.name) && !request.toolCall.name.startsWith('extract')) {
+        // Refuse without ending the run: the agent is told what it may use instead.
+        push({ agent: 'System', kind: 'tool', title: `Refused tool: ${request.toolCall.name}`, detail: 'Only the case evidence tools, write_todos and task are permitted.', status: 'failed' });
+        return new ToolMessage({
+          content: `Tool not permitted: ${request.toolCall.name}. Use only write_todos and task (lead), or the case evidence tools (subagents).`,
+          tool_call_id: request.toolCall.id ?? '',
+          name: request.toolCall.name,
+        });
+      }
       return handler(request);
     },
   });
@@ -293,6 +340,7 @@ Try to show the claim is wrong or unsettled. Search for contrary records, ambigu
     permissions: [{ operations: ['read', 'write'], paths: ['/**'], mode: 'deny' }],
     responseFormat: toolStrategy(findingSchema),
     systemPrompt: `You are the Lead Investigator for ${store.title}. ${rules}
+Your only tools are write_todos and task; the evidence tools belong to your subagents.
 Steps:
 1. Call write_todos with a short plan for testing the claim.
 2. Delegate with the task tool: give the timeline-researcher the claim and the dates to find; give the evidence-reviewer the claim to challenge. You may delegate both at once. Only these two subagent types exist.
@@ -368,9 +416,18 @@ Steps:
     if (!page) return { ok: false, why: `${evidenceId} is not a stored page of this case`, page };
     if (!returned.has(evidenceId)) return { ok: false, why: `${evidenceId} was not returned by any tool during this run`, page };
     const sameSource = [...store.pages.values()].filter((p) => p.sourceId === page.sourceId).map((p) => ({ page: p.page, text: p.text }));
+    // A quote with omissions ("A … B", or a trailing "...") passes only if every piece is on the page.
+    const pieces = quote.split(/\s*(?:\.{3}|…)\s*/).map((x) => x.trim()).filter((x) => x.length > 0);
+    if (pieces.length > 1 || /(\.{3}|…)\s*$/.test(quote.trim())) {
+      if (pieces.some((x) => x.length < 8)) return { ok: false, why: 'A quoted piece is too short to check', page };
+      const missing = pieces.filter((x) => checkScannedQuote(sameSource, x, page.page).status !== 'exact');
+      return missing.length
+        ? { ok: false, why: `Part of the quote is not on the stored page: “${missing[0]!.slice(0, 60)}”`, page }
+        : { ok: true, why: `Quote found on ${page.sourceTitle}, ${page.location} (with omissions marked)`, page };
+    }
     const r = checkScannedQuote(sameSource, quote, page.page);
-    if (r.status === 'exact') return { ok: true, why: `Quote found on ${page.sourceTitle}, PDF p.${page.page}${'loose' in r && r.loose ? ' (spacing ignored)' : ''}`, page };
-    if (r.status === 'moved') return { ok: false, why: `Quote is on p.${r.page}, not p.${page.page}`, page };
+    if (r.status === 'exact') return { ok: true, why: `Quote found on ${page.sourceTitle}, ${page.location}${'loose' in r && r.loose ? ' (spacing ignored)' : ''}`, page };
+    if (r.status === 'moved') return { ok: false, why: `Quote is in another record of this source, not ${page.location}`, page };
     return { ok: false, why: 'Quote not found on the stored page', page };
   };
   const around = (text: string, quote: string) => {
@@ -386,6 +443,7 @@ Steps:
       source_id: r.page?.sourceId ?? '',
       source_title: r.page?.sourceTitle ?? c.evidence_id,
       page: r.page?.page ?? 0,
+      location: r.page?.location ?? '',
       quote: c.quote,
       role: c.role,
       verified: r.ok,
@@ -393,6 +451,7 @@ Steps:
       context: r.page ? around(r.page.text, c.quote) : '',
       url: r.page?.url ?? null,
       method: r.page?.method ?? '',
+      frame: r.page?.frame ?? null,
     };
   });
   const events = out.timeline_events.map((e) => {
@@ -405,6 +464,7 @@ Steps:
       check: r.ok && !dated ? `Quote found, but the year ${year} is not on that page` : r.why,
       source_title: r.page?.sourceTitle ?? e.evidence_id,
       page: r.page?.page ?? null,
+      location: r.page?.location ?? null,
     };
   });
   const verified = citations.filter((c) => c.verified).length;

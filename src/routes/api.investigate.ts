@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 // "Test this claim": forwards the request to the Deep Agents investigator service
 // (services/investigator, POST /investigate-claim) and streams its NDJSON events back. The
 // service token stays on the server. Not a page.
-const CASES = new Set(["btk"]);
+const CASES = new Set(["btk", "rosales"]);
 
 export const Route = createFileRoute("/api/investigate")({
   server: {
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/api/investigate")({
         }
         const claim = typeof body.claim === "string" ? body.claim.trim() : "";
         if (typeof body.caseId !== "string" || !CASES.has(body.caseId))
-          return Response.json({ error: "Claim investigations run on the State v. Rader case." }, { status: 400 });
+          return Response.json({ error: "Claim investigations run on State v. Rader or Rosales v. Terrell." }, { status: 400 });
         if (claim.length < 8 || claim.length > 400)
           return Response.json({ error: "Write the claim as a full sentence (8 to 400 characters)." }, { status: 400 });
 
