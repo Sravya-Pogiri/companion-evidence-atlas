@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { fromAxis, splitLabel, splitTick, toAxis } from "@/lib/split-axis";
 import { decide, getDecisions, resetDecisions } from "@/lib/review-store";
 import {
   SAMPLE_ITEMS as ITEMS,
@@ -12,10 +13,18 @@ import {
 describe("sample case logic", () => {
   beforeEach(() => resetDecisions());
 
-  it("formats times on the 0:00 to 1:30 axis", () => {
-    expect(formatTime(0)).toBe("0:00");
-    expect(formatTime(45)).toBe("0:45");
-    expect(formatTime(90)).toBe("1:30");
+  it("formats axis points as their camera's time on the split analysis axis", () => {
+    // Left part: dashcam 0:30-1:50; right part: bodycam 0:00-21:21; a gap between them.
+    expect(toAxis("dashcam", 30)).toBe(0);
+    expect(toAxis("dashcam", 94)).toBe(32);
+    expect(toAxis("dashcam", 20)).toBeNull();
+    expect(toAxis("bodycam", 0)).toBe(44);
+    // Axis positions round to 0.1 units (about 1.7 bodycam seconds); items keep their exact second.
+    expect(Math.abs(fromAxis(toAxis("bodycam", 520)!)!.t - 520)).toBeLessThan(2);
+    expect(fromAxis(42)).toBeNull();
+    expect(splitLabel(32)).toBe("1:34");
+    expect(splitTick(44)).toBe("Bodycam 0:00");
+    expect(formatTime(32)).toBe(splitLabel(32));
   });
 
   it("finds what is on the timeline at the playhead", () => {

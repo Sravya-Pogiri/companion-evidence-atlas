@@ -2,6 +2,7 @@ import { DEMO_CASE, sourceLinks } from "@/lib/case-data";
 import { ACTIVE_CASE } from "@/lib/active-case";
 import { btkAxisLabel, btkTickLabel, buildBtkCase, BTK_LANES } from "@/lib/cases/btk";
 import { loadAnalysis, seedFromAnalysis } from "@/lib/evidence/seed";
+import { SPLIT_END, SPLIT_TICKS, fromAxis, splitLabel, splitTick, toAxis } from "@/lib/split-axis";
 
 // One data set feeds Live Case, Review, and Handoff. Public sample only:
 // Rosales v. Terrell (public footage and filings). Times on the shared axis are
@@ -44,6 +45,8 @@ export interface TimelineItem {
   frame?: string;
   /** A rendered image of the cited page, under /public. */
   page?: { src: string; page: number; file: string };
+  /** For video items: the second in the source video (the axis may not be its clock). */
+  videoAt?: number;
   /** A video clip that is not on YouTube (a local file under /public/media). */
   clip?: { src: string; file: string };
 }
@@ -77,22 +80,30 @@ export const VIDEOS = {
   dashcam: { id: "xqvFJ8yzDfw", label: "Dashcam" },
 } as const;
 
-const ANALYSIS_AXIS_END = 120;
+const ANALYSIS_AXIS_END = SPLIT_END;
 
 // The case the app opens with: verified findings from the evidence analysis when there are any
 // (scripts/evidence/analyze.ts -> src/data/rosales/analysis.json), else the hand-written sample.
 const SEED = (() => {
   const analysis = loadAnalysis("rosales");
-  return analysis ? seedFromAnalysis(analysis, ANALYSIS_AXIS_END) : null;
+  return analysis ? seedFromAnalysis(analysis, ANALYSIS_AXIS_END, toAxis) : null;
 })();
 /**
- * Length of the shared axis. The video case follows the dashcam clock: 0:00-1:30 for the
- * hand-written sample, 0:00-2:00 for the analysis (its findings reach 1:34). The BTK case uses
+ * The shared axis. Hand-written sample: the dashcam clock, 0:00-1:30. Analysis: a split axis,
+ * the dashcam approach then the whole bodycam, each on its own clock (split-axis.ts). BTK:
  * 0-90 as evenly spaced slots.
  */
-export const AXIS_END = BTK ? 90 : SEED ? ANALYSIS_AXIS_END : 90;
-/** Tick spacing on the axis. */
-export const TICK_STEP = AXIS_END > 90 ? 20 : 10;
+const SPLIT = !BTK && SEED !== null;
+export const AXIS_END = SPLIT ? ANALYSIS_AXIS_END : 90;
+/** Where the axis ticks go. */
+export const TICKS: number[] = SPLIT ? SPLIT_TICKS : [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+
+/** The second in `video` at a point on the axis, when the axis is split and that part is its. */
+export function sourceTimeAt(axis: number, video: string): number | null {
+  if (!SPLIT) return null;
+  const at = fromAxis(axis);
+  return at && at.source === video ? at.t : null;
+}
 export const FROM_ANALYSIS = SEED !== null;
 // The first verified video moment, where the Live Case opens (else the approach at 0:45).
 const FIRST_VIDEO = SEED?.items
@@ -120,7 +131,9 @@ export const SAMPLE_CASE: {
       // Says where the case data comes from: verified AI analysis, or the hand-written demo.
       label: FROM_ANALYSIS ? "AI analysis (verified) · public sources" : "Hand-written demo · public footage",
       openAt: FIRST_VIDEO?.start ?? 45,
-      axisNote: "Drag the playhead to move through the case. Times on the public sample are approximate.",
+      axisNote: SEED
+        ? "Drag the playhead to move through the case. Left: the dashcam approach on the dashcam clock. Right: the whole bodycam on its own clock. The two clocks are not synced."
+        : "Drag the playhead to move through the case. Times on the public sample are approximate.",
     };
 
 // Times on the shared axis follow the public dashcam (the approach is at about 0:45 and the
@@ -202,13 +215,20 @@ export const DECISION_LABEL: Record<ReviewDecision, string> = {
 /** A point on the shared axis: m:ss for the video case, the entry's date for the BTK case. */
 export function formatTime(seconds: number): string {
   if (BTK) return btkAxisLabel(seconds);
+  if (SPLIT) return splitLabel(seconds);
+  const s = Math.max(0, Math.round(seconds));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+}
+
+/** Seconds in a source video as m:ss (not an axis position). */
+export function formatClock(seconds: number): string {
   const s = Math.max(0, Math.round(seconds));
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
 
 /** A tick label on the axis. */
 export function formatTick(seconds: number): string {
-  return BTK ? btkTickLabel(seconds) : formatTime(seconds);
+  return BTK ? btkTickLabel(seconds) : SPLIT ? splitTick(seconds) : formatTime(seconds);
 }
 
 export function formatRange(item: Pick<TimelineItem, "start" | "end">): string {

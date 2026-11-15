@@ -23,9 +23,11 @@ import {
   LANES,
   SAMPLE_CASE,
   findItem,
+  formatClock,
   formatTime,
   itemsAt,
   shortLabel,
+  sourceTimeAt,
   type Flag,
   type TimelineItem,
 } from "@/lib/sample-case";
@@ -281,7 +283,8 @@ function MomentPanel({
   const lane = LANES.find((l) => l.id === focus.lane);
   const videoAt =
     media?.kind === "video"
-      ? media.at + Math.min(Math.max(playhead - focus.start, 0), focus.end - focus.start)
+      ? (sourceTimeAt(playhead, media.video) ??
+        media.at + Math.min(Math.max(playhead - focus.start, 0), focus.end - focus.start))
       : null;
   const conflict = items.find(
     (i) => i.flag === "conflict" && (i.id === focus.id || i.relatedId === focus.id),
@@ -378,7 +381,7 @@ function MomentPanel({
             </li>
             <li className="rounded-full border border-white/10 px-2.5 py-0.5 font-mono text-[13px] leading-6 text-muted-foreground">
               {videoAt !== null
-                ? formatTime(videoAt)
+                ? formatClock(videoAt)
                 : media?.kind === "page"
                   ? `p.${media.page.page}`
                   : `~${formatTime(focus.start)}`}

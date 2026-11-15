@@ -1,6 +1,6 @@
 {
  "caseId": "rosales",
- "generatedAt": "2026-11-15T03:34:43.488Z",
+ "generatedAt": "2026-11-15T04:12:47.854Z",
  "models": {
   "text": "auto",
   "vision": "auto",
@@ -10,10 +10,10 @@
   "transcription": 0,
   "frame description": 0,
   "claim extraction": 0,
-  "claim verification": 0.3,
-  "cross-check": 0,
-  "time check": 0,
-  "total": 0.3
+  "claim verification": 154.9,
+  "cross-check": 12.6,
+  "time check": 0.2,
+  "total": 167.7
  },
  "sources": [
   {
@@ -866,45 +866,47 @@
   {
    "id": "bodycam-audio-052",
    "origin": "transcript",
-   "claim": "A speaker appears to state the reason for the traffic stop was a failure to signal.",
-   "actor": "Speaker 1",
+   "claim": "A speaker appears to state the reason for the stop is a failure to signal.",
+   "actor": "Speaker 2",
    "at": {
     "source": "bodycam",
-    "t": 520
+    "t": 330.3
    },
-   "exactQuote": "Straight pure straight honest answer: you failed to signal, so we stopped you.",
+   "exactQuote": "Well, I mean, he failed the signal, so that's why I",
    "verification": {
-    "status": "failed",
+    "status": "passed",
     "method": "quote-in-transcript",
-    "note": "time check: 20% of the quoted words heard in 8:20-9:00; the time is not confirmed"
-   }
+    "note": "matches the machine transcript; not checked against the audio by a person; time check: 100% of the quoted words heard in 5:10-5:50"
+   },
+   "frameRef": "/frames/analysis/bodycam-0330.jpg"
   },
   {
    "id": "bodycam-audio-053",
    "origin": "transcript",
-   "claim": "A speaker appears to confirm that the interaction is being recorded.",
+   "claim": "A speaker appears to reiterate the reason for the stop as a failure to signal.",
    "actor": "Speaker 1",
    "at": {
     "source": "bodycam",
-    "t": 300
+    "t": 480
    },
-   "exactQuote": "It's being recorded right now, sir.",
+   "exactQuote": "That's straight pure straight honest answer. He failed the signal, so we stopped you.",
    "verification": {
     "status": "passed",
     "method": "quote-in-transcript",
-    "note": "matches the machine transcript; not checked against the audio by a person"
-   }
+    "note": "matches the machine transcript; not checked against the audio by a person; time check: 100% of the quoted words heard in 7:40-8:20"
+   },
+   "frameRef": "/frames/analysis/bodycam-0480.jpg"
   },
   {
    "id": "bodycam-audio-054",
    "origin": "transcript",
-   "claim": "A speaker appears to inform the individual that they are legally detained.",
-   "actor": "Speaker 1",
+   "claim": "A speaker appears to confirm the stop is being recorded.",
+   "actor": "Speaker 2",
    "at": {
     "source": "bodycam",
-    "t": 645
+    "t": 382.8
    },
-   "exactQuote": "Right now, you're legally detained, so we're not doing anything extra.",
+   "exactQuote": "And look, I promise you, like you see it recording right now.",
    "verification": {
     "status": "passed",
     "method": "quote-in-transcript",
@@ -914,45 +916,46 @@
   {
    "id": "bodycam-audio-055",
    "origin": "transcript",
-   "claim": "A speaker appears to advise the individual of their rights, including the right to remain silent and the right to an attorney.",
-   "actor": "Speaker 3",
+   "claim": "A speaker appears to explain that the stop is public record and recorded by multiple cameras.",
+   "actor": "Speaker 2",
    "at": {
     "source": "bodycam",
-    "t": 331
+    "t": 402.2
    },
-   "exactQuote": "So you do have the right to remain silent, anything you say can and will be used against you in a court of law. You have the right to an attorney. Can't afford an attorney, one will be appointed to you at no cost.",
+   "exactQuote": "Everything we do is recorded, okay? It's public record.",
    "verification": {
-    "status": "failed",
+    "status": "passed",
     "method": "quote-in-transcript",
-    "note": "time check: 17% of the quoted words heard in 5:11-5:51; the time is not confirmed"
+    "note": "matches the machine transcript; not checked against the audio by a person"
    }
   },
   {
    "id": "bodycam-audio-056",
    "origin": "transcript",
-   "claim": "A speaker appears to state that the individual can decline to answer questions by saying 'pass'.",
+   "claim": "A speaker appears to inform the driver they are being cited for failure to signal and failure to register the vehicle.",
    "actor": "Speaker 1",
    "at": {
     "source": "bodycam",
-    "t": 158
+    "t": 1126
    },
-   "exactQuote": "So anytime you're not comfortable with one of my questions, you can say pass.",
+   "exactQuote": "This is what I'm citing you for. Failure to signal and then failure to register register your uh tag and all that good stuff.",
    "verification": {
     "status": "passed",
     "method": "quote-in-transcript",
-    "note": "matches the machine transcript; not checked against the audio by a person"
-   }
+    "note": "matches the machine transcript; not checked against the audio by a person; time check: 95% of the quoted words heard in 18:26-19:06"
+   },
+   "frameRef": "/frames/analysis/bodycam-1126.jpg"
   },
   {
    "id": "bodycam-audio-057",
    "origin": "transcript",
-   "claim": "A speaker appears to confirm they have the individual's registration.",
+   "claim": "A speaker appears to provide instructions on how to request footage of the stop.",
    "actor": "Speaker 1",
    "at": {
     "source": "bodycam",
-    "t": 470
+    "t": 1243.4
    },
-   "exactQuote": "I do have your registration.",
+   "exactQuote": "Contact the city, uh, police department, City of Alexandria, and they'll tell you what you need to do.",
    "verification": {
     "status": "passed",
     "method": "quote-in-transcript",
@@ -960,23 +963,7 @@
    }
   },
   {
-   "id": "bodycam-audio-058",
-   "origin": "transcript",
-   "claim": "A speaker appears to state that they do not do phone calls during traffic stops.",
-   "actor": "Speaker 2",
-   "at": {
-    "source": "bodycam",
-    "t": 860
-   },
-   "exactQuote": "I don't do phone calls on traffic stops.",
-   "verification": {
-    "status": "passed",
-    "method": "quote-in-transcript",
-    "note": "matches the machine transcript; not checked against the audio by a person"
-   }
-  },
-  {
-   "id": "dashcam-059",
+   "id": "dashcam-058",
    "origin": "video",
    "claim": "A red car and a white vehicle appear in the traffic lanes ahead as the camera vehicle proceeds.",
    "at": {
@@ -991,7 +978,7 @@
    "frameRef": "/frames/analysis/dashcam-0040.jpg"
   },
   {
-   "id": "dashcam-060",
+   "id": "dashcam-059",
    "origin": "video",
    "claim": "The camera vehicle appears to approach behind a red car and a dark SUV.",
    "at": {
@@ -1005,7 +992,7 @@
    }
   },
   {
-   "id": "dashcam-061",
+   "id": "dashcam-060",
    "origin": "video",
    "claim": "A red car and a dark sedan appear visible stopped or moving slowly ahead.",
    "at": {
@@ -1020,7 +1007,7 @@
    "frameRef": "/frames/analysis/dashcam-0048.jpg"
   },
   {
-   "id": "dashcam-062",
+   "id": "dashcam-061",
    "origin": "video",
    "claim": "The camera vehicle appears positioned on the roadway behind a red car.",
    "at": {
@@ -1035,7 +1022,7 @@
    "frameRef": "/frames/analysis/dashcam-0064.jpg"
   },
   {
-   "id": "dashcam-063",
+   "id": "dashcam-062",
    "origin": "video",
    "claim": "An individual appearing to wear a dark uniform is visible on the right side of the frame.",
    "at": {
@@ -1049,7 +1036,7 @@
    }
   },
   {
-   "id": "dashcam-064",
+   "id": "dashcam-063",
    "origin": "video",
    "claim": "The driver-side door of the red car appears to open while an individual wearing a dark uniform stands on the right.",
    "at": {
@@ -1064,148 +1051,94 @@
    "frameRef": "/frames/analysis/dashcam-0094.jpg"
   },
   {
-   "id": "bodycam-065",
+   "id": "bodycam-064",
    "origin": "video",
-   "claim": "A person in a black shirt stands near a red vehicle holding a white object.",
-   "at": {
-    "source": "bodycam",
-    "t": 0
-   },
-   "verification": {
-    "status": "passed",
-    "method": "second-vision-check",
-    "note": "A person wearing a black shirt is visible standing next to a red vehicle, and they appear to be holding a small white object in their hand."
-   },
-   "frameRef": "/frames/analysis/bodycam-0000.jpg"
-  },
-  {
-   "id": "bodycam-066",
-   "origin": "video",
-   "claim": "The person in the black shirt appears to hand a white document to the camera operator.",
+   "claim": "A person in a black shirt appears to be handing a white document to the camera operator near a red vehicle.",
    "at": {
     "source": "bodycam",
     "t": 4
    },
    "verification": {
-    "status": "failed",
+    "status": "passed",
     "method": "second-vision-check",
-    "note": "unclear: While the person in the black shirt is holding a white object in their hands, the frame does not show them extending their hands toward the camera operator or completing a transfer."
-   }
+    "note": "The frame shows a person in a black shirt holding a white object in their hands while standing near a red vehicle and a police vehicle."
+   },
+   "frameRef": "/frames/analysis/bodycam-0004.jpg"
   },
   {
-   "id": "bodycam-067",
+   "id": "bodycam-065",
    "origin": "video",
-   "claim": "A person in a dark uniform appears in the background near the red vehicle.",
+   "claim": "A second person in a dark uniform appears in the background near the red vehicle.",
    "at": {
     "source": "bodycam",
     "t": 22
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: Only one person in a dark uniform is visible in the background near the red vehicle."
    }
   },
   {
-   "id": "bodycam-068",
+   "id": "bodycam-066",
    "origin": "video",
-   "claim": "The camera operator appears to hand a white document back to the person in the black shirt.",
+   "claim": "The camera operator appears to be handing a white document back to the person in the black shirt.",
    "at": {
     "source": "bodycam",
     "t": 30
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: The person in the black shirt is holding a small, dark object in their hand, and there is no white document visible in the frame."
    }
   },
   {
-   "id": "bodycam-069",
+   "id": "bodycam-067",
    "origin": "video",
-   "claim": "An individual in a dark shirt stands near a white vehicle with a uniformed person in the background.",
+   "claim": "An individual in a dark shirt is seen standing near a white vehicle while a uniformed person stands in the background.",
    "at": {
     "source": "bodycam",
     "t": 32
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
-  },
-  {
-   "id": "bodycam-070",
-   "origin": "video",
-   "claim": "The camera is oriented toward the front grill and hood of the white vehicle.",
-   "at": {
-    "source": "bodycam",
-    "t": 46
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "The frame shows an individual in a dark shirt standing near a white vehicle with a uniformed person visible in the background."
    },
-   "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
+   "frameRef": "/frames/analysis/bodycam-0032.jpg"
   },
   {
-   "id": "bodycam-071",
+   "id": "bodycam-068",
    "origin": "video",
-   "claim": "A cell phone is visible being held in the foreground near the individual standing by the hood.",
-   "at": {
-    "source": "bodycam",
-    "t": 50
-   },
-   "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
-  },
-  {
-   "id": "bodycam-072",
-   "origin": "video",
-   "claim": "A piece of paper appears to be held out between the camera wearer and the individual.",
+   "claim": "A cell phone and a piece of paper appear to be held between the camera wearer and the individual near the white vehicle.",
    "at": {
     "source": "bodycam",
     "t": 54
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
-  },
-  {
-   "id": "bodycam-073",
-   "origin": "video",
-   "claim": "The individual stands in front of the vehicle hood looking down at a mobile phone.",
-   "at": {
-    "source": "bodycam",
-    "t": 56
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "The image shows a person holding a rectangular object resembling a cell phone in their right hand, while a piece of paper is held in the foreground between the camera wearer and that individual."
    },
-   "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
+   "frameRef": "/frames/analysis/bodycam-0054.jpg"
   },
   {
-   "id": "bodycam-074",
+   "id": "bodycam-069",
    "origin": "video",
-   "claim": "A uniformed officer appears standing in the background near a building.",
+   "claim": "A uniformed officer appears standing in the background near a building as the camera wearer holds up a mobile device.",
    "at": {
     "source": "bodycam",
     "t": 68
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: While the camera wearer is holding a mobile device, there is no uniformed officer visible in the background of the frame."
    }
   },
   {
-   "id": "bodycam-075",
+   "id": "bodycam-070",
    "origin": "video",
    "claim": "The camera turns toward a white SUV parked along a paved drive near a grassy area.",
    "at": {
@@ -1213,131 +1146,170 @@
     "t": 80
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: The vehicle visible in the frame appears to be dark-colored rather than white."
    }
   },
   {
-   "id": "bodycam-076",
+   "id": "bodycam-071",
    "origin": "video",
-   "claim": "The camera view shows the interior panel and dashboard of a vehicle.",
-   "at": {
-    "source": "bodycam",
-    "t": 84
-   },
-   "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
-  },
-  {
-   "id": "bodycam-077",
-   "origin": "video",
-   "claim": "A person in a black shirt stands near the front of a white vehicle with a red car parked nearby.",
+   "claim": "A person in a black shirt stands near the front of a white vehicle, while a red car is parked nearby.",
    "at": {
     "source": "bodycam",
     "t": 96
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: While a red car is visible, the person in the black shirt is standing near the side of a vehicle that is not clearly identifiable as white, and they are not positioned at the front of it."
    }
   },
   {
-   "id": "bodycam-078",
+   "id": "bodycam-072",
    "origin": "video",
-   "claim": "A person in a police uniform appears to be standing near the person in the black shirt.",
-   "at": {
-    "source": "bodycam",
-    "t": 100
-   },
-   "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
-   }
-  },
-  {
-   "id": "bodycam-079",
-   "origin": "video",
-   "claim": "Three individuals appear to be standing in a line near the front of the white vehicle.",
+   "claim": "A group of three individuals appears to be standing in a line near the front of the white vehicle.",
    "at": {
     "source": "bodycam",
     "t": 114
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "Three individuals are visible standing in a line near the front of the white vehicle."
+   },
+   "frameRef": "/frames/analysis/bodycam-0114.jpg"
+  },
+  {
+   "id": "bodycam-073",
+   "origin": "video",
+   "claim": "The red vehicle appears to be moving further away from the white vehicle.",
+   "at": {
+    "source": "bodycam",
+    "t": 336
+   },
+   "verification": {
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "unclear: A single static frame does not provide information about the relative motion of the vehicles."
+   }
+  },
+  {
+   "id": "bodycam-074",
+   "origin": "video",
+   "claim": "A hand appears to enter the frame from the bottom right, moving toward the person in the black shirt.",
+   "at": {
+    "source": "bodycam",
+    "t": 506
+   },
+   "verification": {
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: While there is a blurry shape in the bottom right corner of the frame, it is not clearly identifiable as a hand, and it does not appear to be moving toward the person in the black shirt."
+   }
+  },
+  {
+   "id": "bodycam-075",
+   "origin": "video",
+   "claim": "A person appears to be holding a clipboard with a document and a pen in front of a white vehicle.",
+   "at": {
+    "source": "bodycam",
+    "t": 1122
+   },
+   "verification": {
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "The foreground shows a person holding a clipboard with a document, and a white vehicle is visible in the background."
+   },
+   "frameRef": "/frames/analysis/bodycam-1122.jpg"
+  },
+  {
+   "id": "bodycam-076",
+   "origin": "video",
+   "claim": "The person holding the clipboard appears to be writing on the document with a pen.",
+   "at": {
+    "source": "bodycam",
+    "t": 1126
+   },
+   "verification": {
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "unclear: While a person is holding a clipboard with writing on it, the hand holding the pen is obscured by the clipboard itself, making it impossible to confirm if they are actively writing."
+   }
+  },
+  {
+   "id": "bodycam-077",
+   "origin": "video",
+   "claim": "The person appears to be handing the clipboard or document toward the camera.",
+   "at": {
+    "source": "bodycam",
+    "t": 1140
+   },
+   "verification": {
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: The clipboard is held by the person wearing the camera, not by the individuals standing in front of them."
    }
   }
  ],
  "findings": [
   {
    "id": "finding-1",
-   "kind": "agrees",
-   "title": "Reason for traffic stop",
-   "explanation": "Multiple sources, including the complaint, the court opinion, and bodycam audio, agree that the officers stated the reason for the traffic stop was a failure to signal. The bodycam audio quote cited for this was left out: its time could not be confirmed.",
-   "claimIds": [
-    "complaint-004",
-    "complaint-016",
-    "opinion-043"
-   ],
-   "status": "verified"
-  },
-  {
-   "id": "finding-2",
-   "kind": "agrees",
-   "title": "Miranda warnings provided",
-   "explanation": "The complaint and the court opinion both indicate that Officer Lewis provided Miranda warnings to Mario Rosales during the stop. The bodycam audio quote cited for this was left out: its time could not be confirmed.",
-   "claimIds": [
-    "complaint-009",
-    "opinion-040"
-   ],
-   "status": "verified"
-  },
-  {
-   "id": "finding-3",
-   "kind": "agrees",
-   "title": "Dismissal of traffic charges",
-   "explanation": "Both the complaint and the court opinion confirm that the traffic charges issued to Mario Rosales were subsequently dismissed.",
-   "claimIds": [
-    "complaint-028",
-    "opinion-048"
-   ],
-   "status": "verified"
-  },
-  {
-   "id": "finding-4",
-   "kind": "conflict",
-   "title": "Clarity of video evidence regarding signal",
-   "explanation": "The complaint asserts that video evidence clearly shows Mario signaled, whereas the court opinion notes that the video is not objectively clear regarding when the signal was activated.",
-   "claimIds": [
-    "complaint-029",
-    "opinion-046",
-    "opinion-049"
-   ],
-   "status": "verified"
-  },
-  {
-   "id": "finding-5",
    "kind": "missing",
-   "title": "Dispatch audio recording",
-   "explanation": "While the complaint references dispatch radioing results of history checks, no actual dispatch audio recording appears to be included in the provided evidence.",
+   "title": "Dispatch Audio Recording",
+   "explanation": "While the complaint and opinion mention dispatch providing information to the officers, no audio recording of the dispatch communication appears to be included in the provided evidence.",
    "claimIds": [
+    "complaint-024",
     "complaint-026",
     "dispatch"
    ],
    "status": "verified"
   },
   {
-   "id": "finding-6",
+   "id": "finding-2",
    "kind": "agrees",
-   "title": "Denial of request to record",
-   "explanation": "The complaint and the court opinion agree that the officers did not permit the individuals to record the stop with their phones.",
+   "title": "Reason for Traffic Stop",
+   "explanation": "Multiple sources, including the complaint, the court opinion, and bodycam audio, agree that the officers stated the reason for the stop was a failure to signal.",
+   "claimIds": [
+    "complaint-004",
+    "complaint-016",
+    "opinion-043",
+    "bodycam-audio-052",
+    "bodycam-audio-053"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-3",
+   "kind": "conflict",
+   "title": "Video Evidence of Signaling",
+   "explanation": "The complaint and court opinion assert that video evidence shows the signal was activated, while the court also notes that it is not objectively clear from the video whether the signal was activated at the legally required distance.",
+   "claimIds": [
+    "complaint-029",
+    "opinion-045",
+    "opinion-046",
+    "opinion-049"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-4",
+   "kind": "agrees",
+   "title": "Issuance of Citations",
+   "explanation": "The complaint, court opinion, and bodycam audio all agree that Rosales was cited for failure to signal and registration-related violations.",
+   "claimIds": [
+    "complaint-027",
+    "opinion-047",
+    "bodycam-audio-056"
+   ],
+   "status": "dropped",
+   "droppedBecause": "uses conclusive language"
+  },
+  {
+   "id": "finding-5",
+   "kind": "agrees",
+   "title": "Denial of Recording Request",
+   "explanation": "The complaint and court opinion agree that the officers did not permit the occupants to retrieve their phones to record the encounter.",
    "claimIds": [
     "complaint-013",
     "complaint-017",
@@ -1346,14 +1318,24 @@
    "status": "verified"
   },
   {
+   "id": "finding-6",
+   "kind": "agrees",
+   "title": "Miranda Warnings",
+   "explanation": "The complaint and court opinion agree that Miranda warnings were provided to Rosales by Officer Lewis.",
+   "claimIds": [
+    "complaint-009",
+    "opinion-040"
+   ],
+   "status": "verified"
+  },
+  {
    "id": "finding-7",
    "kind": "agrees",
-   "title": "Instruction to exit vehicle",
-   "explanation": "The complaint, court opinion, and dashcam footage all support the sequence where the driver was instructed to exit the vehicle.",
+   "title": "Instruction to Exit Vehicle",
+   "explanation": "The complaint and court opinion agree that Officer Terrell instructed Rosales to exit the vehicle and that he complied.",
    "claimIds": [
     "complaint-005",
-    "opinion-033",
-    "dashcam-064"
+    "opinion-033"
    ],
    "status": "verified"
   }
@@ -1361,17 +1343,16 @@
  "log": [
   "analyze rosales",
   "  dashcam: no speech above the energy gate, nothing sent for transcription",
-  "  bodycam: whole audio in 3 pieces of 420s",
-  "  bodycam chunk-420-00000-420.mp3: 32 lines left out (time outside the piece)",
-  "  bodycam chunk-420-00420-420.mp3: 17 lines left out (time outside the piece)",
-  "  bodycam chunk-420-00840-440.mp3: 35 lines left out (time outside the piece)",
+  "  bodycam: whole audio in 21 pieces of 60s",
+  "  bodycam chunk-60-01200-80.mp3: 1 lines left out (time outside the piece)",
   "  transcription: 0s",
   "  frame description: 0s",
   "  claim extraction: 0s",
-  "  claim verification: 0.3s",
-  "  cross-check: 0s",
-  "  bodycam-audio-052 at 8:40: time check: 20% of the quoted words heard in 8:20-9:00",
-  "  bodycam-audio-055 at 5:31: time check: 17% of the quoted words heard in 5:11-5:51",
-  "  time check: 0s"
+  "  claim verification: 154.9s",
+  "  cross-check: 12.6s",
+  "  bodycam-audio-052 at 5:30: time check: 100% of the quoted words heard in 5:10-5:50",
+  "  bodycam-audio-053 at 8:00: time check: 100% of the quoted words heard in 7:40-8:20",
+  "  bodycam-audio-056 at 18:46: time check: 95% of the quoted words heard in 18:26-19:06",
+  "  time check: 0.2s"
  ]
 }

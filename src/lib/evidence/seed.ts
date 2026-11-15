@@ -59,7 +59,12 @@ const passed = (c: Claim | undefined) => !!c && (c.verification.status === "pass
  * claims sit at the moment of the video claim they are compared with. Items outside the axis
  * (0..axisEnd seconds) are left off the timeline rather than squeezed onto it.
  */
-export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null {
+export function seedFromAnalysis(
+  a: CaseAnalysis,
+  axisEnd: number,
+  /** Where a video moment sits on the axis (null: not on it). Default: its own second. */
+  place: (source: string, t: number) => number | null = (_s, t) => t,
+): Seed | null {
   const claims = new Map(a.claims.map((c) => [c.id, c]));
   const findings = a.findings.filter(
     (f) => f.status === "verified" && f.claimIds.every((id) => !claims.has(id) || passed(claims.get(id))),
@@ -74,8 +79,8 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
   const say = (msg: Omit<ChatMessage, "id">) =>
     conversation.push({ ...msg, ...(msg.from === "agent" ? { text: `AI finding: ${msg.text}` } : {}), id: `a${++m}` });
 
-  const itemFor = (c: Claim, at: number, flag: Flag): TimelineItem | null => {
-    if (at < 0 || at > axisEnd) return null;
+  const itemFor = (c: Claim, at: number | null, flag: Flag): TimelineItem | null => {
+    if (at === null || at < 0 || at > axisEnd) return null;
     const id = `claim-${c.id}`;
     const existing = items.get(id);
     if (existing) {
@@ -83,7 +88,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
       if (flag !== "agrees") existing.flag = flag;
       return existing;
     }
-    const start = Math.max(0, Math.min(axisEnd - 5, Math.round(at)));
+    const start = Math.max(0, Math.min(axisEnd - 5, Math.round(at * 10) / 10));
     const item: TimelineItem = {
       id,
       lane: laneFor(c),
@@ -98,6 +103,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
       status: "filed",
       flag,
       ...(c.frameRef ? { frame: c.frameRef } : {}),
+      ...("t" in c.at ? { videoAt: c.at.t } : {}),
     };
     items.set(id, item);
     claimsByItem[id] = [c];
@@ -107,7 +113,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
   for (const f of findings) {
     const cited = f.claimIds.map((id) => claims.get(id)).filter((c): c is Claim => passed(c));
     const video = cited.find((c) => "t" in c.at);
-    const anchor = video && "t" in video.at ? video.at.t : undefined;
+    const anchor = video && "t" in video.at ? (place(video.at.source, video.at.t) ?? undefined) : undefined;
 
     if (f.kind === "missing") {
       const expected = f.claimIds.find((id) => !claims.has(id));
@@ -132,7 +138,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
         continue;
       }
       const target = cited[0];
-      const at = anchor ?? (target && "t" in target.at ? target.at.t : undefined);
+      const at = anchor ?? (target && "t" in target.at ? (place(target.at.source, target.at.t) ?? undefined) : undefined);
       if (target && at !== undefined) {
         const item = itemFor(target, at, "missing");
         if (item) say({ from: "agent", text: `Possible gap: ${f.explanation}`, itemId: item.id });
@@ -147,7 +153,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
       say({ from: "agent", text: `${f.kind === "conflict" ? "Possible conflict" : "Documents agree"} (no video time): ${f.explanation} Sources: ${cites}.` });
       continue;
     }
-    const placed = cited.map((c) => ({ c, item: itemFor(c, "t" in c.at ? c.at.t : anchor, "agrees") }));
+    const placed = cited.map((c) => ({ c, item: itemFor(c, "t" in c.at ? place(c.at.source, c.at.t) : anchor, "agrees") }));
     const doc = placed.find((p) => p.item && p.item.lane === "documents");
     const vid = placed.find((p) => p.item && p.c === video);
     if (!vid?.item) continue;

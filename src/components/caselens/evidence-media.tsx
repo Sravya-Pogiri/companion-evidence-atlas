@@ -13,7 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { LOCAL_VIDEO, embedUrl, nearestFrame, type PageImage, type VideoId } from "@/lib/media";
-import { VIDEOS, formatTime, type Lane } from "@/lib/sample-case";
+import { VIDEOS, formatClock, type Lane } from "@/lib/sample-case";
 import { cn } from "@/lib/utils";
 
 export const LANE_ICON: Record<Lane, LucideIcon> = {
@@ -45,7 +45,7 @@ export function FrameThumb({
       <img src={src} alt={alt} loading="lazy" className="size-full object-cover" />
       {duration !== undefined && (
         <span className="absolute bottom-1 right-1 rounded bg-black/75 px-1.5 py-px font-mono text-[13px] leading-5 text-white">
-          {formatTime(duration)}
+          {formatClock(duration)}
         </span>
       )}
     </span>
@@ -167,13 +167,13 @@ export function PlayableStill({
           controls
           playsInline
           onError={() => setLocalFailed(true)}
-          aria-label={`${VIDEOS[video].label} from ${formatTime(at)}`}
+          aria-label={`${VIDEOS[video].label} from ${formatClock(at)}`}
         />
       ) : playing ? (
         <iframe
           className="size-full"
           src={embedUrl(video, at)}
-          title={`${VIDEOS[video].label} from ${formatTime(at)}`}
+          title={`${VIDEOS[video].label} from ${formatClock(at)}`}
           allow="autoplay; encrypted-media; picture-in-picture"
           allowFullScreen
         />
@@ -182,7 +182,7 @@ export function PlayableStill({
           type="button"
           onClick={() => setPlaying(true)}
           className="group relative block size-full"
-          aria-label={`Play ${VIDEOS[video].label} from ${formatTime(at)}`}
+          aria-label={`Play ${VIDEOS[video].label} from ${formatClock(at)}`}
         >
           <img src={frame.src} alt="" className="size-full object-cover" />
           <span className="absolute inset-0 grid place-items-center bg-black/10 transition-colors group-hover:bg-black/25">
@@ -191,7 +191,7 @@ export function PlayableStill({
             </span>
           </span>
           <span className="absolute left-2 top-2 rounded bg-black/70 px-1.5 py-px font-mono text-[13px] leading-5 text-white">
-            {badge ?? `${VIDEOS[video].label.toUpperCase()} · ${formatTime(at)}`}
+            {badge ?? `${VIDEOS[video].label.toUpperCase()} · ${formatClock(at)}`}
           </span>
         </button>
       )}

@@ -60,6 +60,7 @@ const modelOpt = (m: string) => (m === "auto" ? {} : { model: m });
 //   --skip-audio                         no transcription
 //   --max-vchecks 4                      at most N second-pass frame checks
 //   --doc-chunk 20                       PDF pages per claims request (default 6)
+//   --audio-cached-only                  use only audio pieces already transcribed
 //   --audio-chunk 420                    transcribe the whole audio in pieces of N seconds cut
 //                                        from the original video (needs --media), instead of one
 //                                        request per speech segment
@@ -81,6 +82,8 @@ const SKIP_AUDIO = flag("--skip-audio");
 const MAX_VCHECKS = Number(opt("--max-vchecks", "1000"));
 const DOC_CHUNK = Math.max(1, Number(opt("--doc-chunk", "6")));
 const AUDIO_CHUNK = Number(opt("--audio-chunk", "0"));
+// Use only audio pieces already transcribed (cached); skip the rest, listing them.
+const AUDIO_CACHED_ONLY = flag("--audio-cached-only");
 const FFMPEG = process.env["FFMPEG"] ?? "ffmpeg";
 
 interface CaseFile {
@@ -182,9 +185,15 @@ async function transcribe(sourceId: string): Promise<Line[]> {
     return [];
   }
   const segments = AUDIO_CHUNK > 0 ? audioChunks(sourceId, audioDir) : speech.segments;
+  const skipped: string[] = [];
   const parts = await pool(segments, async (seg) => {
     const b64 = readFileSync(join(audioDir, seg.file)).toString("base64");
-    const res = await cached(`transcribe:${AUDIO_MODEL}:${sourceId}:${seg.file}:${b64.length}`, { lines: [] }, () =>
+    const key = `transcribe:${AUDIO_MODEL}:${sourceId}:${seg.file}:${b64.length}`;
+    if (AUDIO_CACHED_ONLY && !existsSync(join(MODEL_CACHE, `${createHash("sha256").update(key).digest("hex").slice(0, 24)}.json`))) {
+      skipped.push(`${mmss(seg.start)}-${mmss(seg.end)}`);
+      return [];
+    }
+    const res = await cached(key, { lines: [] }, () =>
       transcribeAudio(TRANSCRIBE_SYSTEM, TRANSCRIBE_TASK, b64, "mp3", modelOpt(AUDIO_MODEL)),
     );
     const rows = asArray<Line>(res, "lines").filter((l) => typeof l.text === "string" && l.text.trim() && Number.isFinite(num(l.t)));
@@ -194,6 +203,7 @@ async function transcribe(sourceId: string): Promise<Line[]> {
     if (inPiece.length < rows.length) say(`  ${sourceId} ${seg.file}: ${rows.length - inPiece.length} lines left out (time outside the piece)`);
     return inPiece.map((l) => ({ t: Math.round((seg.start + num(l.t)) * 10) / 10, speaker: String(l.speaker ?? ""), text: l.text.trim() }));
   });
+  if (skipped.length) say(`  ${sourceId}: ${skipped.length} audio pieces not transcribed yet, left out: ${skipped.sort().join(", ")}`);
   const lines = parts.flat().sort((a, b) => a.t - b.t);
   writeFileSync(join(CACHE, sourceId, "transcript.json"), JSON.stringify(lines, null, 1));
   return lines;
@@ -244,7 +254,13 @@ async function timeCheck(findings: Finding[], claims: Claim[]): Promise<void> {
     const want = words(c.exactQuote ?? "");
     const share = want.length ? want.filter((w) => heard.has(w)).length / want.length : 0;
     const note = `time check: ${Math.round(share * 100)}% of the quoted words heard in ${mmss(start)}-${mmss(start + 40)}`;
-    if (share >= 0.6) c.verification = { ...c.verification, note: [c.verification.note, note].filter(Boolean).join("; ") };
+    if (share >= 0.6) {
+      c.verification = { ...c.verification, note: [c.verification.note, note].filter(Boolean).join("; ") };
+      // The frame at that second, as the still for this moment.
+      const name = `${c.at.source}-${String(Math.round(c.at.t)).padStart(4, "0")}.jpg`;
+      if (!DRY) grabFrame(c.at.source, c.at.t, join(FRAMES_OUT, name));
+      c.frameRef = `/frames/analysis/${name}`;
+    }
     else {
       c.verification = { status: "failed", method: c.verification.method, note: `${note}; the time is not confirmed` };
       // The words may still be in the recording; only their time is unknown. Take this claim out

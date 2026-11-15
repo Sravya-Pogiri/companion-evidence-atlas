@@ -87,7 +87,7 @@ export function nearestFrame(v: VideoId, at: number): Frame {
 
 /** The still or page that belongs to an item, when the sample has one. */
 export function mediaFor(
-  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame" | "page" | "clip">,
+  item: Pick<TimelineItem, "id" | "lane" | "start" | "sourceLink" | "frame" | "page" | "clip" | "videoAt">,
 ): ItemMedia | null {
   const known = BY_ITEM[item.id];
   if (known) return known;
@@ -96,7 +96,7 @@ export function mediaFor(
   if (item.clip) return { kind: "clip", src: item.clip.src, file: item.clip.file, href: item.sourceLink };
   // Items from the evidence analysis carry their own verified frame.
   if (item.frame && (item.lane === "dashcam" || item.lane === "bodycam")) {
-    return { ...(video(item.lane, item.start) as Extract<ItemMedia, { kind: "video" }>), frame: item.frame };
+    return { ...(video(item.lane, item.videoAt ?? item.start) as Extract<ItemMedia, { kind: "video" }>), frame: item.frame };
   }
   // Document items: use the rendered page only when it is the cited page.
   if (item.sourceLink?.endsWith(`#page=${PAGES.complaint.page}`) && item.sourceLink.includes("Complaint")) {
@@ -107,7 +107,7 @@ export function mediaFor(
   }
   // Items filed during the demo: footage lanes get the nearest real frame from that video.
   const lane = item.lane as Lane;
-  if (lane === "dashcam" || lane === "bodycam") return video(lane, item.start);
+  if (lane === "dashcam" || lane === "bodycam") return video(lane, item.videoAt ?? item.start);
   if (item.sourceLink?.includes(VIDEOS.dashcam.id)) return video("dashcam", item.start);
   if (item.sourceLink?.includes(VIDEOS.bodycam.id)) return video("bodycam", item.start);
   return null;
