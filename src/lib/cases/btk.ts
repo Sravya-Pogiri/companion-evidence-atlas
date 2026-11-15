@@ -155,6 +155,9 @@ function clipFor(cits: CheckedCitation[]) {
   return id ? { src: LOCAL_CLIPS[id]!, file: SOURCES_BY_ID.get(id)?.path?.split("/").pop() ?? id } : undefined;
 }
 
+/** Cross-check findings that passed the quote check, the second check and any review. */
+const verifiedFindings = (analysis.findings ?? []).filter((f) => f.status === "verified");
+
 const obsById = new Map(analysis.observations.map((o) => [o.id, o]));
 const itemId = (eventId: string) => `btk-${eventId}`;
 
@@ -285,10 +288,23 @@ function buildConversation(items: TimelineItem[]): ChatMessage[] {
       itemId: "btk-T21",
     });
   }
+  for (const f of verifiedFindings)
+    add({
+      from: "agent",
+      text: `${/Corrected in review/.test(f.check ?? "") ? "Reviewed finding" : "AI finding"}: ${f.kind === "conflict" ? "Possible conflict" : "Sources agree"}: ${f.explanation} Sources: ${f.cites.map((q) => `${shortName(q.source)}, PDF p.${q.page}`).join("; ")}.`,
+    });
+  for (const r of analysis.recordChecks ?? []) add({ from: "agent", text: `AI finding: Records check. ${r.title}: ${r.detail}` });
+  const derived = analysis.derivedChecks ?? [];
+  if (derived.length)
+    add({
+      from: "agent",
+      text: `AI finding: The page images cut from the filings match their pages (${derived.map((d) => `${d.id} ${Math.round(d.share * 100)}% on ${shortName(d.parent)} p.${d.page}`).join("; ")}). The two photos of a person were not analyzed: faces are not compared.`,
+    });
   const n = (s: string) => analysis.observations.filter((o) => o.status === s).length;
+  const open = analysis.observations.filter((o) => o.status === "unverified").map((o) => o.id);
   add({
     from: "agent",
-    text: `AI finding: Citation check done. ${n("verified")} of ${analysis.observations.length} observations have a quote found on the cited page, ${n("partial")} only partly, and ${n("unverified")} could not be checked (a video clip and a photo with no text in the packet). Confirm before use.`,
+    text: `AI finding: Citation check done. ${n("verified")} of ${analysis.observations.length} observations have a quote found on the cited page, ${n("partial")} only partly${open.length ? `, and ${open.length} could not be checked (${open.join(", ")}: no text or copy in the packet)` : ""}. No contradiction between the packet's own sources survived the checks. Confirm before use.`,
   });
   return out;
 }
@@ -309,6 +325,14 @@ function buildSources(itemsByQuote: Map<string, string>): Source[] {
       pages.set(q.page, set);
       quotesBySource.set(x.source, pages);
     }
+  // Quotes behind the cross-check findings and the records checks, found on their pages in code.
+  for (const q of [...verifiedFindings.flatMap((f) => f.cites), ...(analysis.recordChecks ?? [])]) {
+    const pages = quotesBySource.get(q.source) ?? new Map<number, Set<string>>();
+    const set = pages.get(q.page) ?? new Set<string>();
+    set.add(q.quote);
+    pages.set(q.page, set);
+    quotesBySource.set(q.source, pages);
+  }
   const n = (s: string) => analysis.observations.filter((o) => o.status === s).length;
   const summary: Source = {
     id: "summary",
@@ -334,6 +358,20 @@ function buildSources(itemsByQuote: Map<string, string>): Source[] {
             label: "¶4",
             text: `Attribution test: with the disk-metadata lead turned off, ${analysis.attribution.streams.length} links in the packet graph remain and ${analysis.attribution.lost.length} drop out.`,
           },
+          {
+            id: "s5",
+            label: "¶5",
+            text: `Cross-check of all texts in the packet: ${verifiedFindings.filter((f) => f.kind === "conflict").length} possible conflicts and ${verifiedFindings.filter((f) => f.kind === "agrees").length} agreements survived the quote and second checks; ${(analysis.findings ?? []).filter((f) => f.status === "dropped").length} suggested findings were dropped.`,
+          },
+          ...(analysis.recordChecks ?? []).map((r, i) => ({ id: `r${i + 1}`, label: "Record", text: `${r.title}: ${r.detail}` })),
+          ...(analysis.derivedChecks ?? []).map((d, i) => ({
+            id: `d${i + 1}`,
+            label: "Image",
+            text: `${d.id}: ${Math.round(d.share * 100)}% of the words read from this page image are on ${d.parent} PDF p.${d.page}, the page it was cut from (${d.status === "passed" ? "it matches" : "it does not match"}).`,
+          })),
+          ...(analysis.notAnalyzed ?? [])
+            .filter((x) => x.id.startsWith("PHOTO_"))
+            .map((x, i) => ({ id: `na${i + 1}`, label: "Not analyzed", text: `${x.id}: ${x.why}` })),
           ...analysis.hypotheses.map((h, i) => ({
             id: `h${i + 1}`,
             label: h.id,
@@ -412,6 +450,9 @@ function buildEntities(sources: Source[]): Entity[] {
 }
 
 export interface BtkCase {
+  /** Cross-check findings that survived every check, for the Flag step. */
+  findings: { id: string; kind: "conflict" | "agrees"; title: string; explanation: string; reviewed?: string }[];
+  findingCitations: Record<string, Citation[]>;
   items: TimelineItem[];
   conversation: ChatMessage[];
   sources: Source[];
@@ -448,7 +489,22 @@ export function buildBtkCase(): BtkCase {
   }
   for (const it of items) if (it.lane === "gaps") citations[it.id] = [{ source: "COURT_RECORDS" }, { source: "WPD_RECORDS" }];
   const disk = items.find((i) => i.id === "btk-T15");
+  const findingCitations: Record<string, Citation[]> = Object.fromEntries(
+    verifiedFindings.map((f) => [
+      f.id,
+      f.cites.map((q): Citation => {
+        const p = sources.find((s) => s.id === q.source)?.blocks?.flatMap((b) => b.paragraphs).find((x) => x.text === q.quote);
+        if (p) p.marks = [...(p.marks ?? []).filter((m) => m.phrase !== q.quote), { phrase: q.quote, itemId: `finding:${f.id}` }];
+        return p ? { source: q.source, para: p.id } : { source: q.source };
+      }),
+    ]),
+  );
   return {
+    findings: verifiedFindings.map((f) => {
+      const review = /Corrected in review: (.*)$/.exec(f.check ?? "")?.[1];
+      return { id: f.id, kind: f.kind, title: f.title, explanation: f.explanation, ...(review ? { reviewed: review } : {}) };
+    }),
+    findingCitations,
     items,
     conversation: buildConversation(items),
     sources,

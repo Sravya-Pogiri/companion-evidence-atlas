@@ -1,7 +1,7 @@
 import { sourceLinks } from "@/lib/case-data";
 import { normalizeText } from "@/lib/evidence/verify";
 import type { VideoId } from "@/lib/media";
-import { ANALYSIS_CLAIMS, BTK, DOC_FINDINGS, ITEMS } from "@/lib/sample-case";
+import { ANALYSIS_CLAIMS, BTK, ITEMS, ROSALES_DOC_FINDINGS } from "@/lib/sample-case";
 import type { Claim } from "@/lib/evidence/types";
 
 // The sources of the public sample case and the text the workspace shows for them.
@@ -298,11 +298,11 @@ function addVerifiedQuotes(claims: Claim[]): void {
     block.paragraphs.push({ id, label: src.id === "complaint" && para ? `¶${para}` : `p.${page}`, text: c.exactQuote });
   }
 }
-if (!BTK) addVerifiedQuotes([...Object.values(ANALYSIS_CLAIMS).flat(), ...DOC_FINDINGS.flatMap((f) => f.claims)]);
+if (!BTK) addVerifiedQuotes([...Object.values(ANALYSIS_CLAIMS).flat(), ...ROSALES_DOC_FINDINGS.flatMap((f) => f.claims)]);
 
 /** Where each document-only finding's claims are, for clickable citation chips. */
-export const DOC_FINDING_CITATIONS: Record<string, Citation[]> = Object.fromEntries(
-  DOC_FINDINGS.map((f) => [
+export const DOC_FINDING_CITATIONS: Record<string, Citation[]> = BTK ? BTK.findingCitations : Object.fromEntries(
+  ROSALES_DOC_FINDINGS.map((f) => [
     f.id,
     f.claims.map((c): Citation => {
       const paragraphs = ROSALES_SOURCES.find((s) => s.id === c.at.source)?.blocks?.flatMap((b) => b.paragraphs) ?? [];

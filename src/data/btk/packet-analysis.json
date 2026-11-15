@@ -1,7 +1,7 @@
 {
  "caseId": "btk",
- "generatedAt": "2026-11-15T03:46:05.219Z",
- "model": "gemini-3.5-flash",
+ "generatedAt": "2026-11-15T04:27:59.717Z",
+ "model": "cached",
  "observations": [
   {
    "id": "B-001",
@@ -1940,6 +1940,182 @@
    }
   ]
  },
+ "findings": [
+  {
+   "id": "x1",
+   "kind": "agrees",
+   "title": "Identification of Dennis Rader via disk properties",
+   "explanation": "Both the State's summary and the RCFL annual report agree that digital forensic examination of a floppy disk sent by the suspect revealed information linking it to Dennis Rader and Christ Lutheran Church.",
+   "cites": [
+    {
+     "source": "STATE",
+     "page": 42,
+     "quote": "After locating the name of “Dennis” and ‘Christ Lutheran Church’ in the properties section of the document, Detective Stone conducted a Google search on the Internet for Christ Lutheran Chuch."
+    },
+    {
+     "source": "RCFL",
+     "page": 13,
+     "quote": "Examination of the disk properties revealed the words “Dennis” and “Christ Lutheran Church,” as well as other words relating to the Park City, Kansas, government."
+    }
+   ],
+   "status": "verified",
+   "check": "bothTrue=true, sameFact=true: Both sources appear to confirm the presence of the name 'Dennis' and 'Christ Lutheran Church' within the disk properties."
+  },
+  {
+   "id": "x2",
+   "kind": "agrees",
+   "title": "Arrest of Dennis Rader",
+   "explanation": "Multiple sources confirm that Dennis Rader was taken into custody on February 25, 2005, while driving home for lunch.",
+   "cites": [
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "quote": "On February 25, 2005, the police announced that they had taken a person of interest into custody. On February 26, 2005, at a nationally televised press conference, the police announced that they had arrested Dennis L. Rader"
+    }
+   ],
+   "status": "dropped",
+   "droppedBecause": "fewer than two sources with a quote found on the page"
+  },
+  {
+   "id": "x3",
+   "kind": "agrees",
+   "title": "Plea and sentencing details",
+   "explanation": "The court records and the judicial opinion agree that Rader entered a guilty plea on June 27, 2005, and was sentenced to 10 consecutive life terms.",
+   "cites": [
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "quote": "On June 27, 2005, Rader pled guilty to 10 counts of first-degree murder. He was sentenced to 10 consecutive life terms."
+    }
+   ],
+   "status": "dropped",
+   "droppedBecause": "fewer than two sources with a quote found on the page"
+  },
+  {
+   "id": "x4",
+   "kind": "agrees",
+   "title": "Police chief not at the arrest scene; a TV report said otherwise",
+   "explanation": "The Kansas Supreme Court opinion records that KSN reported the police chief took part in the arrest, and says he was not, in fact, at the scene. The State's list of the arrest team does not name him. The two sources agree; the difference is with the TV report the opinion describes.",
+   "cites": [
+    {
+     "source": "VALADEZ",
+     "page": 5,
+     "quote": "KSN reported that the police chief himself participated in the arrest, suggesting that the arrest was of unusual importance. The police chief was not, in fact, at the scene of the arrest."
+    },
+    {
+     "source": "STATE",
+     "page": 43,
+     "quote": "The arrest team included Lieutenant Landwehr, Detectives Kelly Otis, Clint Snyder, Dana Gouge, Tim Relph, Officers Scott Moon and Dan Harty of the Wichita Police Department, John Sullivan and Chuck Pritchett of the Federal Bureau of Investigation (FBI), Senior Special Agent Ray Lundin and Special Agent in Charge Larry Thomas of the KBI."
+    }
+   ],
+   "status": "verified",
+   "check": "bothTrue=false, sameFact=false: The sources appear to conflict regarding the police chief's presence, as one source explicitly states he was not at the scene while the other source's list of the arrest team does not include him. Corrected in review: The model called this a conflict between the opinion and the State's filing, but the opinion's quote states the correction; the two quoted sources agree."
+  },
+  {
+   "id": "x5",
+   "kind": "agrees",
+   "title": "DNA analysis of Otero evidence",
+   "explanation": "Both the State's summary and the FBI Laboratory report indicate that DNA analysis was performed on evidence from the Otero case, though the State's summary provides the specific results of the comparison to Rader.",
+   "cites": [
+    {
+     "source": "STATE",
+     "page": 45,
+     "quote": "The DNA profile obtained from the sperm cell fraction of swabs [from the Otero home] is consistent with the profile of Dennis Rader, therefore Dennis Rader cannot be excluded as the source of this profile."
+    },
+    {
+     "source": "VAULT",
+     "page": 110,
+     "quote": "The specimen listed below was examined in the DNA Analysis Unit I: Q184 Envelope postmarked “WICHITA KS 672 PM 5 OCT 2004\""
+    }
+   ],
+   "status": "dropped",
+   "check": "bothTrue=true, sameFact=false: The sources appear to discuss different items of evidence, with one focusing on Otero home swabs and the other on a specific envelope.",
+   "droppedBecause": "second check: the quotes do not state the same fact (The sources appear to discuss different items of evidence, with one focusing on Otero home swabs and the other on a specific envelope.)"
+  }
+ ],
+ "derivedChecks": [
+  {
+   "id": "SCAN_METADATA",
+   "parent": "STATE",
+   "page": 42,
+   "share": 0.92,
+   "status": "passed"
+  },
+  {
+   "id": "SCAN_Q184",
+   "parent": "VAULT",
+   "page": 110,
+   "share": 0.95,
+   "status": "passed"
+  }
+ ],
+ "recordChecks": [
+  {
+   "title": "Filing date of the State’s Summary",
+   "detail": "The filing stamp on PDF page 1 reads “2005 RUG 18 PA 12 29” (OCR; the month reads as AUG), which matches the packet’s filed date 2005-08-18. One mirror’s file name says 2005-07-18; that is the website’s label, not the record.",
+   "source": "STATE",
+   "page": 1,
+   "quote": "2005 RUG 18 PA 12 29"
+  }
+ ],
+ "notAnalyzed": [
+  {
+   "id": "PHOTO_KDOC",
+   "why": "A portrait of a real person. Faces are not compared or identified; the photo's caption gives the name."
+  },
+  {
+   "id": "PHOTO_INTERVIEW",
+   "why": "A published still of a real person. Faces are not compared; the still's provenance is the ABC clip (external)."
+  },
+  {
+   "id": "FBI_HISTORY",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "VIDEO_ABC_INTERVIEW",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "VIDEO_KCTU",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "VIDEO_ABC_EXPLAINER",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "CNN_PRESS",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "CNN_SENTENCING",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "EAGLE_CAPTURE",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "CBS_PHOTOS",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "ABC_FAMILIES",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "OXYGEN_PHOTOS",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "COURT_RECORDS",
+   "why": "External link: no copy in the packet to analyze."
+  },
+  {
+   "id": "WPD_RECORDS",
+   "why": "External link: no copy in the packet to analyze."
+  }
+ ],
  "log": [
   "observations: 23 statements, 33 citations with text, prompt 67k chars",
   "timeline: 24 statements, 32 citations with text, prompt 70k chars",
@@ -1954,10 +2130,22 @@
   "  T24 JUDGMENT p.1: quote not on the page (missing): \"2005 OCT 31 AM 10 50 IN THE EIGHTEENTH JUDICIAL DISTRIČT— DI…\"",
   "  T24 DISPOSITION p.1: quote not on the page (missing): \"2005 JCT 31 AM 10 49 IN THE EIGHTEENTH JUDICIAL DISTRICT DIS…\"",
   "clip: 2.5s people, 7.5s document, 12.5s exterior, 17.5s interior, 22.5s exterior, 27.5s exterior, 32.5s exterior, 37.5s exterior, 42.5s document, 47.5s document",
+  "derived SCAN_METADATA: 92% of its words are on STATE p.42",
+  "derived SCAN_Q184: 95% of its words are on VAULT p.110",
+  "cross-check: 51 pages, prompt 90k chars",
+  "  xcheck 2: quote not on STATE p.43: \"The arrest of Dennis Rader would be made on February 25, 200…\"",
+  "  xcheck 3: quote not on JUDGMENT p.1: \"On this 27th day of June, 2005, this case comes on for plea …\"",
+  "  review applied to \"Police presence at arrest scene\"",
+  "  finding [verified] agrees: Identification of Dennis Rader via disk properties (STATE p.42, RCFL p.13)",
+  "  finding [dropped] agrees: Arrest of Dennis Rader (VALADEZ p.5) - fewer than two sources with a quote found on the page",
+  "  finding [dropped] agrees: Plea and sentencing details (VALADEZ p.5) - fewer than two sources with a quote found on the page",
+  "  finding [verified] agrees: Police chief not at the arrest scene; a TV report said otherwise (VALADEZ p.5, STATE p.43)",
+  "  finding [dropped] agrees: DNA analysis of Otero evidence (STATE p.45, VAULT p.110) - second check: the quotes do not state the same fact (The sources appear to discuss different items of evidence, with one focusing on Otero home swabs and the other on a specific envelope.)",
+  "record check: STATE stamp \"2005 RUG 18 PA 12 29\" vs filed 2005-08-18; mirror names 2005-07-18",
   "observations: 18 verified, 4 partial, 1 unverified",
   "timeline: 22 verified, 1 partial, 1 unverified",
   "agreements across sources: B-004 (STATE, CHURCH); B-016 (PLEA, JUDGMENT); B-017 (JUDGMENT, VALADEZ); B-019 (STATE, VAULT, FBI_CASE_STUDY)",
   "without the disk lead: 9 links remain, 5 drop out",
-  "provider: {\"provider\":\"gemini\",\"requests\":1,\"exhaustedModels\":[],\"requestsByModel\":{\"gemini-3.5-flash\":1}}; 9.4s"
+  "provider: {\"provider\":\"gemini\",\"requests\":0,\"exhaustedModels\":[],\"requestsByModel\":{}}; 0s"
  ]
 }

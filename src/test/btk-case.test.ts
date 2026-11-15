@@ -4,7 +4,12 @@ import { btkTickLabel, buildBtkCase } from "@/lib/cases/btk";
 import type { BtkAnalysis } from "@/lib/cases/btk-types";
 
 const a = analysis as unknown as BtkAnalysis;
-const verified = new Set([...a.observations, ...a.events].flatMap((o) => o.citations.flatMap((c) => c.quotes.map((q) => q.text))));
+// Quotes found on their pages in code: citation checks, cross-check findings, records checks.
+const verified = new Set([
+  ...[...a.observations, ...a.events].flatMap((o) => o.citations.flatMap((c) => c.quotes.map((q) => q.text))),
+  ...(a.findings ?? []).filter((f) => f.status === "verified").flatMap((f) => f.cites.map((c) => c.quote)),
+  ...(a.recordChecks ?? []).map((r) => r.quote),
+]);
 
 describe("the BTK case built from the checked packet analysis", () => {
   const btk = buildBtkCase();
@@ -47,7 +52,7 @@ describe("the BTK case built from the checked packet analysis", () => {
 
   it("uses hedged agent messages and no conclusions of its own", () => {
     for (const m of btk.conversation.filter((x) => x.from === "agent")) {
-      expect(m.text.startsWith("AI finding:")).toBe(true);
+      expect(/^(AI finding|Reviewed finding):/.test(m.text)).toBe(true);
       // Outside quoted court text, no conclusions of its own.
       expect(m.text.replace(/“[^”]*”/g, "")).not.toMatch(/\b(proves?|guilty of|illegal|lied)\b/i);
     }

@@ -286,4 +286,8 @@ export const ITEMS: TimelineItem[] = BTK?.items ?? SEED?.items ?? SAMPLE_ITEMS;
 export const CONVERSATION: ChatMessage[] = BTK?.conversation ?? SEED?.conversation ?? SAMPLE_CONVERSATION;
 export const ANALYSIS_CLAIMS = BTK ? {} : (SEED?.claimsByItem ?? {});
 /** Verified findings between documents only (no video moment), shown in the Flag step. */
-export const DOC_FINDINGS = BTK ? [] : (SEED?.docFindings ?? []);
+export const DOC_FINDINGS: { id: string; kind: "conflict" | "agrees" | "missing"; title: string; explanation: string; reviewed?: string }[] = BTK
+  ? BTK.findings
+  : (SEED?.docFindings ?? []);
+/** The Rosales document-only findings with the claims they rest on. */
+export const ROSALES_DOC_FINDINGS = BTK ? [] : (SEED?.docFindings ?? []);

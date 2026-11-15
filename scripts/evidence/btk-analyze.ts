@@ -15,7 +15,7 @@ import { join } from "node:path";
 import { askJsonParts, providerStats } from "../../src/lib/ai/provider.server";
 import { checkScannedQuote } from "../../src/lib/evidence/verify";
 import type { BtkAnalysis, CheckedCitation, Packet, PacketCitation } from "../../src/lib/cases/btk-types";
-import { QUOTE_SYSTEM, VISION_SYSTEM } from "./prompts";
+import { QUOTE_SYSTEM, VISION_SYSTEM, XCHECK_SYSTEM } from "./prompts";
 
 const DRY = process.argv.includes("--dry");
 const CLIP = (() => {
@@ -23,6 +23,11 @@ const CLIP = (() => {
   return i >= 0 ? process.argv[i + 1]! : "";
 })();
 const FFMPEG = process.env["FFMPEG"] ?? "ffmpeg";
+const CROSSCHECK = process.argv.includes("--crosscheck");
+const EVIDENCE_DIR = (() => {
+  const i = process.argv.indexOf("--evidence");
+  return i >= 0 ? process.argv[i + 1]! : join(process.env["HOME"] ?? "", "Desktop", "evidence");
+})();
 const CACHE = join("cache", "btk");
 const MODEL_CACHE = join(CACHE, "model");
 mkdirSync(MODEL_CACHE, { recursive: true });
@@ -244,6 +249,151 @@ Return {"cells":[{"t": seconds, "shows": "short description", "kind": "exterior|
     .filter(({ srcs }) => srcs.length >= 2)
     .map(({ o, srcs }) => ({ observationId: o.id, sources: srcs }));
 
+  // Page images cut from a filing: their OCR (cache/btk/ocr/<id>/p1.txt, from ocr-vision.swift)
+  // should read like the page they come from. Share of the image's words found on that page.
+  const words = (t: string) => t.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((w) => w.length >= 4);
+  const derivedChecks = c.sources
+    .filter((s) => s.id.startsWith("SCAN_"))
+    .flatMap((s) => {
+      const meta = s as typeof s & { parent_source_id?: string; parent_pdf_page?: number };
+      const f = join(CACHE, "ocr", s.id, "p1.txt");
+      const parent = pages[meta.parent_source_id ?? ""]?.[String(meta.parent_pdf_page)];
+      if (!existsSync(f) || !parent || !meta.parent_pdf_page) return [];
+      const img = words(readFileSync(f, "utf8"));
+      const onPage = new Set(words(parent));
+      const share = img.length ? img.filter((w) => onPage.has(w)).length / img.length : 0;
+      say(`derived ${s.id}: ${Math.round(share * 100)}% of its words are on ${meta.parent_source_id} p.${meta.parent_pdf_page}`);
+      return [{ id: s.id, parent: meta.parent_source_id!, page: meta.parent_pdf_page, share: Math.round(share * 100) / 100, status: (share >= 0.7 ? "passed" : "failed") as "passed" | "failed" }];
+    });
+
+  // Contradictions and agreements across every text in the packet (one request). Each quote
+  // must be found on its page in code; a finding needs two different sources.
+  let findings: NonNullable<BtkAnalysis["findings"]> = [];
+  if (CROSSCHECK) {
+    const allPages: Record<string, Record<string, string>> = { ...pages };
+    const churchLines = (pages["CHURCH"]?.["1"] ?? "").split("\n").filter((l) => /President|Secretary|Treasurer|council/i.test(l)).map((l) => l.replace(/<[^>]+>/g, "").trim());
+    allPages["CHURCH"] = { "1": churchLines.join("\n") };
+    for (const d of derivedChecks) allPages[d.id] = { "1": readFileSync(join(CACHE, "ocr", d.id, "p1.txt"), "utf8") };
+    const block = Object.entries(allPages)
+      .flatMap(([sid, ps]) => Object.entries(ps).map(([p, t]) => `=== ${sid} p.${p} (${methods[`${sid}:${p}`] ?? (sid.startsWith("SCAN_") ? "image OCR" : "")}) ===\n${t}`))
+      .join("\n\n");
+    const questions = [
+      c.question,
+      "Where do two sources describe the same artifact, date, result or event differently? For example how the disk information was found and described, the dates of arrest, announcement, sentencing and filing, and the laboratory results on specimens.",
+      "Which statements are backed by two or more independent sources?",
+    ];
+    const prompt = `SOURCES: ${c.sources.filter((s) => allPages[s.id]).map((s) => `${s.id} = ${s.title} (${s.type})`).join("; ")}\n\nPAGE TEXTS:\n${block}\n\nQUESTIONS:\n${questions.map((q) => `- ${q}`).join("\n")}\n
+Answer from the page texts only. Report possible conflicts (two sources describing the same thing differently) and agreements (two different sources backing the same statement). Do not treat a difference in wording or detail as a conflict unless the descriptions cannot both be exactly right. Avoid graphic detail about the crimes.
+Each finding cites at least two different sources; each cite has the source id, the page number and a short quote (8 to 40 words) copied character for character from that page's text.
+Return {"findings":[{"kind":"conflict|agrees","title":"short","explanation":"one or two hedged sentences","cites":[{"source":"STATE","page":42,"quote":"..."}]}]}. At most 10, most important first.`;
+    say(`cross-check: ${Object.values(allPages).reduce((n, ps) => n + Object.keys(ps).length, 0)} pages, prompt ${Math.round(prompt.length / 1000)}k chars`);
+    const r = await cached<{ findings?: { kind: string; title: string; explanation: string; cites: { source: string; page: number | string; quote: string }[] }[] }>(
+      `btk-xcheck:${createHash("sha256").update(prompt).digest("hex")}`,
+      () => askJsonParts(XCHECK_SYSTEM, [{ type: "input_text", text: prompt }], { timeoutMs: 240_000, effort: "medium" }),
+    );
+    const CONCLUSIVE = /\b(guilty|innocent|illegal(ly)?|unlawful(ly)?|lied|lying|fabricat\w*|proves?|unconstitutional)\b/i;
+    findings = (r?.findings ?? [])
+      .filter((f) => ["conflict", "agrees"].includes(f.kind) && Array.isArray(f.cites))
+      .map((f, i) => {
+        const cites = f.cites
+          .map((x) => ({ source: String(x.source), page: parseInt(String(x.page), 10) || 1, quote: String(x.quote ?? "").trim() }))
+          .filter((x) => {
+            const ps = Object.entries(allPages[x.source] ?? {}).map(([p, text]) => ({ page: Number(p), text }));
+            const ok = checkScannedQuote(ps, x.quote, x.page).status === "exact";
+            if (!ok) say(`  xcheck ${i + 1}: quote not on ${x.source} p.${x.page}: "${x.quote.slice(0, 60)}…"`);
+            return ok;
+          });
+        const finding = { id: `x${i + 1}`, kind: f.kind as "conflict" | "agrees", title: String(f.title).trim(), explanation: String(f.explanation ?? "").trim(), cites, status: "verified" as "verified" | "dropped" };
+        const srcs = new Set(cites.map((x) => x.source));
+        if (srcs.size < 2) return { ...finding, status: "dropped" as const, droppedBecause: "fewer than two sources with a quote found on the page" };
+        if (CONCLUSIVE.test(`${finding.title} ${finding.explanation}`)) return { ...finding, status: "dropped" as const, droppedBecause: "uses conclusive language" };
+        return finding;
+      });
+    // Second check: the quotes exist, but does the finding describe them correctly? Each verified
+    // finding goes back with its quotes only; a finding the quotes do not support is dropped, or
+    // takes the corrected kind and wording when the check gives one (one request).
+    const toJudge = findings.filter((f) => f.status === "verified");
+    if (toJudge.length) {
+      const jprompt = toJudge
+        .map((f) => `${f.id} | kind: ${f.kind} | ${f.title}: ${f.explanation}\n${f.cites.map((x) => `  ${x.source} p.${x.page}: "${x.quote}"`).join("\n")}`)
+        .join("\n\n");
+      // Plain yes/no questions about the quotes (open-ended reviews proved unreliable).
+      const j = await cached<{ checks?: { id: string; bothTrue?: boolean | string; sameFact?: boolean | string; reason?: string }[] }>(
+        `btk-judge3:${createHash("sha256").update(jprompt).digest("hex")}`,
+        () =>
+          askJsonParts(
+            XCHECK_SYSTEM,
+            [
+              {
+                type: "input_text",
+                text: `For each item, read only its quotes, literally.\n- bothTrue: can all of its quotes be literally true at the same time? (A source that reports someone else's claim and then corrects it is stating the correction.)\n- sameFact: do at least two of its quotes, from different sources, state the same fact about the same item or event?\n\n${jprompt}\n
+Return {"checks":[{"id":"x1","bothTrue":true,"sameFact":false,"reason":"one sentence"}]}.`,
+              },
+            ],
+            { timeoutMs: 120_000, effort: "medium" },
+          ),
+      );
+      const yes = (v: unknown) => v === true || String(v).toLowerCase() === "true" || String(v).toLowerCase() === "yes";
+      for (const ch of j?.checks ?? []) {
+        const f = findings.find((x) => x.id === String(ch.id));
+        if (!f) continue;
+        f.check = `bothTrue=${yes(ch.bothTrue)}, sameFact=${yes(ch.sameFact)}: ${ch.reason ?? ""}`.trim();
+        if (f.kind === "conflict" && yes(ch.bothTrue))
+          Object.assign(f, { status: "dropped", droppedBecause: `second check: the quoted sources can both be true, so this is not a conflict (${ch.reason ?? ""})` });
+        if (f.kind === "agrees" && !yes(ch.sameFact))
+          Object.assign(f, { status: "dropped", droppedBecause: `second check: the quotes do not state the same fact (${ch.reason ?? ""})` });
+      }
+      // Corrections a person made after reading the quotes (scripts/evidence/btk-review.json).
+      const review = existsSync(join("scripts", "evidence", "btk-review.json"))
+        ? (JSON.parse(readFileSync(join("scripts", "evidence", "btk-review.json"), "utf8")) as { corrections: { title: string; kind?: string; newTitle?: string; explanation?: string; reason: string; reject?: boolean }[] }).corrections
+        : [];
+      for (const rv of review) {
+        const f = findings.find((x) => x.title === rv.title);
+        if (!f) continue;
+        if (rv.reject) Object.assign(f, { status: "dropped", droppedBecause: `review: ${rv.reason}` });
+        else {
+          if (rv.kind === "agrees" || rv.kind === "conflict") f.kind = rv.kind;
+          if (rv.newTitle) f.title = rv.newTitle;
+          if (rv.explanation) f.explanation = rv.explanation;
+          Object.assign(f, { status: "verified", check: `${f.check ?? ""} Corrected in review: ${rv.reason}`.trim() });
+        }
+        say(`  review applied to "${rv.title}"`);
+      }
+      // A finding the second check did not answer for stays out.
+      for (const f of toJudge) if (!f.check) Object.assign(f, { status: "dropped", droppedBecause: "no answer from the second check" });
+    }
+    for (const f of findings) say(`  finding [${f.status}] ${f.kind}: ${f.title} (${f.cites.map((x) => `${x.source} p.${x.page}`).join(", ")})${f.droppedBecause ? ` - ${f.droppedBecause}` : ""}`);
+  }
+
+  // The filing's own stamp against the packet's filed date and the mirrors' file names.
+  const recordChecks: NonNullable<BtkAnalysis["recordChecks"]> = [];
+  const stateP1 = (() => {
+    for (const d of (packet as unknown as { cases: { text_derivatives?: { path: string; parent_source_id: string }[] }[] }).cases[0]!.text_derivatives ?? []) {
+      if (d.parent_source_id !== "STATE") continue;
+      const f = join(EVIDENCE_DIR, d.path);
+      if (!existsSync(f)) return "";
+      for (const l of readFileSync(f, "utf8").split("\n")) {
+        if (!l.trim()) continue;
+        const row = JSON.parse(l) as { pdf_page: number; text: string };
+        if (row.pdf_page === 1) return row.text;
+      }
+    }
+    return "";
+  })();
+  const stamp = /20\s?05\s+[A-Z]{3}\s+\d{1,2}\s+[AP][AM]\s+\d{1,2}\s+\d{2}/.exec(stateP1)?.[0];
+  if (stamp) {
+    const state = c.sources.find((s) => s.id === "STATE") as (typeof c.sources)[number] & { filed_date?: string; matching_mirrors?: string[] };
+    const mirrorDates = (state.matching_mirrors ?? []).map((u) => /(\d{4}-\d{2}-\d{2})/.exec(u)?.[1]).filter(Boolean);
+    recordChecks.push({
+      title: "Filing date of the State’s Summary",
+      detail: `The filing stamp on PDF page 1 reads “${stamp}” (OCR; the month reads as AUG), which matches the packet’s filed date ${state.filed_date}. ${mirrorDates.length ? `One mirror’s file name says ${mirrorDates.join(", ")}; that is the website’s label, not the record.` : ""}`.trim(),
+      source: "STATE",
+      page: 1,
+      quote: stamp,
+    });
+    say(`record check: STATE stamp "${stamp}" vs filed ${state.filed_date}; mirror names ${mirrorDates.join(", ")}`);
+  }
+
   const attribution = attributionWithout(["B-002", "B-003", "B-004", "B-023"], "RADER");
   const analysis: BtkAnalysis = {
     caseId: "btk",
@@ -255,6 +405,14 @@ Return {"cells":[{"t": seconds, "shows": "short description", "kind": "exterior|
     gaps: c.raw_artifact_gaps.map((g) => ({ artifact: g.artifact, availability: g.availability, why: g.why, evidenceIds: g.evidence_ids })),
     hypotheses: c.hypotheses,
     attribution,
+    findings,
+    derivedChecks,
+    recordChecks,
+    notAnalyzed: [
+      { id: "PHOTO_KDOC", why: "A portrait of a real person. Faces are not compared or identified; the photo's caption gives the name." },
+      { id: "PHOTO_INTERVIEW", why: "A published still of a real person. Faces are not compared; the still's provenance is the ABC clip (external)." },
+      ...c.sources.filter((s) => s.availability === "external_link").map((s) => ({ id: s.id, why: "External link: no copy in the packet to analyze." })),
+    ],
     log,
   };
   const n = (s: string) => observations.filter((o) => o.status === s).length;

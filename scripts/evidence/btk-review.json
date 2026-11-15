@@ -1,0 +1,12 @@
+{
+  "note": "Corrections a person made after reading a finding's quotes. Applied by btk-analyze.ts after the model's checks, matched by title. Each one is shown in the app with its reason.",
+  "corrections": [
+    {
+      "title": "Police presence at arrest scene",
+      "kind": "agrees",
+      "newTitle": "Police chief not at the arrest scene; a TV report said otherwise",
+      "explanation": "The Kansas Supreme Court opinion records that KSN reported the police chief took part in the arrest, and says he was not, in fact, at the scene. The State's list of the arrest team does not name him. The two sources agree; the difference is with the TV report the opinion describes.",
+      "reason": "The model called this a conflict between the opinion and the State's filing, but the opinion's quote states the correction; the two quoted sources agree."
+    }
+  ]
+}

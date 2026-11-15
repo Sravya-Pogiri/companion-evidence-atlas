@@ -237,7 +237,14 @@ function FindingsView({
             <span className="text-[13px] text-muted-foreground">No video time</span>
           </div>
           <h3 className="mt-2 font-serif text-[24px] leading-tight">{f.title}</h3>
-          <p className="mt-2 text-[15px] leading-relaxed text-[#38425c]">AI finding: {f.explanation}</p>
+          <p className="mt-2 text-[15px] leading-relaxed text-[#38425c]">
+            {f.reviewed ? "Reviewed finding" : "AI finding"}: {f.explanation}
+          </p>
+          {f.reviewed && (
+            <p className="mt-2 border-l-2 border-border pl-3 text-[13px] text-muted-foreground">
+              Corrected by a person after reading the quotes: {f.reviewed}
+            </p>
+          )}
           <Citations cites={DOC_FINDING_CITATIONS[f.id] ?? []} className="mt-3" />
         </article>
       ))}

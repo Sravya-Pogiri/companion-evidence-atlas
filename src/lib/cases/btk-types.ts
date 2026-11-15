@@ -103,5 +103,23 @@ export interface BtkAnalysis {
     streams: { from: string; type: string; to: string; evidenceIds: string[] }[];
     lost: { from: string; type: string; to: string; evidenceIds: string[] }[];
   };
+  /** Contradictions and agreements across the evidence, each quote found on its page in code. */
+  findings?: {
+    id: string;
+    kind: "conflict" | "agrees";
+    title: string;
+    explanation: string;
+    cites: { source: string; page: number; quote: string }[];
+    status: "verified" | "dropped";
+    droppedBecause?: string;
+    /** What the second check (quotes only, read literally) said. */
+    check?: string;
+  }[];
+  /** Page images cut from a filing: does their text match the page they come from? */
+  derivedChecks?: { id: string; parent: string; page: number; share: number; status: "passed" | "failed" }[];
+  /** Checks of the records themselves (dates, stamps, file names), with what was found. */
+  recordChecks?: { title: string; detail: string; source: string; page: number; quote: string }[];
+  /** Evidence not analyzed, and why. */
+  notAnalyzed?: { id: string; why: string }[];
   log: string[];
 }
