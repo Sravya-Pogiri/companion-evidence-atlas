@@ -10,7 +10,7 @@
 ## Deploy
 From repository root:
 ```sh
-docker build -t caselens-investigator services/investigator
+docker build -t lexora-investigator services/investigator
 ```
 Deploy this container on a Node/container host with HTTPS, port 8787, a persistent volume mounted at `/app/runs`, and streaming HTTP enabled. Do not impose short response timeouts: tool/model investigations may take several minutes.
 

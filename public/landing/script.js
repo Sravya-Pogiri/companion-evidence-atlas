@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CaseLens — script.js
+   Lexora — script.js
    Modules: data → helpers → nav → reveal/counters → cases + modal → workflow → calculator
    ========================================================================== */
 (() => {
@@ -96,7 +96,7 @@
             flag: "<b>Potential inconsistency: sighting conditions.</b> The account of the later recognition conflicts with independent signal-timing information."
           }
         ],
-        note: "In a real deployment, each finding would cite a transcript page or a video timestamp. Here, the citations point to the Registry's public summary because CaseLens has not processed the original records."
+        note: "In a real deployment, each finding would cite a transcript page or a video timestamp. Here, the citations point to the Registry's public summary because Lexora has not processed the original records."
       },
       sources: [SRC.nreBenitez]
     },
@@ -160,7 +160,7 @@
           { t: "Defense alibi", v: "Many witnesses place him at a church fish fry at the same time.", flag: true },
           { t: "Recordings", v: "Taped statements indicate pressure on the State's only eyewitness.", flag: true }
         ],
-        flag: "<b>Conflicting accounts for the same period.</b> The sources cannot all be accurate. CaseLens would group them on one timeline and flag the conflict for attorney review. It would not resolve the conflict itself.",
+        flag: "<b>Conflicting accounts for the same period.</b> The sources cannot all be accurate. Lexora would group them on one timeline and flag the conflict for attorney review. It would not resolve the conflict itself.",
         checklistTitle: "Illustrative evidence-request checklist",
         checklist: [
           "All recorded interviews with each prosecution witness",
@@ -245,7 +245,7 @@
           "Request for independent re-examination by a qualified expert",
           "Request for funding to retain a qualified defense expert"
         ],
-        note: "CaseLens does not evaluate forensic science itself. It is designed to put conflicting conclusions side by side, link each to its source, and prompt the right verification steps for attorneys and qualified experts."
+        note: "Lexora does not evaluate forensic science itself. It is designed to put conflicting conclusions side by side, link each to its source, and prompt the right verification steps for attorneys and qualified experts."
       },
       sources: [SRC.ejiHinton, SRC.scotusHinton, SRC.nre]
     }
@@ -426,7 +426,7 @@
     { id: "timeline", label: "Timeline" },
     { id: "evidence", label: "Evidence" },
     { id: "questions", label: "Investigative Questions" },
-    { id: "demo", label: "CaseLens Demo" },
+    { id: "demo", label: "Lexora Demo" },
     { id: "sources", label: "Sources" }
   ];
 
@@ -542,7 +542,7 @@
         <dl class="mp-grid">${c.facts.map(([k, v]) => `<div class="mp-fact"><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
         <p class="mp-sub">Key investigative issues</p>
         <ul class="mp-issues">${c.issues.map(i => `<li>${icon("search")}<span>${i}</span></li>`).join("")}</ul>
-        <p class="mp-sub">CaseLens demo capability</p>
+        <p class="mp-sub">Lexora demo capability</p>
         <p class="mp-lede">${c.capability}. <span class="tag tag--illus">Illustrative</span></p>`,
 
       timeline: (c) => `
@@ -552,7 +552,7 @@
 
       evidence: (c) => `
         <div class="mp-head"><h3>Evidence categories</h3><span class="tag tag--fact">Documented in public sources</span></div>
-        <p class="mp-lede" style="margin-bottom:20px">These are the kinds of evidence the public sources describe for this case. CaseLens has not accessed or processed any original evidence files.</p>
+        <p class="mp-lede" style="margin-bottom:20px">These are the kinds of evidence the public sources describe for this case. Lexora has not accessed or processed any original evidence files.</p>
         <div class="ev-grid">${c.evidence.map(ev => `<div class="ev">${icon(ev.icon)}<div><h4>${ev.name}</h4><p>${ev.desc}</p></div></div>`).join("")}</div>`,
 
       questions: (c) => `
@@ -577,7 +577,7 @@
         return `
           <div class="mp-head"><h3>${d.title}</h3><span class="tag tag--illus">Illustrative demonstration</span></div>
           <div class="demo">
-            <p class="demo__intro">This is a mock-up of how CaseLens is designed to present findings, built only from the public case summary. It is not output from processing the original evidence.</p>
+            <p class="demo__intro">This is a mock-up of how Lexora is designed to present findings, built only from the public case summary. It is not output from processing the original evidence.</p>
             <p class="demo__cap">Capability: ${c.capability}</p>
             ${pairs}${rows}${list}
           </div>

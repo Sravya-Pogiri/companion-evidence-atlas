@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "caselens-investigator",
+      "name": "lexora-investigator",
       "dependencies": {
         "@ai-sdk/openai": "^4.0.118",
         "@langchain/core": "^1.4.1",
