@@ -31,7 +31,7 @@ use the editor.
 
 ## Lexora architecture
 - Product name is `APP_NAME` in src/lib/config.ts.
-- Landing page at `/` (src/routes/index.tsx, component in src/components/landing, outside the workspace layout).
+- Landing page: `/` redirects to the static site in public/landing (plain HTML, CSS and JS with a 3D casebook, from the teammates' repo gnana35/HackPrincetonSpring26, branch lexora-website). Its buttons lead into the app at `/live`. It is branded CaseLens; the app is branded Lexora. The earlier React landing page (src/components/landing) is no longer routed. `casebook.js` is a built file; its source and build script are in the original repo.
 - Workspace pages under the pathless `_workspace` layout (dark theme, top nav): Live Case `/live` (`/live?demo=1` replays the demo), Case Analysis `/analysis`, Review `/review`, Handoff `/handoff`. Every page shows "Findings are suggestions. Confirm before use." (Live Case in its timeline card, Case Analysis in its sidebar and status bar). Do not add pages without asking.
 - Case Analysis uses the same dark and gold palette and the same text scale (18px base, Playfair Display serif) as the other pages. It lives in src/components/case-analysis with its own stylesheet (case-analysis.css, scoped to `.lx-analysis`, loaded by its route only), which redefines the theme tokens and a few `--lx-*` shades. Use those tokens, not hard-coded colors. Do not move its look into global CSS, the root layout or the shared nav. Its Drafts step uses the same review decisions as Review and Handoff.
 - Source text and citations live in src/lib/sources.ts. Document text is copied from the public PDFs; the case summary is a labeled paraphrase. Highlights must match the source text exactly (src/test/sources.test.ts checks this).

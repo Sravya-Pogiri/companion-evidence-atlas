@@ -1,12 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { LandingPage } from "@/components/landing/landing-page";
-import { seo } from "@/lib/seo";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
+// The landing page is a static site in public/landing (plain HTML, CSS and JS, with a 3D
+// casebook). Its buttons lead into the app at /live. The React landing page in
+// src/components/landing is no longer routed.
 export const Route = createFileRoute("/")({
-  head: () =>
-    seo(
-      "Evidence timelines for public defenders",
-      "Text evidence to one number. Lexora puts every photo, page and voice note on a live timeline, linked to its source.",
-    ),
-  component: LandingPage,
+  beforeLoad: () => {
+    throw redirect({ href: "/landing/index.html" });
+  },
 });
