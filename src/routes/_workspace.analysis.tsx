@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CaseAnalysis } from "@/components/case-analysis/workspace-layout";
+import { CaseFile } from "@/components/cases/case-file";
+import { useActiveCase } from "@/lib/case-store";
 import analysisCss from "@/components/case-analysis/case-analysis.css?url";
 import { seo } from "@/lib/seo";
 
@@ -12,5 +14,11 @@ export const Route = createFileRoute("/_workspace/analysis")({
     ),
     links: [{ rel: "stylesheet", href: analysisCss }],
   }),
-  component: CaseAnalysis,
+  component: AnalysisPage,
 });
+
+/** Case Analysis is built around the Rosales documents and footage. Other cases get their case file. */
+function AnalysisPage() {
+  const meta = useActiveCase();
+  return meta.kind === "dated" ? <CaseFile caseId={meta.id} /> : <CaseAnalysis />;
+}

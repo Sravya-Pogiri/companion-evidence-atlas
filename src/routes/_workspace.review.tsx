@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Bell, CalendarClock, ExternalLink } from "lucide-react";
 import { PageHeader } from "@/components/caselens/shared";
-import { setItemDue, useCase, useFiledItems } from "@/lib/case-store";
+import { setItemDue, useActiveCase, useCase, useFiledItems } from "@/lib/case-store";
 import {
   dueInfo,
   effectiveDue,
@@ -23,7 +23,6 @@ import {
   DECISION_LABEL,
   FLAG_LABEL,
   LANES,
-  SAMPLE_CASE,
   findItem,
   formatRange,
   reviewQueue,
@@ -79,9 +78,12 @@ function Review() {
   const decisions = useDecisions();
   const items = useFiledItems();
   const { mode } = useCase();
+  const activeCase = useActiveCase();
+  const isFootage = activeCase.kind === "footage";
   const now = useNow();
   const calendar = useCaseCalendar();
-  const caseDueAt = calendar?.next?.dueAt ?? null;
+  // The calendar feed is read for the Rosales case only.
+  const caseDueAt = isFootage ? (calendar?.next?.dueAt ?? null) : null;
 
   const flagged = reviewQueue(items);
   const queue = prioritize(flagged, decisions, caseDueAt);
@@ -97,7 +99,7 @@ function Review() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow={SAMPLE_CASE.label}
+        eyebrow={`${activeCase.name} · ${activeCase.label}`}
         title="Review"
         desc="Nothing is filed for an attorney until a person confirms it. These are suggestions, not conclusions."
       >
@@ -111,7 +113,7 @@ function Review() {
         </div>
       </PageHeader>
 
-      <DeadlineBanner calendar={calendar} now={now} mode={mode} />
+      {isFootage && <DeadlineBanner calendar={calendar} now={now} mode={mode} />}
 
       <ul className="space-y-4">
         {queue.map((item) => (

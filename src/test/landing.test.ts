@@ -22,6 +22,20 @@ describe("static landing page", () => {
     expect(html).toContain("Try the live case");
   });
 
+  it("opens each case in the app: on its card and in its popup", () => {
+    const script = readFileSync(`${dir}/script.js`, "utf8");
+    expect(script).toContain("/live?case=${c.id}");
+    expect(html).toContain('id="modalOpenApp"');
+    expect(script).toContain("modalOpenApp");
+  });
+
+  it("only links to cases the app knows", () => {
+    const script = readFileSync(`${dir}/script.js`, "utf8");
+    for (const id of ["benitez", "mcmillian", "hinton"]) {
+      expect(script).toContain(`id: "${id}"`);
+    }
+  });
+
   it("loads no outside scripts, only its own", () => {
     const scripts = [...html.matchAll(/<script[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]);
     expect(scripts.every((s) => !/^https?:/.test(s ?? ""))).toBe(true);

@@ -406,6 +406,7 @@
           <div class="cb-card__actions">
             <button class="btn btn--primary btn--sm" data-open-case="${i}" aria-haspopup="dialog">View Case ${icon("arrow")}</button>
             ${ext(c.primarySource.url, "Original source", "cb-card__src")}
+            <a class="cb-card__src cb-card__app" href="/live?case=${c.id}">Open in the app ${icon("arrow")}</a>
           </div>
         </div>
         <span class="cb-card__illus">Illustrative photo</span>
@@ -491,6 +492,7 @@
       $("#modalEyebrow").textContent = `Case 0${this.index + 1} of 0${ARCHIVE.length} · ${c.category}`;
       $("#modalTitle").textContent = c.name;
       $("#modalMeta").textContent = `${c.location} · ${c.type}`;
+      $("#modalOpenApp").href = `/live?case=${c.id}`;
       this.tabsEl.innerHTML = TABS.map(t => `
         <button role="tab" class="modal-tab" id="mtab-${t.id}" data-tab="${t.id}"
           aria-controls="mpanel" aria-selected="${t.id === this.tab}" tabindex="${t.id === this.tab ? 0 : -1}">${t.label}</button>`).join("");

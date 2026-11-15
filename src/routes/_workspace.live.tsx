@@ -13,7 +13,8 @@ import { ChatPanel } from "@/components/caselens/chat-panel";
 import { ConflictDialog } from "@/components/caselens/conflict-dialog";
 import { LANE_ICON, PageThumb, PlayableStill } from "@/components/caselens/evidence-media";
 import { Timeline } from "@/components/caselens/timeline";
-import { getCase, useFiledItems } from "@/lib/case-store";
+import { DatedCaseLive } from "@/components/cases/dated-case-live";
+import { getCase, useActiveCase, useFiledItems } from "@/lib/case-store";
 import { startDemo } from "@/lib/demo";
 import { mediaFor, nearestFrame } from "@/lib/media";
 import { setNote, useNotes } from "@/lib/notes-store";
@@ -33,15 +34,23 @@ import { seo } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_workspace/live")({
-  validateSearch: (search: Record<string, unknown>): { demo?: number } =>
-    [1, "1", true].includes(search["demo"] as never) ? { demo: 1 } : {},
+  // Keeps ?demo=1 (replay the demo) and ?case=<id> (which case to open).
+  validateSearch: (search: Record<string, unknown>): { demo?: number; case?: string } => ({
+    ...([1, "1", true].includes(search["demo"] as never) ? { demo: 1 } : {}),
+    ...(typeof search["case"] === "string" ? { case: search["case"] } : {}),
+  }),
   head: () =>
     seo("Live Case", "Text evidence to one number and watch it land on a live case timeline."),
-  component: LiveCase,
+  component: LivePage,
 });
 
 /** The moment the sample case opens on: the possible conflict. */
 const CONFLICT_MOMENT = 45;
+
+function LivePage() {
+  const meta = useActiveCase();
+  return meta.kind === "dated" ? <DatedCaseLive caseId={meta.id} /> : <LiveCase />;
+}
 
 function LiveCase() {
   const { demo } = Route.useSearch();

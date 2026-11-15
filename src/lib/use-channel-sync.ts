@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { getChannelState } from "@/lib/channel.functions";
 import { getCase, setCase } from "@/lib/case-store";
+import { DEFAULT_CASE_ID } from "@/lib/cases";
 import { syncDecisions } from "@/lib/deadlines.functions";
 import { getDecisions, subscribe } from "@/lib/review-store";
 
@@ -21,13 +22,18 @@ export function useChannelSync(): void {
         const s = await getChannelState();
         if (stopped) return;
         if (s.mode === "photon") {
-          setCase({
-            mode: "photon",
-            items: s.items,
-            messages: s.messages,
-            pendingId: s.pendingId,
-            busy: s.busy,
-          });
+          // The server holds the Rosales case, so only mirror it while that case is on screen.
+          if (getCase().caseId === DEFAULT_CASE_ID) {
+            setCase({
+              mode: "photon",
+              items: s.items,
+              messages: s.messages,
+              pendingId: s.pendingId,
+              busy: s.busy,
+            });
+          } else if (getCase().mode !== "photon") {
+            setCase({ mode: "photon" });
+          }
           again = true;
         } else if (getCase().mode !== "simulated") {
           setCase({ mode: "simulated" });

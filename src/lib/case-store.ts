@@ -1,6 +1,7 @@
 import { useMemo, useSyncExternalStore } from "react";
 import type { PipelineState } from "@/lib/agent/pipeline";
 import { setItemDueOnServer } from "@/lib/deadlines.functions";
+import { CASE_LIST, DEFAULT_CASE_ID, caseData, caseMeta, type CaseMeta } from "@/lib/cases";
 import { CONVERSATION, ITEMS, type ChatMessage, type TimelineItem } from "@/lib/sample-case";
 
 // The live case: timeline items and the conversation. It starts from the sample data and
@@ -13,6 +14,8 @@ export interface CaseState extends PipelineState {
   busy: boolean;
   /** Who runs the conversation: this page (simulated) or the server (Photon). */
   mode: "simulated" | "photon";
+  /** Which case the app is showing. */
+  caseId: string;
 }
 
 const INITIAL: CaseState = {
@@ -21,6 +24,7 @@ const INITIAL: CaseState = {
   pendingId: null,
   busy: false,
   mode: "simulated",
+  caseId: DEFAULT_CASE_ID,
 };
 let state: CaseState = INITIAL;
 const listeners = new Set<() => void>();
@@ -62,12 +66,21 @@ export async function setItemDue(id: string, dueAt: string | null): Promise<void
       return dueAt ? { ...rest, dueAt } : rest;
     }),
   });
-  if (state.mode !== "photon") return;
+  // The server holds only the Rosales case (reminders are sent for it).
+  if (state.mode !== "photon" || state.caseId !== DEFAULT_CASE_ID) return;
   try {
     await setItemDueOnServer({ data: { id, dueAt } });
   } catch {
     // The next poll shows what the server really has.
   }
+}
+
+/** Show a different case: its items and sample conversation replace what is on screen. */
+export function selectCase(id: string): void {
+  const meta = caseMeta(id);
+  if (meta.id === state.caseId) return;
+  const { items, messages } = caseData(meta.id);
+  setCase({ caseId: meta.id, items, messages, pendingId: null, pendingFor: null, busy: false });
 }
 
 export function resetCase(): void {
@@ -78,6 +91,13 @@ export function resetCase(): void {
 export function useCase(): CaseState {
   return useSyncExternalStore(subscribeCase, getCase, () => INITIAL);
 }
+
+/** The case on screen: its name, where it is, and whether it is the footage case or a dated one. */
+export function useActiveCase(): CaseMeta {
+  return caseMeta(useCase().caseId);
+}
+
+export { CASE_LIST };
 
 /** Timeline, Review, and Handoff only show items a person has filed. */
 export function useFiledItems(): TimelineItem[] {
