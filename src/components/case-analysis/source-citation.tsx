@@ -24,7 +24,7 @@ export function SourceCitation({ c, className }: { c: Citation; className?: stri
       <span
         title={title}
         className={cn(
-          "inline-flex h-6 items-center rounded-md border border-border px-1.5 font-mono text-[13px] text-muted-foreground",
+          "inline-flex h-6 items-center rounded-md border border-border px-1.5 font-mono text-[12px] text-muted-foreground",
           className,
         )}
       >
@@ -41,10 +41,10 @@ export function SourceCitation({ c, className }: { c: Citation; className?: stri
         openCitation(c);
       }}
       className={cn(
-        "inline-flex h-6 items-center rounded-md border px-1.5 font-mono text-[13px] transition-colors",
+        "inline-flex h-6 items-center rounded-md border px-1.5 font-mono text-[12px] transition-colors",
         missing
-          ? "border-[var(--lx-amber-border)] bg-[var(--lx-amber-bg)] text-[color:var(--lx-amber-text)] hover:bg-[var(--lx-amber-bg-hover)]"
-          : "border-[var(--lx-link-border)] bg-card text-primary hover:border-primary hover:bg-accent",
+          ? "border-[#e6c98c] bg-[#fbf3e1] text-[#8a5a12] hover:bg-[#f7ead0]"
+          : "border-[#c4d1fb] bg-white text-primary hover:border-primary hover:bg-accent",
         active && "border-primary bg-accent",
         className,
       )}

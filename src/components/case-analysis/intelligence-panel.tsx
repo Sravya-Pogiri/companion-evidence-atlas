@@ -46,10 +46,12 @@ export function IntelligencePanel() {
           view === "messages" && "min-h-0 flex-1 pb-5",
         )}
       >
-        <p className="font-mono text-[13px] uppercase tracking-[0.1em] text-primary">
+        <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-primary">
           {head.stage}
         </p>
-        <h2 className="mt-1.5 font-serif text-3xl leading-[1.1] text-foreground">{head.title}</h2>
+        <h2 className="mt-1.5 font-serif text-[30px] leading-[1.1] text-foreground">
+          {head.title}
+        </h2>
         <div className={cn("mt-6", view === "messages" && "flex min-h-0 flex-1 flex-col")}>
           {view === "ingest" && <IngestView />}
           {view === "entities" && <EntitiesView />}
@@ -86,11 +88,11 @@ function IngestView() {
 
   return (
     <div className="space-y-6">
-      <p className="text-base text-muted-foreground">
+      <p className="text-[15px] text-muted-foreground">
         {available.length + attachments.length} indexed · {missing.length} referenced but not
         received
       </p>
-      <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+      <ul className="divide-y divide-border rounded-xl border border-border bg-white">
         {[...available, ...missing].map((s) => (
           <li key={s.id}>
             <button
@@ -99,13 +101,13 @@ function IngestView() {
               className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-muted/50"
             >
               <span className="min-w-0 flex-1">
-                <span className="block font-serif text-xl leading-tight">{s.title}</span>
-                <span className="text-sm text-muted-foreground">{kind[s.kind]}</span>
+                <span className="block font-serif text-[20px] leading-tight">{s.title}</span>
+                <span className="text-[13px] text-muted-foreground">{kind[s.kind]}</span>
               </span>
               {s.available ? (
-                <span className="text-sm text-corroborate">Indexed</span>
+                <span className="text-[13px] text-corroborate">Indexed</span>
               ) : (
-                <span className="rounded border border-[var(--lx-amber-border)] bg-[var(--lx-amber-bg)] px-1.5 text-[13px] text-[color:var(--lx-amber-text)]">
+                <span className="rounded border border-[#e6c98c] bg-[#fbf3e1] px-1.5 text-[12px] text-[#8a5a12]">
                   Referenced, not received
                 </span>
               )}
@@ -120,35 +122,35 @@ function IngestView() {
               className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-muted/50"
             >
               <span className="min-w-0 flex-1">
-                <span className="block truncate font-serif text-xl leading-tight">
+                <span className="block truncate font-serif text-[20px] leading-tight">
                   {i.sourceLabel}
                 </span>
-                <span className="text-sm text-muted-foreground">Text message attachment</span>
+                <span className="text-[13px] text-muted-foreground">Text message attachment</span>
               </span>
-              <span className="text-sm text-corroborate">Indexed</span>
+              <span className="text-[13px] text-corroborate">Indexed</span>
             </button>
           </li>
         ))}
       </ul>
 
-      <div className="rounded-xl border border-border bg-card p-4">
-        <p className="font-mono text-[13px] uppercase tracking-[0.08em] text-muted-foreground">
+      <div className="rounded-xl border border-border bg-white p-4">
+        <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-muted-foreground">
           Message intake
         </p>
-        <p className="mt-2 text-base leading-relaxed">
+        <p className="mt-2 text-[15px] leading-relaxed">
           The team texts photos, pages and voice notes to{" "}
           <span className="font-mono">{CASE_LINE}</span>
           {mode === "photon"
             ? " over iMessage, through Photon."
             : ". This demo runs a simulated line in the page."}
         </p>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-[13px] text-muted-foreground">
           {busy ? "Reading a new message…" : `${messages.length} messages on the line.`}
         </p>
         <button
           type="button"
           onClick={() => setView("messages")}
-          className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-md border border-border bg-card px-3 text-sm font-medium hover:bg-muted"
+          className="mt-3 inline-flex h-8 items-center gap-1.5 rounded-md border border-border bg-white px-3 text-[13px] font-medium hover:bg-muted"
         >
           <MessageSquare className="size-3.5" /> Open messages
         </button>
@@ -162,7 +164,7 @@ const TYPES: EntityType[] = ["Person", "Place", "Date", "Organization"];
 function EntitiesView() {
   return (
     <div className="space-y-6">
-      <p className="text-[15px] leading-relaxed text-muted-foreground">
+      <p className="text-[14px] leading-relaxed text-muted-foreground">
         A small index of names that appear in the sample documents, prepared by hand. Mentions are
         marked in the open document while this step is selected.
       </p>
@@ -171,7 +173,7 @@ function EntitiesView() {
         if (list.length === 0) return null;
         return (
           <section key={type}>
-            <p className="mb-2 font-mono text-[13px] uppercase tracking-[0.08em] text-muted-foreground">
+            <p className="mb-2 font-mono text-[12px] uppercase tracking-[0.08em] text-muted-foreground">
               {type === "Person"
                 ? "People"
                 : type === "Place"
@@ -180,12 +182,12 @@ function EntitiesView() {
                     ? "Dates"
                     : "Organizations"}
             </p>
-            <ul className="divide-y divide-border rounded-xl border border-border bg-card">
+            <ul className="divide-y divide-border rounded-xl border border-border bg-white">
               {list.map((e) => (
                 <li key={e.name} className="flex items-start justify-between gap-3 px-4 py-3">
                   <span className="min-w-0">
-                    <span className="block font-serif text-[22px] leading-tight">{e.name}</span>
-                    <span className="text-sm text-muted-foreground">{e.role}</span>
+                    <span className="block font-serif text-[21px] leading-tight">{e.name}</span>
+                    <span className="text-[13px] text-muted-foreground">{e.role}</span>
                   </span>
                   <Citations cites={e.cites} className="shrink-0 justify-end pt-1" />
                 </li>
@@ -210,10 +212,12 @@ function FindingsView({
     .filter((i) => i.flag !== "agrees" || i.relatedId)
     .sort((a, b) => (RANK[a.flag] ?? 9) - (RANK[b.flag] ?? 9) || a.start - b.start);
   if (findings.length === 0)
-    return <p className="text-base text-muted-foreground">No conflicts or gaps are flagged yet.</p>;
+    return (
+      <p className="text-[15px] text-muted-foreground">No conflicts or gaps are flagged yet.</p>
+    );
   return (
     <div className="space-y-4">
-      <p className="text-[15px] text-muted-foreground">
+      <p className="text-[14px] text-muted-foreground">
         Suggestions only. Each one stays unverified until a person checks the sources.
       </p>
       {findings.map((i) => (
@@ -227,16 +231,16 @@ function DraftsView() {
   const { queue, decisions } = useWorkspace();
   const approved = queue.filter((i) => decisions[i.id] === "confirmed").length;
   if (queue.length === 0)
-    return <p className="text-base text-muted-foreground">Nothing is waiting for review.</p>;
+    return <p className="text-[15px] text-muted-foreground">Nothing is waiting for review.</p>;
   return (
     <div className="space-y-4">
-      <p className="text-[15px] text-muted-foreground">
+      <p className="text-[14px] text-muted-foreground">
         Approving adds a finding to the attorney handoff. Nothing is sent or filed from here.
       </p>
       {queue.map((i) => (
         <DraftReviewCard key={i.id} item={i} />
       ))}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-[15px]">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-[14px]">
         <span className="text-muted-foreground">
           {approved} of {queue.length} approved
         </span>

@@ -45,12 +45,12 @@ export function MessagingPanel() {
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-border bg-card">
+    <div className="flex min-h-0 flex-1 flex-col rounded-xl border border-border bg-white">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2.5">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-[13px] text-muted-foreground">
           Text evidence to <span className="font-mono text-foreground">{CASE_LINE}</span>
         </p>
-        <span className="rounded border border-border px-1.5 font-mono text-xs leading-5 text-muted-foreground">
+        <span className="rounded border border-border px-1.5 font-mono text-[11px] leading-5 text-muted-foreground">
           {mode === "photon" ? "iMessage via Photon" : "Simulated"}
         </span>
       </div>
@@ -61,7 +61,7 @@ export function MessagingPanel() {
         aria-live="polite"
       >
         {messages.length === 0 && (
-          <li className="text-[15px] text-muted-foreground">No messages yet.</li>
+          <li className="text-[14px] text-muted-foreground">No messages yet.</li>
         )}
         {messages.map((m) => {
           const item = findItem(items, m.itemId) ?? findItem(ITEMS, m.itemId);
@@ -77,13 +77,13 @@ export function MessagingPanel() {
         })}
         {busy && (
           <li
-            className="lx-fade mr-auto flex w-fit items-center gap-1 rounded-2xl rounded-bl-md bg-muted px-3.5 py-3"
+            className="lx-fade mr-auto flex w-fit items-center gap-1 rounded-2xl rounded-bl-md bg-[#f1f2f4] px-3.5 py-3"
             aria-label="Reading the message"
           >
             {[0, 1, 2].map((i) => (
               <span
                 key={i}
-                className="lx-pulse size-1.5 rounded-full bg-muted-foreground"
+                className="lx-pulse size-1.5 rounded-full bg-[#9aa2b4]"
                 style={{ animationDelay: `${i * 0.2}s`, animationDuration: "1.2s" }}
               />
             ))}
@@ -92,7 +92,7 @@ export function MessagingPanel() {
       </ol>
 
       {mode === "photon" ? (
-        <p className="border-t border-border px-4 py-3 text-sm text-muted-foreground">
+        <p className="border-t border-border px-4 py-3 text-[13px] text-muted-foreground">
           The team texts {CASE_LINE} from their phones. New evidence lands on the timeline here.
         </p>
       ) : (
@@ -111,7 +111,7 @@ export function MessagingPanel() {
                 onClick={() => setStaged(staged?.key === a.key ? null : a)}
                 aria-pressed={staged?.key === a.key}
                 className={cn(
-                  "h-7 rounded-md border px-2 text-sm transition-colors disabled:opacity-50",
+                  "h-7 rounded-md border px-2 text-[13px] transition-colors disabled:opacity-50",
                   staged?.key === a.key
                     ? "border-primary bg-accent text-primary"
                     : "border-border text-muted-foreground hover:text-foreground",
@@ -122,7 +122,7 @@ export function MessagingPanel() {
             ))}
           </div>
           {staged && (
-            <p className="flex items-center justify-between gap-2 rounded-md bg-muted px-3 py-1.5 text-sm">
+            <p className="flex items-center justify-between gap-2 rounded-md bg-muted px-3 py-1.5 text-[13px]">
               <span className="truncate">{staged.name}</span>
               <button type="button" onClick={() => setStaged(null)} aria-label="Remove attachment">
                 <X className="size-3.5" />
@@ -135,13 +135,13 @@ export function MessagingPanel() {
               onChange={(e) => setText(e.target.value)}
               placeholder={staged ? "Add a note (optional)" : "Text the case line"}
               aria-label="Message"
-              className="h-9 min-w-0 flex-1 rounded-md border border-border bg-card px-3 text-[15px] outline-none placeholder:text-muted-foreground focus:border-primary"
+              className="h-9 min-w-0 flex-1 rounded-md border border-border bg-white px-3 text-[14px] outline-none placeholder:text-muted-foreground focus:border-primary"
             />
             <button
               type="submit"
               disabled={disabled || (!text.trim() && !staged)}
               aria-label="Send"
-              className="grid size-9 shrink-0 place-items-center rounded-md bg-foreground text-background disabled:opacity-35"
+              className="grid size-9 shrink-0 place-items-center rounded-md bg-foreground text-white disabled:opacity-35"
             >
               <Send className="size-4" />
             </button>
@@ -177,9 +177,9 @@ function Attachment({ message, item }: { message: ChatMessage; item: TimelineIte
           page={media.page}
           highlight
           focusTop
-          className="h-24 w-full rounded-lg border border-border"
+          className="h-24 w-full rounded-lg border border-black/5"
         />
-        <span className="absolute bottom-1 right-1 rounded bg-black/65 px-1 font-mono text-xs text-white">
+        <span className="absolute bottom-1 right-1 rounded bg-black/65 px-1 font-mono text-[11px] text-white">
           p.{media.page.page}
         </span>
       </span>
@@ -189,7 +189,7 @@ function Attachment({ message, item }: { message: ChatMessage; item: TimelineIte
     return <FrameThumb src={message.preview} className="mb-1.5 aspect-video w-full rounded-lg" />;
   if (message.attachment === "voice") {
     return (
-      <span className="mb-1.5 flex items-center gap-2 rounded-lg bg-foreground/10 px-2.5 py-2">
+      <span className="mb-1.5 flex items-center gap-2 rounded-lg bg-black/5 px-2.5 py-2">
         <Mic className="size-3.5 shrink-0" aria-hidden />
         <span className="flex h-4 flex-1 items-center gap-[3px]" aria-hidden>
           {[5, 9, 13, 8, 14, 10, 6, 12, 15, 8, 5, 11, 13, 7].map((h, i) => (
@@ -205,7 +205,7 @@ function Attachment({ message, item }: { message: ChatMessage; item: TimelineIte
   }
   if (message.attachment) {
     return (
-      <span className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+      <span className="mb-1 flex items-center gap-1.5 text-[13px] font-medium">
         <FileText className="size-3.5" aria-hidden /> Attachment
       </span>
     );
@@ -232,16 +232,16 @@ function Bubble({
       <div
         onClick={linkable ? onOpen : undefined}
         className={cn(
-          "max-w-[84%] text-[15px] leading-snug",
+          "max-w-[84%] text-[14px] leading-snug",
           media ? "w-[72%] rounded-xl p-1.5 pb-2" : "rounded-xl px-3 py-2",
           mine
-            ? "rounded-br-sm bg-foreground text-background"
-            : "rounded-bl-sm bg-muted text-foreground",
+            ? "rounded-br-sm bg-foreground text-white"
+            : "rounded-bl-sm bg-[#f1f2f4] text-foreground",
           linkable && "cursor-pointer",
         )}
       >
         {conflict && (
-          <span className="mb-0.5 flex items-center gap-1.5 text-[13px] font-semibold text-contradiction">
+          <span className="mb-0.5 flex items-center gap-1.5 text-[12px] font-semibold text-contradiction">
             <span className="size-1.5 rounded-full bg-contradiction" aria-hidden /> Possible
             conflict
           </span>

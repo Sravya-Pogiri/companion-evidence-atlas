@@ -53,12 +53,12 @@ export function InvestigationPipeline() {
                 aria-current={active ? "step" : undefined}
                 className={cn(
                   "relative flex w-full items-start gap-3 overflow-hidden px-5 py-2.5 text-left transition-colors",
-                  active ? "bg-card" : "hover:bg-foreground/5",
+                  active ? "bg-white" : "hover:bg-white/70",
                 )}
               >
                 <span
                   className={cn(
-                    "pt-px font-mono text-[13px]",
+                    "pt-px font-mono text-[12px]",
                     active
                       ? "text-primary"
                       : done[s.view]
@@ -71,7 +71,7 @@ export function InvestigationPipeline() {
                 <span className="min-w-0">
                   <span
                     className={cn(
-                      "flex items-center gap-1.5 text-base font-medium",
+                      "flex items-center gap-1.5 text-[15px] font-medium",
                       active ? "text-primary" : "text-foreground",
                     )}
                   >
@@ -80,7 +80,7 @@ export function InvestigationPipeline() {
                       <Check className="size-3.5 text-corroborate" aria-label="done" />
                     )}
                   </span>
-                  <span className="block truncate text-sm text-muted-foreground">{s.sub}</span>
+                  <span className="block truncate text-[13px] text-muted-foreground">{s.sub}</span>
                 </span>
                 {active && (
                   <span className="absolute inset-x-0 bottom-0 h-[2px] bg-primary" aria-hidden />

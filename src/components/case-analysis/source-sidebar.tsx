@@ -59,7 +59,11 @@ export function SourceSidebar({ open, onClose }: { open: boolean; onClose: () =>
   return (
     <>
       {open && (
-        <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={onClose} aria-hidden />
+        <div
+          className="fixed inset-0 z-40 bg-[#101b38]/20 lg:hidden"
+          onClick={onClose}
+          aria-hidden
+        />
       )}
       <aside
         aria-label="Sources and workspace"
@@ -70,7 +74,7 @@ export function SourceSidebar({ open, onClose }: { open: boolean; onClose: () =>
         )}
       >
         <div className="flex items-center justify-between px-4 pt-4 lg:hidden">
-          <span className="text-sm font-medium text-muted-foreground">Navigate</span>
+          <span className="text-[13px] font-medium text-muted-foreground">Navigate</span>
           <button
             type="button"
             onClick={onClose}
@@ -125,7 +129,7 @@ export function SourceSidebar({ open, onClose }: { open: boolean; onClose: () =>
         </Group>
 
         <div className="mt-auto p-3">
-          <p className="flex items-start gap-2 rounded-lg border border-dashed border-border px-3 py-2.5 text-sm leading-snug text-muted-foreground">
+          <p className="flex items-start gap-2 rounded-lg border border-dashed border-[#c6cad3] px-3 py-2.5 text-[13px] leading-snug text-muted-foreground">
             <ShieldCheck className="mt-px size-4 shrink-0" aria-hidden />
             Attorney review required for all output.
           </p>
@@ -138,7 +142,7 @@ export function SourceSidebar({ open, onClose }: { open: boolean; onClose: () =>
 function Group({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="px-2.5 pt-4">
-      <p className="px-2 pb-1.5 font-mono text-[13px] uppercase tracking-[0.08em] text-muted-foreground">
+      <p className="px-2 pb-1.5 font-mono text-[12px] uppercase tracking-[0.08em] text-muted-foreground">
         {label}
       </p>
       <ul className="space-y-0.5">{children}</ul>
@@ -171,7 +175,9 @@ function Row({
         aria-current={active ? "true" : undefined}
         className={cn(
           "flex w-full items-start gap-2.5 rounded-lg border px-2 py-1.5 text-left transition-colors",
-          active ? "border-border bg-card " : "border-transparent hover:bg-foreground/5",
+          active
+            ? "border-border bg-white shadow-[0_1px_0_rgb(16_27_56/0.03)]"
+            : "border-transparent hover:bg-white/60",
         )}
       >
         <Icon
@@ -183,17 +189,17 @@ function Row({
         />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
-            <span className="truncate text-base text-foreground">{title}</span>
+            <span className="truncate text-[15px] text-foreground">{title}</span>
             {tag && (
-              <span className="rounded border border-[var(--lx-amber-border)] bg-[var(--lx-amber-bg)] px-1 font-mono text-xs leading-4 text-[color:var(--lx-amber-text)]">
+              <span className="rounded border border-[#e6c98c] bg-[#fbf3e1] px-1 font-mono text-[11px] leading-4 text-[#8a5a12]">
                 {tag}
               </span>
             )}
           </span>
-          {meta && <span className="block truncate text-[13px] text-muted-foreground">{meta}</span>}
+          {meta && <span className="block truncate text-[12px] text-muted-foreground">{meta}</span>}
         </span>
         {count !== undefined && (
-          <span className="pt-px font-mono text-[13px] tabular-nums text-muted-foreground">
+          <span className="pt-px font-mono text-[12px] tabular-nums text-muted-foreground">
             {count}
           </span>
         )}
