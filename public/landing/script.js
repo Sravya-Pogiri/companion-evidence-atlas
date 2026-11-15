@@ -120,7 +120,7 @@
       art: "network",
       overview:
         "A floppy disk mailed to a Wichita TV station in February 2005 carried the words “Dennis” and “Christ Lutheran Church” in its file properties, a lead that pointed investigators to Dennis Rader. DNA comparisons followed, and he pleaded guilty to ten counts in June 2005.",
-      focus: "Tracing a digital lead through dated records to the court record.",
+      focus: "A digital lead traced through dated records.",
       capability: "Dated records, verified quotes and an attribution test without the disk lead",
       primarySource: SRC.btkState,
       summary:
@@ -538,8 +538,8 @@
 
   // The case archive on the landing page shows exactly these two cases, in this order.
   const ARCHIVE_FOCUS = {
-    rosales: "The stated reason for the stop versus the video and the filings.",
-    btk: "Tracing a digital lead through dated records to the court record."
+    rosales: "The stated reason for the stop versus the video.",
+    btk: "A digital lead traced through dated records."
   };
   const ARCHIVE = Object.keys(ARCHIVE_FOCUS).map(id => CASES.find(c => c.id === id));
   // "Open in the app": case 1 opens the app's Live Case page on Rosales v. Terrell, case 2 on

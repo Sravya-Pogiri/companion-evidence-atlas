@@ -409,6 +409,12 @@
   </dialog>
 
   <script src="script.js"></script>
+  <script>
+    // The Lexora L mark, stamped in gold foil on the 3D book's cover (casebook.js waits for it).
+    window.__lexoraMark = new Image();
+    window.__lexoraMark.src = "lexora-mark-foil.png";
+    window.__lexoraMarkReady = window.__lexoraMark.decode().catch(function () {});
+  </script>
   <script src="casebook.js"></script>
 </body>
 </html>
