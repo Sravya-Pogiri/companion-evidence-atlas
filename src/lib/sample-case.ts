@@ -41,6 +41,10 @@ export interface TimelineItem {
   relatedId?: string;
   /** When it was filed through the message pipeline (ISO). Sample items have none. */
   filedAt?: string;
+  /** When a person needs to have dealt with it by (ISO). Set by a person on Review. */
+  dueAt?: string;
+  /** A date in words ("Aug 2014"), for cases whose timeline is dated and not a video clip. */
+  when?: string;
   /** A verified still for this item (from the evidence analysis), under /public. */
   frame?: string;
   /** A rendered image of the cited page, under /public. */
@@ -231,7 +235,9 @@ export function formatTick(seconds: number): string {
   return BTK ? btkTickLabel(seconds) : SPLIT ? splitTick(seconds) : formatTime(seconds);
 }
 
-export function formatRange(item: Pick<TimelineItem, "start" | "end">): string {
+export function formatRange(item: Pick<TimelineItem, "start" | "end"> & { when?: string }): string {
+  // Dated cases (the landing page's case library) carry their date in words.
+  if (item.when) return item.when;
   if (BTK) return formatTime((item.start + item.end) / 2);
   return `~${formatTime(item.start)} to ~${formatTime(item.end)}`;
 }

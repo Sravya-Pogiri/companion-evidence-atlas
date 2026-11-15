@@ -11,8 +11,9 @@ import {
 import { useCase, useFiledItems } from "@/lib/case-store";
 import { startDemo, type DemoController } from "@/lib/demo";
 import { useDecisions, type Decisions } from "@/lib/review-store";
-import { BTK, reviewQueue, type TimelineItem } from "@/lib/sample-case";
-import { ITEM_CITATIONS, findSource, type Citation } from "@/lib/sources";
+import { reviewQueue, type TimelineItem } from "@/lib/sample-case";
+import { ITEM_CITATIONS, findSource, type Citation, HOME } from "@/lib/sources";
+import { DEFAULT_CASE_ID } from "@/lib/cases";
 
 // UI state shared by the workspace columns. Case data itself stays in the case store and
 // review store; this only tracks what the person is looking at.
@@ -67,8 +68,8 @@ export function citationsFor(item: TimelineItem): Citation[] {
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [view, setView] = useState<View>("findings");
-  const [sourceId, setSourceId] = useState(BTK ? "STATE" : "complaint");
-  const [focusId, setFocusId] = useState<string | null>("complaint-reason");
+  const [sourceId, setSourceId] = useState(HOME.sourceId);
+  const [focusId, setFocusId] = useState<string | null>(HOME.focusId);
   const [flash, setFlash] = useState<Flash | null>(null);
   const [videoTime, setVideoTimes] = useState<Record<string, number>>({ dashcam: 45, bodycam: 80 });
   const [demo, setDemo] = useState<"idle" | "playing" | "paused">("idle");
@@ -77,7 +78,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const nonce = useRef(0);
 
   const items = useFiledItems();
-  const { mode } = useCase();
+  const { mode, caseId } = useCase();
   const decisions = useDecisions();
   const queue = useMemo(() => reviewQueue(items), [items]);
 
@@ -118,7 +119,8 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const replay = useCallback(() => {
-    if (mode === "photon") return;
+    // The scripted demo is the Rosales one; Photon runs the real conversation.
+    if (mode === "photon" || caseId !== DEFAULT_CASE_ID) return;
     controller.current?.stop();
     setDemo("playing");
     setView("messages");
@@ -127,9 +129,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     controller.current = startDemo(() => {
       setDemo("idle");
       controller.current = null;
-      setFocusId("complaint-reason");
+      setFocusId(HOME.focusId);
     });
-  }, [mode]);
+  }, [mode, caseId]);
 
   const playDemo = useCallback(() => {
     if (demo === "paused" && controller.current) {
@@ -150,7 +152,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     controller.current?.stop();
     controller.current = null;
     setDemo("idle");
-    setFocusId("complaint-reason");
+    setFocusId(HOME.focusId);
   }, []);
 
   // D plays or pauses the demo, unless the person is typing.

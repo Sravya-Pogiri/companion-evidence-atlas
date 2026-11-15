@@ -6,15 +6,22 @@
 // (ssr: false on the _workspace route), so it can read the choice; the server and the Photon
 // channel always use the Rosales case.
 
-export type CaseId = "rosales" | "btk";
+export type CaseId = "rosales" | "btk" | "benitez" | "mcmillian" | "hinton";
 
 export const CASE_OPTIONS: { id: CaseId; name: string; kind: string }[] = [
   { id: "rosales", name: "Rosales v. Terrell", kind: "Traffic stop · dashcam and filings" },
   { id: "btk", name: "State v. Rader (BTK)", kind: "Digital forensics · public record" },
+  // Public-record cases from the landing page's case library (src/lib/case-library.ts).
+  { id: "benitez", name: "Benitez (public record)", kind: "Dated timeline · summarized from public sources" },
+  { id: "mcmillian", name: "McMillian (public record)", kind: "Dated timeline · summarized from public sources" },
+  { id: "hinton", name: "Hinton (public record)", kind: "Dated timeline · summarized from public sources" },
 ];
 
+/** Cases from the landing page's case library: shown with the dated-case views (src/lib/cases.ts). */
+export const LIBRARY_CASES: readonly CaseId[] = ["benitez", "mcmillian", "hinton"];
+
 const KEY = "lexora.case";
-const isCase = (v: unknown): v is CaseId => v === "rosales" || v === "btk";
+const isCase = (v: unknown): v is CaseId => CASE_OPTIONS.some((c) => c.id === v);
 
 function read(): CaseId {
   if (typeof window === "undefined") return "rosales";

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCase } from "@/lib/case-store";
 import { cn } from "@/lib/utils";
 import { WorkspaceProvider, useWorkspace } from "./context";
 import { DemoControls } from "./demo-controls";
@@ -15,8 +16,10 @@ import { WorkspaceHeader } from "./workspace-header";
  * /analysis route only), so nothing here changes the rest of the app.
  */
 export function CaseAnalysis() {
+  const { caseId } = useCase();
   return (
-    <WorkspaceProvider>
+    // Keyed by case, so choosing another case starts the tab on that case's own documents.
+    <WorkspaceProvider key={caseId}>
       <CaseAnalysisLayout />
     </WorkspaceProvider>
   );
@@ -54,10 +57,8 @@ function CaseAnalysisLayout() {
             aria-selected={pane === p}
             onClick={() => setPane(p)}
             className={cn(
-              "h-8 flex-1 rounded-md text-[14px] font-medium transition-colors",
-              pane === p
-                ? "border border-border bg-white text-foreground"
-                : "text-muted-foreground",
+              "h-8 flex-1 rounded-md text-[15px] font-medium transition-colors",
+              pane === p ? "border border-border bg-card text-foreground" : "text-muted-foreground",
             )}
           >
             {p === "document" ? "Document" : "Intelligence"}

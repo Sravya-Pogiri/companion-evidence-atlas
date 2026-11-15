@@ -19,6 +19,8 @@ interface ChatPanelProps {
   onSelect: (id: string) => void;
   /** True while the demo is playing; the composer waits. */
   locked?: boolean;
+  /** A sample conversation to read. There is no composer. */
+  readOnly?: boolean;
   className?: string;
 }
 
@@ -26,7 +28,13 @@ interface ChatPanelProps {
  * Phone-style conversation. Simulated: the presenter plays the case team from here.
  * Photon: the conversation happens over iMessage and this only shows it.
  */
-export function ChatPanel({ selectedId, onSelect, locked = false, className }: ChatPanelProps) {
+export function ChatPanel({
+  selectedId,
+  onSelect,
+  locked = false,
+  readOnly = false,
+  className,
+}: ChatPanelProps) {
   const { messages, items, busy, mode } = useCase();
   const [text, setText] = useState("");
   const [staged, setStaged] = useState<SampleAttachment | null>(null);
@@ -68,7 +76,7 @@ export function ChatPanel({ selectedId, onSelect, locked = false, className }: C
           <p className="font-mono text-[13px] leading-tight text-muted-foreground">{CASE_LINE}</p>
         </div>
         <span className="shrink-0 rounded-full border border-white/10 px-2 py-0.5 text-[13px] text-muted-foreground">
-          {mode === "photon" ? "iMessage" : "Simulated"}
+          {readOnly ? "Sample" : mode === "photon" ? "iMessage" : "Simulated"}
         </span>
       </div>
 
@@ -104,7 +112,12 @@ export function ChatPanel({ selectedId, onSelect, locked = false, className }: C
         )}
       </ol>
 
-      {mode === "photon" ? (
+      {readOnly ? (
+        <p className="border-t border-white/[0.06] px-3 py-3 text-sm text-muted-foreground">
+          A sample conversation for this public-record case. Filing new evidence by text runs on the
+          Rosales footage case.
+        </p>
+      ) : mode === "photon" ? (
         <p className="border-t border-white/[0.06] px-3 py-3 text-sm text-muted-foreground">
           Text {CASE_LINE} from your phone. The conversation and timeline update here.
         </p>

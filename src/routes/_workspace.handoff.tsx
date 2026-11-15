@@ -2,13 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/caselens/shared";
-import { useFiledItems } from "@/lib/case-store";
+import { useActiveCase, useFiledItems } from "@/lib/case-store";
 import { useDecisions } from "@/lib/review-store";
 import { seo } from "@/lib/seo";
 import {
   FLAG_LABEL,
   LANES,
-  SAMPLE_CASE,
   findItem,
   formatRange,
   handoffItems,
@@ -24,14 +23,15 @@ export const Route = createFileRoute("/_workspace/handoff")({
 function Handoff() {
   const decisions = useDecisions();
   const items = useFiledItems();
+  const activeCase = useActiveCase();
   const confirmed = handoffItems(items, decisions);
 
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow={SAMPLE_CASE.label}
+        eyebrow={activeCase.label}
         title="Handoff"
-        desc={`${SAMPLE_CASE.name}, ${SAMPLE_CASE.number}. Items a person confirmed, each with its source.`}
+        desc={`${activeCase.name}, ${activeCase.sub}. Items a person confirmed, each with its source.`}
       >
         <Button type="button" onClick={() => window.print()} className="print:hidden">
           <Printer className="size-4" /> Print or save as PDF

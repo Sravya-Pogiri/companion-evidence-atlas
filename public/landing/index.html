@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaseLens — Every detail. In focus.</title>
+  <meta name="description" content="CaseLens is an evidence intelligence and case preparation platform concept for public defenders and criminal defense teams. Every detail. In focus." />
+  <meta name="theme-color" content="#070D1B" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230B1736'/%3E%3Ccircle cx='15' cy='15' r='7' fill='none' stroke='%234F8CFF' stroke-width='2.5'/%3E%3Cpath d='M20 20l5 5' stroke='%234F8CFF' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ============ ICON SPRITE ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+      <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.5"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+      <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M7 21h10M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/></symbol>
+      <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></symbol>
+      <symbol id="i-network" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M11 7.3L6.2 15.8M13 7.3l4.8 8.5M7.5 18h9"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+      <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+      <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-8-4.7-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.3 12 20 12 20z"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M19 19v2H6"/></symbol>
+      <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5l8-2 8 2v16M2 21h20M9 21v-4h6v4M8 8h.01M12 8h.01M16 8h.01M8 12h.01M12 12h.01M16 12h.01"/></symbol>
+      <symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v5c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M9 15v2c0 1.7 2.7 3 6 3s6-1.3 6-3v-5c0-1.6-2.4-2.9-5.5-3"/></symbol>
+      <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div>
+
+  <!-- ============ NAVIGATION ============ -->
+  <header class="site-header" id="siteHeader">
+    <nav class="nav container" aria-label="Primary">
+      <a href="#home" class="wordmark" aria-label="CaseLens home">
+        <span class="wordmark__mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><circle cx="14" cy="14" r="8.5"/><circle cx="14" cy="14" r="3.2" class="dot"/><path d="M20.5 20.5L27 27"/></svg>
+        </span>
+        <span class="wordmark__text">Case<b>Lens</b></span>
+      </a>
+
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#home" data-nav="home">Home</a></li>
+        <li><a href="#problem" data-nav="problem">Problem</a></li>
+        <li><a href="#cases" data-nav="cases">Cases</a></li>
+      </ul>
+
+      <div class="nav__actions">
+        <a class="btn btn--sm nav__cta" href="/investigate">Open the app</a>
+        <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+          <svg class="ico"><use href="#i-menu"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav" hidden>
+      <ul>
+        <li><a href="#home" data-nav="home">Home</a></li>
+        <li><a href="#problem" data-nav="problem">Problem</a></li>
+        <li><a href="#cases" data-nav="cases">Cases</a></li>
+        <li><a href="/investigate">Open the app</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home" aria-labelledby="heroTitle">
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__grid"></div>
+        <div class="hero__doc" id="heroDoc">
+          <div class="doc-layer doc-layer--blur"></div>
+          <div class="doc-layer doc-layer--sharp"></div>
+          <div class="hero__lens"></div>
+        </div>
+        <div class="hero__glow hero__glow--a"></div>
+        <div class="hero__glow hero__glow--b"></div>
+      </div>
+
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <h1 class="hero__title reveal" id="heroTitle">
+            <span class="nowrap">Every detail.</span><br /><em>In focus.</em>
+          </h1>
+          <p class="hero__lede reveal">
+            Transforming fragmented legal evidence into clear, verifiable insights, empowering defense teams to prepare with greater confidence.
+          </p>
+          <div class="hero__ctas reveal">
+            <a href="/investigate" class="btn btn--primary btn--lg">Explore Real Cases <svg class="ico"><use href="#i-arrow"/></svg></a>
+            <a href="/live?demo=1" class="btn btn--ghost btn--lg">Try the live case <svg class="ico"><use href="#i-arrow"/></svg></a>
+          </div>
+        </div>
+
+        <!-- Evidence convergence visualization -->
+        <div class="hero__visual reveal" aria-hidden="true">
+          <svg class="evviz" viewBox="0 0 560 560" role="presentation">
+            <defs>
+              <radialGradient id="lensGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#3268E9" stop-opacity=".22"/>
+                <stop offset="55%" stop-color="#3268E9" stop-opacity=".05"/>
+                <stop offset="100%" stop-color="#2457E7" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="wire" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#F7F7F3" stop-opacity=".04"/>
+                <stop offset="100%" stop-color="#F7F7F3" stop-opacity=".32"/>
+              </linearGradient>
+              <linearGradient id="cardFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#14243A"/>
+                <stop offset="100%" stop-color="#0E1A30"/>
+              </linearGradient>
+            </defs>
+
+            <!-- connection wires -->
+            <g class="wires" fill="none" stroke="url(#wire)" stroke-width="1.4">
+              <path d="M118 96 C 180 140, 220 200, 280 280"/>
+              <path d="M450 86 C 400 150, 340 210, 280 280"/>
+              <path d="M70 290 C 150 290, 210 280, 280 280"/>
+              <path d="M492 300 C 420 300, 350 285, 280 280"/>
+              <path d="M126 470 C 190 410, 230 340, 280 280"/>
+              <path d="M440 470 C 380 410, 330 340, 280 280"/>
+            </g>
+            <g class="wires wires--flow" fill="none" stroke="#D4C1A1" stroke-width="1.4" stroke-linecap="round">
+              <path d="M118 96 C 180 140, 220 200, 280 280"/>
+              <path d="M450 86 C 400 150, 340 210, 280 280"/>
+              <path d="M70 290 C 150 290, 210 280, 280 280"/>
+              <path d="M492 300 C 420 300, 350 285, 280 280"/>
+              <path d="M126 470 C 190 410, 230 340, 280 280"/>
+              <path d="M440 470 C 380 410, 330 340, 280 280"/>
+            </g>
+
+            <!-- lens -->
+            <circle cx="280" cy="280" r="150" fill="url(#lensGlow)"/>
+            <g class="lens-ring lens-ring--outer"><circle cx="280" cy="280" r="118" fill="none" stroke="#8BA6E8" stroke-opacity=".28" stroke-dasharray="2 9"/></g>
+            <g class="lens-ring lens-ring--inner"><circle cx="280" cy="280" r="84" fill="none" stroke="#8BA6E8" stroke-opacity=".45" stroke-dasharray="40 14"/></g>
+            <circle cx="280" cy="280" r="56" fill="#0B1736" stroke="#F7F7F3" stroke-opacity=".55" stroke-width="1.2"/>
+            <circle cx="280" cy="280" r="56" fill="none" stroke="#D4C1A1" stroke-opacity=".12" stroke-width="6" class="lens-pulse"/>
+            <path d="M280 236v14M280 310v14M236 280h14M310 280h14" stroke="#D4C1A1" stroke-opacity=".7" stroke-width="1.4"/>
+            <circle cx="280" cy="280" r="6" fill="#8BA6E8"/>
+
+            <!-- evidence fragment cards -->
+            <g class="frag frag--1">
+              <rect x="38" y="62" width="150" height="66" rx="10" fill="url(#cardFill)" stroke="#2C3B55"/>
+              <rect x="52" y="76" width="18" height="22" rx="3" fill="none" stroke="#8BA6E8"/>
+              <text x="80" y="86" class="t-label">Incident report</text>
+              <rect x="80" y="94" width="88" height="4" rx="2" fill="#33435E"/>
+              <rect x="52" y="108" width="116" height="4" rx="2" fill="#223049"/>
+            </g>
+            <g class="frag frag--2">
+              <rect x="374" y="50" width="150" height="66" rx="10" fill="url(#cardFill)" stroke="#2C3B55"/>
+              <circle cx="398" cy="76" r="9" fill="none" stroke="#8BA6E8"/>
+              <text x="414" y="80" class="t-label">Witness statement</text>
+              <rect x="388" y="94" width="120" height="4" rx="2" fill="#33435E"/>
+              <rect x="388" y="102" width="80" height="4" rx="2" fill="#223049"/>
+            </g>
+            <g class="frag frag--3">
+              <rect x="10" y="258" width="128" height="64" rx="10" fill="url(#cardFill)" stroke="#2C3B55"/>
+              <rect x="24" y="272" width="26" height="18" rx="3" fill="none" stroke="#8BA6E8"/>
+              <path d="M34 277l7 4-7 4z" fill="#8BA6E8"/>
+              <text x="58" y="285" class="t-label">Video</text>
+              <rect x="24" y="300" width="98" height="3" rx="1.5" fill="#223049"/>
+              <rect x="24" y="300" width="42" height="3" rx="1.5" fill="#8BA6E8"/>
+            </g>
+            <g class="frag frag--4">
+              <rect x="428" y="266" width="122" height="64" rx="10" fill="url(#cardFill)" stroke="#2C3B55"/>
+              <path d="M444 296h4l3-9 4 18 4-14 3 5h6" fill="none" stroke="#8BA6E8" stroke-width="1.4"/>
+              <text x="478" y="290" class="t-label">Audio</text>
+              <rect x="478" y="300" width="56" height="4" rx="2" fill="#223049"/>
+            </g>
+            <g class="frag frag--5">
+              <rect x="40" y="440" width="156" height="66" rx="10" fill="url(#cardFill)" stroke="#2C3B55"/>
+              <path d="M56 466h22M56 474h16M56 482h20" stroke="#8BA6E8" stroke-width="1.4"/>
+              <text x="88" y="470" class="t-label">Lab report</text>
+              <rect x="88" y="478" width="90" height="4" rx="2" fill="#33435E"/>
+            </g>
+            <g class="frag frag--6">
+              <rect x="368" y="440" width="156" height="66" rx="10" fill="url(#cardFill)" stroke="#2C3B55"/>
+              <path d="M384 482h108" stroke="#2C3B55" stroke-width="1.4"/>
+              <circle cx="392" cy="482" r="4" fill="#8BA6E8"/><circle cx="426" cy="482" r="4" fill="#8BA6E8"/><circle cx="470" cy="482" r="4" fill="#D4C1A1"/>
+              <text x="384" y="466" class="t-label">Timeline</text>
+            </g>
+
+            <!-- output -->
+            <g class="insight">
+              <rect x="178" y="354" width="204" height="44" rx="22" fill="#0B1736" stroke="#D4C1A1" stroke-opacity=".6"/>
+              <circle cx="202" cy="376" r="4" fill="#D4C1A1"/>
+              <text x="216" y="373" class="t-insight">Linked finding</text>
+              <text x="216" y="388" class="t-insight-sub">source-traced · for review</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <a href="#problem" class="hero__scroll" aria-label="Scroll to The Problem"><span></span></a>
+    </section>
+
+
+    <!-- ============ THE PROBLEM ============ -->
+    <section class="section theme-light problem" id="problem" aria-labelledby="problemTitle">
+      <div class="container">
+
+        <!-- 1 · The 2,080-hour year -->
+        <div class="yr" id="yr">
+          <header class="yr__head">
+            <p class="section__index reveal">01 — The Problem</p>
+            <h2 class="section__title yr__title reveal" id="problemTitle">One attorney. Too many cases. <em>Not enough time.</em></h2>
+            <p class="yr__lede reveal">Public defenders represent people who cannot afford a lawyer. Here is one attorney's working year, hour by hour.</p>
+          </header>
+
+          <div class="yr__scroll" id="yrScroll">
+            <div class="yr__stage" id="yrStage">
+              <div class="yr__top">
+                <p class="yr__num" aria-hidden="true">150</p>
+                <div class="yr__intro">
+                  <p class="yr__numk"><b>150 felony cases</b> per attorney per year: the 1973 national ceiling.<a href="#yrNote1" class="fn" aria-label="Footnote 1">1</a> <span class="tag tag--fact">Historical standard</span></p>
+                  <div class="yr__toggle" role="group" aria-label="Compare the 1973 ceiling with the 2023 study">
+                    <button type="button" class="yr__btn" data-yr="0" aria-pressed="true">1973 ceiling</button>
+                    <button type="button" class="yr__btn" data-yr="1" aria-pressed="false">2023 study</button>
+                  </div>
+                  <p class="yr__cap" id="yrCap" aria-live="polite"><span class="yr__cap-k">1973</span>Spread across a 2,080-hour working year, 150 cases leave about <b>13.9 hours</b> for each one.</p>
+                </div>
+              </div>
+
+              <figure class="yr__fig" aria-labelledby="yrAlt">
+                <div class="yr__wrap" id="yrWrap">
+                  <canvas id="yrCanvas" aria-hidden="true"></canvas>
+                  <div class="yr__tip" id="yrTip" hidden></div>
+                </div>
+                <figcaption class="yr__legend">
+                  <span class="yr__sw"><i class="lg lg--case"></i>One case's hours</span>
+                  <span class="yr__sw"><i class="lg lg--cut"></i>Case cut off by the end of the year</span>
+                  <span class="yr__sw"><i class="lg lg--out"></i>Case left without the time</span>
+                  <span class="yr__unit">1 cell = 1 working hour · 52 weeks × 40 h = 2,080 h<a href="#yrNote2" class="fn" aria-label="Footnote 2">2</a></span>
+                  <span class="sr-only" id="yrAlt">Chart of one attorney's working year: 2,080 hours, 52 weeks of 40 hours. Under the 1973 ceiling, 150 felony cases share the year at about 13.9 hours each. Under the 2023 study's recommendation of 35 hours per low-level felony, the year is full after 59 cases, leaving 91 cases without the recommended time.</span>
+                </figcaption>
+              </figure>
+
+              <dl class="yr__facts">
+                <div><dt>Hours per case</dt><dd id="yrPer">≈13.9</dd></div>
+                <div><dt>Cases that fit the year</dt><dd id="yrFit">150</dd></div>
+                <div class="is-out"><dt>Cases without the time</dt><dd id="yrOut">0</dd></div>
+              </dl>
+            </div>
+          </div>
+
+          <ol class="yr__notes reveal">
+            <li id="yrNote1"><span>1</span>1973 National Advisory Commission on Criminal Justice Standards and Goals: no more than 150 felony cases per attorney per year. It is shown as a historical benchmark, not today's standard.</li>
+            <li id="yrNote2"><span>2</span>National Public Defense Workload Study (2023), from RAND, NCSC, ABA SCLAID and partners: 35 recommended attorney hours per low-level felony, on a 2,080-hour working year, which works out to 59 cases. Both figures are recommended maximums, not measured caseloads. <a href="https://dids.nv.gov/uploadedFiles/didsnvgov/content/Meetings/2023/NAPD%20Understanding%20the%20National%20Workload%20Study-%20ADA%20Compliant(1).pdf" target="_blank" rel="noopener">NAPD summary<svg class="ico ico--xs" aria-hidden="true"><use href="#i-ext"/></svg></a> · <a href="https://www.rand.org/pubs/research_reports/RRA2559-1.html" target="_blank" rel="noopener">RAND<svg class="ico ico--xs" aria-hidden="true"><use href="#i-ext"/></svg></a></li>
+          </ol>
+        </div>
+
+        <!-- 2 · The workload gap -->
+        <div class="pv-gap">
+          <p class="section__index reveal">The workload gap</p>
+
+          <figure class="pv-chart pv-chart--hours reveal" aria-labelledby="hoursCap">
+            <figcaption class="pv-chart__cap" id="hoursCap">
+              <h3 class="pv-h3">Hours a case <em>needs.</em></h3>
+              <p>Recommended attorney hours per case. <span class="tag tag--fact">Recommended</span></p>
+            </figcaption>
+            <ol class="hbar" style="--max: 248">
+              <li style="--v: 13.8"><span class="hbar__k">Low-level misdemeanor</span><span class="hbar__track"><span class="hbar__fill"></span><span class="hbar__v">13.8 h</span></span></li>
+              <li style="--v: 35"><span class="hbar__k">Low-level felony</span><span class="hbar__track"><span class="hbar__fill"></span><span class="hbar__v">35 h</span></span></li>
+              <li style="--v: 57"><span class="hbar__k">Mid-level felony</span><span class="hbar__track"><span class="hbar__fill"></span><span class="hbar__v">57 h</span></span></li>
+              <li style="--v: 99"><span class="hbar__k">Other high-level felony</span><span class="hbar__track"><span class="hbar__fill"></span><span class="hbar__v">99 h</span></span></li>
+              <li class="is-peak" style="--v: 248"><span class="hbar__k">Murder</span><span class="hbar__track"><span class="hbar__fill"></span><span class="hbar__v">248 h</span></span></li>
+            </ol>
+          </figure>
+
+
+          <p class="pv-src reveal">Source: National Public Defense Workload Study (2023) — RAND, NCSC, ABA SCLAID and research partners · <a href="https://www.rand.org/pubs/research_reports/RRA2559-1.html" target="_blank" rel="noopener">RAND<svg class="ico ico--xs" aria-hidden="true"><use href="#i-ext"/></svg></a> · <a href="https://www.americanbar.org/groups/legal_aid_indigent_defense/indigent_defense_systems_improvement/natl-pub-def-standards/" target="_blank" rel="noopener">ABA<svg class="ico ico--xs" aria-hidden="true"><use href="#i-ext"/></svg></a></p>
+        </div>
+
+        <!-- 3 · Workload simulator -->
+        <div class="sim reveal" id="sim">
+          <div class="sim__head">
+            <h3 class="pv-h3">Try a <em>caseload.</em></h3>
+            <div class="sim__types" role="radiogroup" aria-label="Case type" id="simTypes">
+              <button type="button" role="radio" aria-checked="false" data-h="13.8">Misdemeanor</button>
+              <button type="button" role="radio" aria-checked="true" data-h="35">Low felony</button>
+              <button type="button" role="radio" aria-checked="false" data-h="57">Mid felony</button>
+              <button type="button" role="radio" aria-checked="false" data-h="99">High felony</button>
+              <button type="button" role="radio" aria-checked="false" data-h="248">Murder</button>
+            </div>
+          </div>
+
+          <div class="sim__slider">
+            <label for="simCases">Cases assigned per year</label>
+            <output id="simCasesOut" for="simCases">150</output>
+            <input type="range" id="simCases" min="1" max="300" step="1" value="150" />
+          </div>
+
+          <div class="sim__bar" aria-hidden="true">
+            <span class="sim__fill" id="simFill"></span><span class="sim__over" id="simOver"></span>
+            <span class="sim__cap" id="simCap"><span>2,080 h available</span></span>
+          </div>
+
+          <dl class="sim__nums" aria-live="polite">
+            <div><dt>Hours needed</dt><dd id="simNeed">5,250</dd></div>
+            <div><dt>Hours available</dt><dd>2,080</dd></div>
+            <div class="sim__excess" id="simExcessWrap"><dt id="simExcessK">Over capacity</dt><dd id="simExcess">+3,170</dd></div>
+          </dl>
+          <p class="sim__fine">Uses the study's recommended hours per case. 2,080 h = 40 h × 52 weeks, illustrative.</p>
+        </div>
+      </div>
+
+      <!-- 4 · Fragmented evidence -->
+      <div class="evs" id="evScroll">
+        <div class="evs__stage" id="evStage">
+          <h3 class="evs__title">
+            <span class="evs__t1">The evidence exists.</span>
+            <span class="evs__t2"><em>Finding it</em> shouldn't be the barrier to justice.</span>
+          </h3>
+
+          <div class="evs__docs" id="evDocs">
+            <article class="edoc edoc--audio" data-t="21:02" data-k="911 call">
+              <p class="edoc__k">Audio · 911 call</p>
+              <svg class="edoc__wave" viewBox="0 0 160 48" aria-hidden="true"><g fill="currentColor"><rect x="2" y="20" width="3" height="8"/><rect x="8" y="14" width="3" height="20"/><rect x="14" y="8" width="3" height="32"/><rect x="20" y="16" width="3" height="16"/><rect x="26" y="4" width="3" height="40"/><rect x="32" y="12" width="3" height="24"/><rect x="38" y="18" width="3" height="12"/><rect x="44" y="6" width="3" height="36"/><rect x="50" y="14" width="3" height="20"/><rect x="56" y="20" width="3" height="8"/><rect x="62" y="10" width="3" height="28"/><rect x="68" y="2" width="3" height="44"/><rect x="74" y="12" width="3" height="24"/><rect x="80" y="18" width="3" height="12"/><rect x="86" y="8" width="3" height="32"/><rect x="92" y="16" width="3" height="16"/><rect x="98" y="20" width="3" height="8"/><rect x="104" y="10" width="3" height="28"/><rect x="110" y="14" width="3" height="20"/><rect x="116" y="6" width="3" height="36"/><rect x="122" y="18" width="3" height="12"/><rect x="128" y="12" width="3" height="24"/><rect x="134" y="20" width="3" height="8"/><rect x="140" y="16" width="3" height="16"/><rect x="146" y="21" width="3" height="6"/><rect x="152" y="22" width="3" height="4"/></g></svg>
+              <p class="edoc__meta"><span class="edoc__play" aria-hidden="true"></span>02:41</p>
+            </article>
+            <article class="edoc edoc--cam" data-t="21:09" data-k="Bodycam">
+              <div class="edoc__frame"><span class="edoc__rec">REC</span><span class="edoc__stamp">BWC-02 · 21:09:44</span></div>
+              <p class="edoc__k">Video · Body camera</p>
+            </article>
+            <article class="edoc edoc--photo" data-t="21:47" data-k="Scene photos">
+              <div class="edoc__pic"><span class="edoc__marker">3</span><span class="edoc__ruler"></span></div>
+              <p class="edoc__k">Photo · Exhibit 14</p>
+            </article>
+            <article class="edoc edoc--witness" data-t="23:15" data-k="Witness">
+              <p class="edoc__k">Witness statement</p>
+              <span class="edoc__line"></span><span class="edoc__line"></span><span class="edoc__line edoc__line--s"></span><span class="edoc__line"></span><span class="edoc__line"></span><span class="edoc__line edoc__line--s"></span>
+              <svg class="edoc__sig" viewBox="0 0 120 30" aria-hidden="true"><path d="M4 22c10-14 16-16 18-8s-4 12 2 6 10-14 14-10-2 12 4 8 8-10 12-6 4 8 10 4 14-8 20-6 10 4 28-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </article>
+            <article class="edoc edoc--report" data-t="Day 2 · 08:30" data-k="Police report">
+              <p class="edoc__k">Incident report</p>
+              <div class="edoc__grid"><span></span><span></span><span></span><span></span></div>
+              <span class="edoc__line"></span><span class="edoc__line edoc__line--r"></span><span class="edoc__line"></span><span class="edoc__line edoc__line--s"></span><span class="edoc__line edoc__line--r"></span>
+            </article>
+          </div>
+
+          <div class="evs__axis" aria-hidden="true"><span class="evs__axis-line"></span></div>
+          <div class="evs__foot">
+            <span class="tag tag--illus">Illustrative timeline</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CASE ARCHIVE (3D casebook) ============ -->
+    <!-- Static layout by default. casebook.js upgrades it to the scroll-driven 3D book
+         when WebGL is available and reduced motion is off. Cards are rendered by script.js. -->
+    <section class="cb is-static" id="cases" aria-labelledby="casesTitle">
+      <div class="cb__stage" id="cbStage">
+        <canvas class="cb__canvas" id="cbCanvas" aria-hidden="true"></canvas>
+        <header class="cb__head">
+          <p class="cb__eyebrow">The Case Archive</p>
+          <h2 class="cb__title" id="casesTitle">Behind every case is a story.</h2>
+          <p class="cb__lede">Explore real cases that reveal why careful evidence review matters.</p>
+        </header>
+        <div class="cb__cards" id="caseArchive"><!-- Rendered by script.js from CASES data --></div>
+        <p class="cb__hint" aria-hidden="true"><span class="cb__hint-line"></span>Scroll to open the archive.</p>
+        <p class="cb__note">Case facts come from the linked public sources. Folder photos and documents are illustrative, not case evidence.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#home" class="wordmark" aria-label="CaseLens home">
+            <span class="wordmark__mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="14" cy="14" r="8.5"/><circle cx="14" cy="14" r="3.2" class="dot"/><path d="M20.5 20.5L27 27"/></svg></span>
+            <span class="wordmark__text">Case<b>Lens</b></span>
+          </a>
+          <p class="footer__tagline">Every detail. In focus.</p>
+          <span class="footer__badge">HackPrinceton 2026 project</span>
+        </div>
+
+        <nav class="footer__col" aria-label="Footer navigation">
+          <h3>Navigate</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#cases">Cases</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer__bottom">
+        <p>© 2026 CaseLens. A student project concept built for HackPrinceton 2026.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ CASE MODAL ============ -->
+  <dialog class="modal" id="caseModal" aria-labelledby="modalTitle">
+    <div class="modal__shell">
+      <header class="modal__head">
+        <div>
+          <p class="modal__eyebrow" id="modalEyebrow"></p>
+          <h2 class="modal__title" id="modalTitle"></h2>
+          <p class="modal__meta" id="modalMeta"></p>
+        </div>
+        <button class="modal__close" id="modalClose" aria-label="Close case details"><svg class="ico"><use href="#i-x"/></svg></button>
+      </header>
+      <div class="modal__tabs" role="tablist" aria-label="Case detail sections" id="modalTabs"></div>
+      <div class="modal__body" id="modalBody"></div>
+      <footer class="modal__foot">
+        <p>Historical cases are presented for educational demonstration. Investigative examples are illustrative unless supported by linked primary evidence.</p>
+        <div class="modal__nav">
+          <a class="btn btn--primary btn--sm" id="modalOpenApp" href="/live">Open this case in the app →</a>
+          <button class="btn btn--ghost btn--sm" id="modalPrev" aria-label="Previous case">← Prev case</button>
+          <button class="btn btn--ghost btn--sm" id="modalNext" aria-label="Next case">Next case →</button>
+        </div>
+      </footer>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+  <script src="casebook.js"></script>
+</body>
+</html>

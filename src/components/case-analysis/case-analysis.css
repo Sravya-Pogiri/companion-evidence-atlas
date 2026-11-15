@@ -2,39 +2,55 @@
  * Case Analysis tab only. Loaded by src/routes/_workspace.analysis.tsx, never globally.
  * Every rule is scoped to .lx-analysis, and the theme values are redefined on that element
  * so Tailwind classes inside the tab (bg-background, text-foreground, border-border, ...)
- * resolve to the light editorial palette while the rest of the app keeps its dark theme.
+ * resolve to the same dark and gold palette as the rest of the app.
  * Rules sit in Tailwind's named layers so normal utility classes still win.
  */
 
 @layer base {
   .lx-analysis {
-    --background: #fafaf8;
-    --foreground: #101b38;
-    --card: #ffffff;
-    --card-foreground: #101b38;
-    --popover: #ffffff;
-    --popover-foreground: #101b38;
-    --primary: #315ef4;
-    --primary-foreground: #ffffff;
-    --secondary: #f5f5f1;
-    --secondary-foreground: #101b38;
-    --muted: #f1f2f4;
-    --muted-foreground: #778198;
-    --accent: #eef2fe;
-    --accent-foreground: #101b38;
-    --contradiction: #b94a48;
-    --corroborate: #32856d;
-    --missing: #b7791f;
-    --related: #315ef4;
-    --destructive: #b94a48;
-    --border: #dadde3;
-    --input: #dadde3;
-    --ring: #315ef4;
-    --sidebar: #f5f5f1;
-    --highlight: #f5e7c6;
-    --underline: #c89426;
+    /* The same dark and gold palette as the other pages (see src/styles.css). */
+    --background: oklch(0.152 0.009 285);
+    --foreground: oklch(0.935 0.005 85);
+    --card: oklch(0.195 0.012 285);
+    --card-foreground: oklch(0.935 0.005 85);
+    --popover: oklch(0.215 0.012 285);
+    --popover-foreground: oklch(0.935 0.005 85);
+    --primary: oklch(0.747 0.088 80);
+    --primary-foreground: oklch(0.152 0.009 285);
+    --secondary: oklch(0.245 0.012 285);
+    --secondary-foreground: oklch(0.935 0.005 85);
+    --muted: oklch(0.245 0.012 285);
+    --muted-foreground: oklch(0.675 0.012 285);
+    --accent: oklch(0.25 0.025 80);
+    --accent-foreground: oklch(0.935 0.005 85);
+    --contradiction: oklch(0.632 0.192 24);
+    --corroborate: oklch(0.635 0.132 157);
+    --missing: oklch(0.69 0.194 45);
+    --related: oklch(0.55 0.194 268);
+    --destructive: oklch(0.632 0.192 24);
+    --border: oklch(1 0 0 / 0.09);
+    --input: oklch(1 0 0 / 0.13);
+    --ring: oklch(0.747 0.088 80);
+    --sidebar: oklch(0.125 0.005 285);
+    --highlight: oklch(0.78 0.12 80 / 0.28);
+    --underline: oklch(0.78 0.12 80);
 
-    color-scheme: light;
+    /* Named shades the components use in place of hard-coded colors. */
+    --lx-ink: oklch(0.935 0.005 85);
+    --lx-body: oklch(0.82 0.008 85);
+    --lx-faint: oklch(0.6 0.012 285);
+    --lx-amber-text: oklch(0.84 0.1 82);
+    --lx-amber-bg: oklch(0.78 0.12 80 / 0.12);
+    --lx-amber-bg-hover: oklch(0.78 0.12 80 / 0.2);
+    --lx-amber-border: oklch(0.78 0.12 80 / 0.45);
+    --lx-hilite: oklch(0.78 0.12 80 / 0.28);
+    --lx-hilite-hover: oklch(0.78 0.12 80 / 0.18);
+    --lx-hilite-ring: oklch(0.78 0.12 80 / 0.5);
+    --lx-focus-bg: oklch(0.747 0.088 80 / 0.16);
+    --lx-focus-border: oklch(0.747 0.088 80 / 0.7);
+    --lx-link-border: oklch(0.747 0.088 80 / 0.4);
+
+    color-scheme: dark;
     background-color: var(--background);
     color: var(--foreground);
     font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -47,26 +63,21 @@
   }
 
   .lx-analysis :focus-visible {
-    outline: 2px solid #315ef4;
+    outline: 2px solid var(--primary);
     outline-offset: 2px;
     border-radius: 4px;
   }
 
   .lx-analysis ::selection {
-    background: #dfe6fd;
+    background: oklch(0.747 0.088 80 / 0.3);
   }
 }
 
 @layer utilities {
-  /* The editorial serif, for the tab's headings and document text only. */
-  .lx-analysis .font-serif {
-    font-family: "Instrument Serif", "Libre Caslon Text", Georgia, serif;
-  }
-
   .lx-analysis .lx-scroll,
   .lx-analysis .lx-thread {
     scrollbar-width: thin;
-    scrollbar-color: #d4d7de transparent;
+    scrollbar-color: oklch(1 0 0 / 0.2) transparent;
   }
 
   .lx-analysis .lx-flash {
@@ -88,7 +99,7 @@
 
 @keyframes lx-analysis-flash {
   0% {
-    background-color: rgb(49 94 244 / 0.16);
+    background-color: oklch(0.747 0.088 80 / 0.22);
   }
   100% {
     background-color: transparent;

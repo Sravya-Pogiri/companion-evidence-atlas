@@ -32,7 +32,9 @@ export function ConflictDialog({ claim, footage, onClose, className }: ConflictD
       >
         <DialogHeader>
           <DialogTitle className="font-serif text-2xl font-medium">
-            Compare sources at about {formatTime(claim?.start ?? 0)}
+            {claim?.when
+              ? "Compare sources"
+              : `Compare sources at about ${formatTime(claim?.start ?? 0)}`}
           </DialogTitle>
           <DialogDescription className="text-sm">
             A possible conflict, not a conclusion. Read both and decide for yourself.
@@ -71,7 +73,7 @@ function SourcePane({ item }: { item: TimelineItem }) {
           >
             <PageThumb page={media.page} highlight focusTop className="size-full" />
           </a>
-        ) : (
+        ) : item.when ? null : (
           <div className="grid aspect-video place-items-center rounded-md border border-dashed border-missing/70 text-sm text-muted-foreground">
             No media in the sample record
           </div>

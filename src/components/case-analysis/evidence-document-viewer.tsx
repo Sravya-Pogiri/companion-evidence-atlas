@@ -42,7 +42,7 @@ export function EvidenceDocumentViewer() {
   const flashAnchor = flashKey?.split("#")[0] ?? null;
 
   return (
-    <div ref={scroller} className="lx-scroll h-full overflow-y-auto bg-white">
+    <div ref={scroller} className="lx-scroll h-full overflow-y-auto bg-card">
       <div
         key={sourceId}
         className="lx-fade mx-auto max-w-[46rem] px-6 pb-24 pt-9 sm:px-10 xl:px-14"
@@ -70,17 +70,17 @@ function DocHeader({
 }) {
   return (
     <header className="border-b border-border pb-6">
-      <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-muted-foreground">
+      <p className="font-mono text-[13px] uppercase tracking-[0.1em] text-muted-foreground">
         {label}
       </p>
-      <h1 className="mt-2 font-serif text-[32px] leading-[1.1] text-foreground">{title}</h1>
-      <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">{subtitle}</p>
+      <h1 className="mt-2 font-serif text-3xl leading-[1.1] text-foreground">{title}</h1>
+      <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">{subtitle}</p>
       {url && (
         <a
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="mt-3 inline-flex items-center gap-1 text-[13px] text-primary hover:underline"
+          className="mt-3 inline-flex items-center gap-1 text-sm text-primary hover:underline"
         >
           Open original <ExternalLink className="size-3.5" />
         </a>
@@ -113,11 +113,11 @@ function SourceBody({
         <section key={bi} className="mt-7">
           {block.heading &&
             (/^Page \d+$/.test(block.heading) ? (
-              <p className="mb-4 font-mono text-[12px] uppercase tracking-[0.1em] text-muted-foreground">
+              <p className="mb-4 font-mono text-[13px] uppercase tracking-[0.1em] text-muted-foreground">
                 {block.heading}
               </p>
             ) : (
-              <h2 className="mb-5 font-serif text-[26px] italic leading-snug text-foreground">
+              <h2 className="mb-5 font-serif text-[28px] italic leading-snug text-foreground">
                 {block.heading}
               </h2>
             ))}
@@ -132,7 +132,7 @@ function SourceBody({
             ))}
           </div>
           {block.note && (
-            <p className="mt-6 border-l-2 border-border pl-3 text-[13px] leading-relaxed text-muted-foreground">
+            <p className="mt-6 border-l-2 border-border pl-3 text-sm leading-relaxed text-muted-foreground">
               <span className="font-medium">Editor’s note.</span> {block.note}
             </p>
           )}
@@ -171,10 +171,10 @@ function DocParagraph({
       id={`anchor-${sourceId}-${p.id}`}
       className={cn("grid scroll-mt-24 grid-cols-[3.25rem_minmax(0,1fr)]", flashing && "lx-flash")}
     >
-      <span className="select-none pt-[0.55rem] font-mono text-[12px] text-[#9aa2b4]">
+      <span className="select-none pt-[0.55rem] font-mono text-[13px] text-[color:var(--lx-faint)]">
         {p.label}
       </span>
-      <p className="font-serif text-[24px] leading-[1.5] text-[#1b2540]">
+      <p className="font-serif text-xl leading-[1.5] text-[color:var(--lx-ink)]">
         {runs.map((r, i) =>
           !r.mark ? (
             <span key={i}>{r.text}</span>
@@ -229,7 +229,9 @@ export function EvidenceHighlight({
       title={item ? `${FLAG_LABEL[item.flag]}: ${item.label}` : undefined}
       className={cn(
         "cursor-pointer rounded-[2px] border-b-[1.5px] border-[var(--underline)] bg-[var(--highlight)] px-0.5 text-inherit transition-colors [box-decoration-break:clone]",
-        active ? "bg-[#efd9a3] shadow-[0_0_0_2px_#f5e7c6]" : "hover:bg-[#f1ddb0]",
+        active
+          ? "bg-[var(--lx-hilite)] shadow-[0_0_0_2px_var(--lx-hilite-ring)]"
+          : "hover:bg-[var(--lx-hilite-hover)]",
       )}
     >
       {text}
@@ -316,7 +318,7 @@ function VideoSource({
           role="group"
           aria-label="Jump to a moment"
         >
-          <span className="mr-1 text-[13px] text-muted-foreground">Jump to</span>
+          <span className="mr-1 text-sm text-muted-foreground">Jump to</span>
           {marks.map((m) => (
             <button
               key={m}
@@ -324,10 +326,10 @@ function VideoSource({
               onClick={() => setVideoTime(video, m)}
               aria-pressed={m === t}
               className={cn(
-                "h-7 rounded-md border px-2 font-mono text-[12px] transition-colors",
+                "h-7 rounded-md border px-2 font-mono text-[13px] transition-colors",
                 m === t
                   ? "border-primary bg-accent text-primary"
-                  : "border-border bg-white text-muted-foreground hover:text-foreground",
+                  : "border-border bg-card text-muted-foreground hover:text-foreground",
               )}
             >
               {mmss(m)}
@@ -337,13 +339,13 @@ function VideoSource({
       </div>
 
       <section className="mt-9">
-        <h2 className="font-serif text-[26px] leading-snug">Observations</h2>
-        <p className="mt-1 text-[13px] text-muted-foreground">
+        <h2 className="font-serif text-[28px] leading-snug">Observations</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
           Paraphrased descriptions of what the footage shows, not a transcript. Times are
           approximate.
         </p>
         {observations.length === 0 ? (
-          <p className="mt-5 text-[15px] text-muted-foreground">
+          <p className="mt-5 text-base text-muted-foreground">
             Nothing from this video is on the timeline yet.
           </p>
         ) : (
@@ -365,7 +367,7 @@ function VideoSource({
                     className={cn(
                       "grid w-full grid-cols-[5.5rem_3.25rem_minmax(0,1fr)] items-start gap-3 rounded-lg border p-2.5 text-left transition-colors",
                       focusId === item.id
-                        ? "border-[#c4d1fb] bg-accent/60"
+                        ? "border-[var(--lx-link-border)] bg-accent/60"
                         : "border-border hover:bg-muted/50",
                     )}
                   >
@@ -376,14 +378,14 @@ function VideoSource({
                       }
                       className="aspect-video w-full rounded"
                     />
-                    <span className="pt-0.5 font-mono text-[12px] text-muted-foreground">
+                    <span className="pt-0.5 font-mono text-[13px] text-muted-foreground">
                       {mmss(at.t)}
                     </span>
                     <span className="min-w-0">
-                      <span className="block font-serif text-[21px] leading-snug">
+                      <span className="block font-serif text-[22px] leading-snug">
                         {item.label}
                       </span>
-                      <span className="mt-0.5 block text-[14px] leading-relaxed text-muted-foreground">
+                      <span className="mt-0.5 block text-[15px] leading-relaxed text-muted-foreground">
                         {item.extractedText}
                       </span>
                     </span>
@@ -408,11 +410,11 @@ function MissingSource({ source }: { source: Source }) {
         title={source.title}
         subtitle={source.subtitle}
       />
-      <div className="mt-7 rounded-lg border border-dashed border-[#e0bd74] bg-[#fdf8ee] p-5">
-        <p className="font-serif text-[24px] leading-[1.45]">
+      <div className="mt-7 rounded-lg border border-dashed border-[var(--lx-amber-border)] bg-[var(--lx-amber-bg)] p-5">
+        <p className="font-serif text-xl leading-[1.45]">
           {gap?.extractedText ?? "This source is referenced but no file is in the record."}
         </p>
-        <p className="mt-3 text-[13px] text-[#8a5a12]">
+        <p className="mt-3 text-sm text-[color:var(--lx-amber-text)]">
           Possible gap. Request the recording if it exists.
         </p>
       </div>
@@ -437,8 +439,8 @@ function MessageSource({ itemId }: { itemId: string }) {
       />
       {preview && <FrameThumb src={preview} className="mt-7 aspect-video w-full rounded-lg" />}
       <div className="mt-7 grid grid-cols-[3.25rem_minmax(0,1fr)]">
-        <span className="pt-[0.55rem] font-mono text-[12px] text-[#9aa2b4]">¶1</span>
-        <p className="font-serif text-[24px] leading-[1.5] text-[#1b2540]">
+        <span className="pt-[0.55rem] font-mono text-[13px] text-[color:var(--lx-faint)]">¶1</span>
+        <p className="font-serif text-xl leading-[1.5] text-[color:var(--lx-ink)]">
           {item.extractedText || item.label}
         </p>
       </div>

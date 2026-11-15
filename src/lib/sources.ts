@@ -313,12 +313,12 @@ export const DOC_FINDING_CITATIONS: Record<string, Citation[]> = BTK ? BTK.findi
   ]),
 );
 
-/** The open case's sources (see active-case.ts). */
-export const SOURCES: Source[] = BTK?.sources ?? ROSALES_SOURCES;
-
-export const ITEM_CITATIONS: Record<string, Citation[]> = BTK
-  ? BTK.citations
-  : { ...SAMPLE_CITATIONS, ...analysisCitations() };
+/** The open case's sources (see active-case.ts). Live bindings: setSourceBundle can replace them. */
+const OWN_SOURCES: Source[] = BTK?.sources ?? ROSALES_SOURCES;
+const OWN_CITATIONS: Record<string, Citation[]> = BTK ? BTK.citations : { ...SAMPLE_CITATIONS, ...analysisCitations() };
+const OWN_HOME = BTK ? { sourceId: "STATE", focusId: null } : { sourceId: "complaint", focusId: "complaint-reason" };
+export let SOURCES: Source[] = OWN_SOURCES;
+export let ITEM_CITATIONS: Record<string, Citation[]> = OWN_CITATIONS;
 
 export type EntityType = "Person" | "Place" | "Date" | "Organization";
 
@@ -403,7 +403,29 @@ const ROSALES_ENTITIES: Entity[] = [
   },
 ];
 
-export const ENTITIES: Entity[] = BTK?.entities ?? ROSALES_ENTITIES;
+const OWN_ENTITIES: Entity[] = BTK?.entities ?? ROSALES_ENTITIES;
+export let ENTITIES: Entity[] = OWN_ENTITIES;
+
+/** Where the Case Analysis tab opens: a document, and the finding in focus. */
+export let HOME: { sourceId: string; focusId: string | null } = OWN_HOME;
+
+/**
+ * Show a public-record case's documents (src/lib/case-sources.ts builds them), or this case's
+ * own again (null). Used by the dated cases from the landing page's case library.
+ */
+export function setSourceBundle(
+  b: {
+    sources: Source[];
+    itemCitations: Record<string, Citation[]>;
+    entities: Entity[];
+    home: { sourceId: string; focusId: string | null };
+  } | null,
+): void {
+  SOURCES = b?.sources ?? OWN_SOURCES;
+  ITEM_CITATIONS = b?.itemCitations ?? OWN_CITATIONS;
+  ENTITIES = b?.entities ?? OWN_ENTITIES;
+  HOME = b?.home ?? OWN_HOME;
+}
 
 export function findSource(id: string | undefined): Source | undefined {
   return id ? SOURCES.find((s) => s.id === id) : undefined;
