@@ -1,5 +1,6 @@
 import { useMemo, useSyncExternalStore } from "react";
 import type { PipelineState } from "@/lib/agent/pipeline";
+import { setItemDueOnServer } from "@/lib/deadlines.functions";
 import { CONVERSATION, ITEMS, type ChatMessage, type TimelineItem } from "@/lib/sample-case";
 
 // The live case: timeline items and the conversation. It starts from the sample data and
@@ -47,6 +48,26 @@ export function appendMessage(message: Omit<ChatMessage, "id">): void {
       { ...message, id: `m${state.messages.length + 1}-${Date.now().toString(36)}` },
     ],
   });
+}
+
+/**
+ * Set or clear an item's deadline. The page updates at once. In Photon mode the case lives on
+ * the server (reminders are sent from there), so the change is sent up too.
+ */
+export async function setItemDue(id: string, dueAt: string | null): Promise<void> {
+  setCase({
+    items: state.items.map((i) => {
+      if (i.id !== id) return i;
+      const { dueAt: _old, ...rest } = i;
+      return dueAt ? { ...rest, dueAt } : rest;
+    }),
+  });
+  if (state.mode !== "photon") return;
+  try {
+    await setItemDueOnServer({ data: { id, dueAt } });
+  } catch {
+    // The next poll shows what the server really has.
+  }
 }
 
 export function resetCase(): void {

@@ -16,9 +16,15 @@ export function connectAgent(channel: ChannelAdapter, llm: AgentLlm, store: Case
     const to: ReplyMeta = message.conversationId ? { conversationId: message.conversationId } : {};
     store.update({ busy: true });
     try {
-      const { items, pendingId, pendingFor } = store.get();
+      const { items, pendingId, pendingFor, caseDeadline, resolved } = store.get();
       const result = await handleMessage(
-        { items, pendingId, pendingFor: pendingFor ?? null },
+        {
+          items,
+          pendingId,
+          pendingFor: pendingFor ?? null,
+          ...(caseDeadline !== undefined ? { caseDeadline } : {}),
+          ...(resolved !== undefined ? { resolved } : {}),
+        },
         message,
         llm,
       );

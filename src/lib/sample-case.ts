@@ -27,6 +27,8 @@ export interface TimelineItem {
   relatedId?: string;
   /** When it was filed through the message pipeline (ISO). Sample items have none. */
   filedAt?: string;
+  /** When a person needs to have dealt with it by (ISO). Set by a person on Review. */
+  dueAt?: string;
 }
 
 export interface ChatMessage {

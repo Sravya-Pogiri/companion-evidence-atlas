@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { getChannelState } from "@/lib/channel.functions";
 import { getCase, setCase } from "@/lib/case-store";
+import { syncDecisions } from "@/lib/deadlines.functions";
+import { getDecisions, subscribe } from "@/lib/review-store";
 
 const POLL_MS = 2000;
 
@@ -37,9 +39,25 @@ export function useChannelSync(): void {
     };
     void tick();
 
+    // In Photon mode the server sends deadline reminders, so it needs to know which items a
+    // person already confirmed or dismissed. Send the decisions up when they change.
+    let push: ReturnType<typeof setTimeout> | undefined;
+    const pushDecisions = () => {
+      if (getCase().mode !== "photon") return;
+      syncDecisions({ data: getDecisions() }).catch(() => {});
+    };
+    const unsubscribe = subscribe(() => {
+      if (push) clearTimeout(push);
+      push = setTimeout(pushDecisions, 300);
+    });
+    const first = setTimeout(pushDecisions, 2500); // once the mode is known
+
     return () => {
       stopped = true;
       if (timer) clearTimeout(timer);
+      if (push) clearTimeout(push);
+      clearTimeout(first);
+      unsubscribe();
     };
   }, []);
 }

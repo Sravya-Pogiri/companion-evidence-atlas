@@ -1,5 +1,6 @@
 import { compareItem, describeAttachment } from "@/lib/agent.functions";
 import { getCase, setCase } from "@/lib/case-store";
+import { getDecisions } from "@/lib/review-store";
 import { SimulatedChannel } from "@/lib/channel/simulated";
 import type { ChannelAdapter } from "@/lib/channel/types";
 import type { AgentLlm } from "./pipeline";
@@ -25,6 +26,11 @@ export const serverLlm: AgentLlm = {
 
 export const channel: ChannelAdapter = new SimulatedChannel();
 connectAgent(channel, serverLlm, {
-  get: getCase,
+  get: () => ({
+    ...getCase(),
+    resolved: Object.entries(getDecisions())
+      .filter(([, d]) => d === "confirmed" || d === "dismissed")
+      .map(([id]) => id),
+  }),
   update: setCase,
 });

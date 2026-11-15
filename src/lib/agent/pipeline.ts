@@ -1,4 +1,5 @@
 import type { Attachment, InboundMessage } from "@/lib/channel/types";
+import { dueInfo, effectiveDue, formatDueDate } from "@/lib/deadlines";
 import {
   AXIS_END,
   FLAG_LABEL,
@@ -64,6 +65,10 @@ export interface PipelineState {
   pendingId: string | null;
   /** Who it is waiting on (the conversation that proposed it). Empty or missing when there is one conversation. */
   pendingFor?: string | null;
+  /** The next deadline for the whole case, from a connected calendar. Read-only here. */
+  caseDeadline?: { title: string; dueAt: string; allDay: boolean } | null;
+  /** Items a person already confirmed or dismissed on Review. Read-only here. */
+  resolved?: string[];
 }
 export interface Reply {
   text: string;
@@ -167,6 +172,9 @@ export async function handleMessage(
     return say(state, { text: whatsMissing(state.items) });
   if (/\bwhat(?:'s| has| have)?\s+changed\b/.test(t))
     return say(state, { text: whatsChanged(state.items, now) });
+  // Whole-message only, so a note that happens to say "deadline" is still treated as a note.
+  if (/^(?:what(?:'s| is| are)?\s+(?:due|coming up)|(?:upcoming |any )?deadlines?)$/.test(t))
+    return say(state, { text: whatsDue(state, now) });
 
   // A longer statement (not a question) is evidence in its own right: a note from the case
   // team, filed through the same propose-then-Y flow as an attachment. Over a text-only
@@ -406,6 +414,34 @@ export function whatsMissing(items: TimelineItem[]): string {
     return "I don't see anything flagged as missing. That doesn't mean nothing is missing, so a person should still check.";
   }
   return `Possible gaps: ${gaps.join("; ")}.`;
+}
+
+export function whatsDue(state: PipelineState, now: Date): string {
+  const resolved = new Set(state.resolved ?? []);
+  const caseDue = state.caseDeadline ?? null;
+  const rows = filedItems(state.items)
+    .filter((i) => i.flag !== "agrees" && !resolved.has(i.id))
+    .map((item) => ({ item, due: effectiveDue(item, caseDue?.dueAt) }))
+    .filter((r): r is { item: TimelineItem; due: string } => r.due !== undefined)
+    .sort((a, b) => new Date(a.due).getTime() - new Date(b.due).getTime());
+
+  const head = caseDue
+    ? `Next case deadline: ${caseDue.title} (${dueInfo(caseDue.dueAt, now).label.toLowerCase()}, ${formatDueDate(caseDue.dueAt, caseDue.allDay)}).`
+    : "";
+  if (rows.length === 0) {
+    return (
+      head ||
+      "No deadlines are set. On the Review page you can set one on a flagged item, or connect a calendar."
+    ).concat(head ? " No flagged item is waiting on a person." : "");
+  }
+  const lines = rows
+    .slice(0, 5)
+    .map(
+      ({ item, due }) =>
+        `- ${item.label} (${dueInfo(due, now).label.toLowerCase()}, ${formatDueDate(due)})`,
+    );
+  const more = rows.length > 5 ? `\n...and ${rows.length - 5} more.` : "";
+  return `${head ? `${head}\n` : ""}Waiting on a person:\n${lines.join("\n")}${more}`;
 }
 
 export function whatsChanged(items: TimelineItem[], now: Date): string {

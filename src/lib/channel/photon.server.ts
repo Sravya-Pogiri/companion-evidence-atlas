@@ -65,6 +65,27 @@ export class PhotonChannel implements ChannelAdapter {
       console.error("photon: no conversation to send this reply to; it was not sent.");
       return;
     }
+    await this.post(ctx, text, true);
+  }
+
+  /**
+   * Text everyone who has texted the line, for example a deadline reminder. A shared line can
+   * only message people who have texted it first, and who they are is remembered only while the
+   * server runs, so after a restart this reaches nobody until they text again.
+   */
+  async notifyAll(text: string): Promise<{ recipients: number; accepted: number }> {
+    const contexts = [...this.contexts.values()];
+    if (contexts.length === 0) return { recipients: 0, accepted: 0 };
+    this.log({ from: "agent", text });
+    let accepted = 0;
+    for (const ctx of contexts) {
+      if (await this.post(ctx, text, false)) accepted += 1;
+    }
+    return { recipients: contexts.length, accepted };
+  }
+
+  /** Send one text to one conversation. Returns whether Photon accepted it (queued, not delivered). */
+  private async post(ctx: ReplyContext, text: string, threaded: boolean): Promise<boolean> {
     try {
       const response = await this.fetchImpl(
         `${this.config.baseUrl ?? DEFAULT_BASE_URL}/v1/projects/${encodeURIComponent(this.config.projectId)}/messages`,
@@ -78,16 +99,17 @@ export class PhotonChannel implements ChannelAdapter {
           body: JSON.stringify({
             spaceId: ctx.spaceId,
             senderId: ctx.senderId,
-            parentMessageId: ctx.parentMessageId,
+            ...(threaded ? { parentMessageId: ctx.parentMessageId } : {}),
             content: { type: "text", format: "plain", text },
           }),
           signal: AbortSignal.timeout(10_000),
         },
       );
-      // Accepted means queued for dispatch, not delivered.
       if (!response.ok) console.error(`photon: send failed with status ${response.status}.`);
+      return response.ok;
     } catch {
       console.error("photon: send failed (no response).");
+      return false;
     }
   }
 }
