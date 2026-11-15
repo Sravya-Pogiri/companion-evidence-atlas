@@ -180,54 +180,66 @@
     <section class="section theme-light problem" id="problem" aria-labelledby="problemTitle">
       <div class="container">
 
-        <!-- 1 · The 2,080-hour year -->
-        <div class="yr" id="yr">
-          <header class="yr__head">
+        <!-- 1 · The vicious cycle of public defense (script.js animates it) -->
+        <div class="vc" id="vc">
+          <header class="vc__head">
             <p class="section__index reveal">01 — The Problem</p>
-            <h2 class="section__title yr__title reveal" id="problemTitle">One attorney. Too many cases. <em>Not enough time.</em></h2>
-            <p class="yr__lede reveal">Public defenders represent people who cannot afford a lawyer. Here is one attorney's working year, hour by hour.</p>
+            <h2 class="section__title vc__title reveal" id="problemTitle">The people defending justice <em>need defending, too.</em></h2>
+            <div class="vc__lede reveal">
+              <p>Public defenders dedicate their careers to representing those who cannot afford legal counsel. Yet limited funding, overwhelming caseloads, and inadequate investigative resources leave them fighting an uphill battle.</p>
+              <p class="vc__human">Behind every case is a person. Behind hundreds of cases is an exhausted attorney, trying to give each person the defense they deserve.</p>
+            </div>
           </header>
 
-          <div class="yr__scroll" id="yrScroll">
-            <div class="yr__stage" id="yrStage">
-              <div class="yr__top">
-                <p class="yr__num" aria-hidden="true">150</p>
-                <div class="yr__intro">
-                  <p class="yr__numk"><b>150 felony cases</b> per attorney per year: the 1973 national ceiling.<a href="#yrNote1" class="fn" aria-label="Footnote 1">1</a> <span class="tag tag--fact">Historical standard</span></p>
-                  <div class="yr__toggle" role="group" aria-label="Compare the 1973 ceiling with the 2023 study">
-                    <button type="button" class="yr__btn" data-yr="0" aria-pressed="true">1973 ceiling</button>
-                    <button type="button" class="yr__btn" data-yr="1" aria-pressed="false">2023 study</button>
-                  </div>
-                  <p class="yr__cap" id="yrCap" aria-live="polite"><span class="yr__cap-k">1973</span>Spread across a 2,080-hour working year, 150 cases leave about <b>13.9 hours</b> for each one.</p>
-                </div>
-              </div>
+          <div class="vc__body">
+            <figure class="vc__figure">
+              <p class="vc__kicker">The vicious cycle of public defense</p>
+            <svg class="vc__svg" viewBox="0 0 1000 900" role="img" aria-labelledby="vcTitle vcDesc">
+              <title id="vcTitle">The vicious cycle of public defense</title>
+              <desc id="vcDesc">Six stages in a loop: limited government funding leads to staffing shortages, then overwhelming caseloads, time-consuming investigations, burnout and exhaustion, and reduced capacity for thorough defense, which feeds back into funding and staffing. At the centre: who pays the price? The person waiting for justice.</desc>
+              <defs>
+                <marker id="vcHead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 7 5 1 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+                <radialGradient id="vcCore" cx="50%" cy="42%" r="62%"><stop offset="0" stop-color="#16285A"/><stop offset="1" stop-color="#0B1736"/></radialGradient>
+              </defs>
+              <circle class="vc__track" cx="500" cy="440" r="262"/>
+              <g class="vc__arcs"><path class="vc__arc" data-arc="0" d="M569.7 187.4 A262 262 0 0 1 683.9 253.3" marker-end="url(#vcHead)"/><path class="vc__arc" data-arc="1" d="M753.6 374.1 A262 262 0 0 1 753.6 505.9" marker-end="url(#vcHead)"/><path class="vc__arc" data-arc="2" d="M683.9 626.7 A262 262 0 0 1 569.7 692.6" marker-end="url(#vcHead)"/><path class="vc__arc" data-arc="3" d="M430.3 692.6 A262 262 0 0 1 316.1 626.7" marker-end="url(#vcHead)"/><path class="vc__arc" data-arc="4" d="M246.4 505.9 A262 262 0 0 1 246.4 374.1" marker-end="url(#vcHead)"/><path class="vc__arc vc__arc--loop" data-arc="5" d="M316.1 253.3 A262 262 0 0 1 430.3 187.4" marker-end="url(#vcHead)"/></g>
+              <g class="vc__pulses" aria-hidden="true"><path class="vc__pulse" data-pulse="0" d="M569.7 187.4 A262 262 0 0 1 683.9 253.3"/><path class="vc__pulse" data-pulse="1" d="M753.6 374.1 A262 262 0 0 1 753.6 505.9"/><path class="vc__pulse" data-pulse="2" d="M683.9 626.7 A262 262 0 0 1 569.7 692.6"/><path class="vc__pulse" data-pulse="3" d="M430.3 692.6 A262 262 0 0 1 316.1 626.7"/><path class="vc__pulse" data-pulse="4" d="M246.4 505.9 A262 262 0 0 1 246.4 374.1"/><path class="vc__pulse" data-pulse="5" d="M316.1 253.3 A262 262 0 0 1 430.3 187.4"/></g>
+              <path class="vc__blue" d="M500.0 756.0 C500.0 822.0 500.0 860.0 500.0 900"/>
+              <g class="vc__core">
+                <circle cx="500" cy="440" r="150" fill="url(#vcCore)"/>
+                <circle class="vc__core-ring" cx="500" cy="440" r="164"/>
+                <text class="vc__ask" x="500" y="416" text-anchor="middle"><tspan x="500">Who pays</tspan><tspan x="500" dy="48">the price?</tspan></text>
+                <text class="vc__answer" x="500" y="508" text-anchor="middle"><tspan x="500">The person waiting</tspan><tspan x="500" dy="27">for justice.</tspan></text>
+              </g>
+              <g class="vc__nodes"><g class="vc__node" data-stage="0" transform="translate(500.0 178.0)"><circle class="vc__disc" r="50"/><g class="vc__icon" transform="translate(-17 -17) scale(1.42)"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v7M9.5 10v7M14.5 10v7M19 10v7"/><path d="M3.5 19.5h17"/></g><circle class="vc__num-bg" cx="36.0" cy="-36.0" r="13"/><text class="vc__num" x="36.0" y="-31.5">1</text></g><g class="vc__node" data-stage="1" transform="translate(726.9 309.0)"><circle class="vc__disc" r="50"/><g class="vc__icon" transform="translate(-17 -17) scale(1.42)"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.6-3.3 2.8-5 5.5-5s4.9 1.7 5.5 5"/><circle cx="17.5" cy="9" r="2.4" stroke-dasharray="2 2"/><path d="M15 19c.4-2 1.4-3.3 2.9-3.7" stroke-dasharray="2 2"/></g><circle class="vc__num-bg" cx="36.0" cy="-36.0" r="13"/><text class="vc__num" x="36.0" y="-31.5">2</text></g><g class="vc__node" data-stage="2" transform="translate(726.9 571.0)"><circle class="vc__disc" r="50"/><g class="vc__icon" transform="translate(-17 -17) scale(1.42)"><path d="M5 6.5h12l2 2v11H5z"/><path d="M7.5 4h12v12"/><path d="M8 11h8M8 14h8M8 17h5"/></g><circle class="vc__num-bg" cx="36.0" cy="-36.0" r="13"/><text class="vc__num" x="36.0" y="-31.5">3</text></g><g class="vc__node" data-stage="3" transform="translate(500.0 702.0)"><circle class="vc__disc" r="50"/><g class="vc__icon" transform="translate(-17 -17) scale(1.42)"><path d="M5 3.5h8l3 3v6"/><path d="M5 3.5v16h6"/><path d="M7.5 8h5M7.5 11h4"/><circle cx="16" cy="16" r="3.6"/><path d="m18.6 18.6 2.6 2.6"/></g><circle class="vc__num-bg" cx="36.0" cy="-36.0" r="13"/><text class="vc__num" x="36.0" y="-31.5">4</text></g><g class="vc__node" data-stage="4" transform="translate(273.1 571.0)"><circle class="vc__disc" r="50"/><g class="vc__icon" transform="translate(-17 -17) scale(1.42)"><rect x="3" y="8" width="16" height="9" rx="1.6"/><path d="M21 11v3"/><path d="M5.5 10.5h2.5v4H5.5z" fill="currentColor"/></g><circle class="vc__num-bg" cx="36.0" cy="-36.0" r="13"/><text class="vc__num" x="36.0" y="-31.5">5</text></g><g class="vc__node" data-stage="5" transform="translate(273.1 309.0)"><circle class="vc__disc" r="50"/><g class="vc__icon" transform="translate(-17 -17) scale(1.42)"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/><path d="m4 4 16 16"/></g><circle class="vc__num-bg" cx="36.0" cy="-36.0" r="13"/><text class="vc__num" x="36.0" y="-31.5">6</text></g></g>
+              <g class="vc__labels" aria-hidden="true"><text class="vc__label" data-stage="0" x="500.0" y="68.0" text-anchor="middle"><tspan x="500.0">Limited government</tspan><tspan x="500.0" dy="24">funding</tspan></text><text class="vc__label" data-stage="1" x="792.7" y="265.0" text-anchor="start"><tspan x="792.7">Staffing</tspan><tspan x="792.7" dy="24">shortages</tspan></text><text class="vc__label" data-stage="2" x="792.7" y="603.0" text-anchor="start"><tspan x="792.7">Overwhelming</tspan><tspan x="792.7" dy="24">caseloads</tspan></text><text class="vc__label" data-stage="3" x="566.0" y="728.0" text-anchor="start"><tspan x="566.0">Time-consuming</tspan><tspan x="566.0" dy="24">investigations</tspan></text><text class="vc__label" data-stage="4" x="207.3" y="603.0" text-anchor="end"><tspan x="207.3">Burnout and</tspan><tspan x="207.3" dy="24">exhaustion</tspan></text><text class="vc__label" data-stage="5" x="207.3" y="265.0" text-anchor="end"><tspan x="207.3">Reduced capacity for</tspan><tspan x="207.3" dy="24">thorough defense</tspan></text></g>
+            </svg>
+              <figcaption class="vc__detail" id="vcDetail" aria-live="polite"><span class="vc__detail-k">Each stage feeds the next.</span> <span class="vc__detail-v">Reduced capacity loops back into the funding and staffing gaps, and the cycle repeats.</span></figcaption>
+            </figure>
 
-              <figure class="yr__fig" aria-labelledby="yrAlt">
-                <div class="yr__wrap" id="yrWrap">
-                  <canvas id="yrCanvas" aria-hidden="true"></canvas>
-                  <div class="yr__tip" id="yrTip" hidden></div>
-                </div>
-                <figcaption class="yr__legend">
-                  <span class="yr__sw"><i class="lg lg--case"></i>One case's hours</span>
-                  <span class="yr__sw"><i class="lg lg--cut"></i>Case cut off by the end of the year</span>
-                  <span class="yr__sw"><i class="lg lg--out"></i>Case left without the time</span>
-                  <span class="yr__unit">1 cell = 1 working hour · 52 weeks × 40 h = 2,080 h<a href="#yrNote2" class="fn" aria-label="Footnote 2">2</a></span>
-                  <span class="sr-only" id="yrAlt">Chart of one attorney's working year: 2,080 hours, 52 weeks of 40 hours. Under the 1973 ceiling, 150 felony cases share the year at about 13.9 hours each. Under the 2023 study's recommendation of 35 hours per low-level felony, the year is full after 59 cases, leaving 91 cases without the recommended time.</span>
-                </figcaption>
-              </figure>
-
-              <dl class="yr__facts">
-                <div><dt>Hours per case</dt><dd id="yrPer">≈13.9</dd></div>
-                <div><dt>Cases that fit the year</dt><dd id="yrFit">150</dd></div>
-                <div class="is-out"><dt>Cases without the time</dt><dd id="yrOut">0</dd></div>
-              </dl>
-            </div>
+            <ol class="vc__list" aria-label="The six stages">
+              <li class="vc__item" data-stage="0" tabindex="0"><span class="vc__item-n">01</span><span class="vc__item-body"><b>Limited government funding</b><span>Public defense offices struggle with insufficient budgets and resources.</span></span></li>
+              <li class="vc__item" data-stage="1" tabindex="0"><span class="vc__item-n">02</span><span class="vc__item-body"><b>Staffing shortages</b><span>Limited resources make it difficult to recruit and retain attorneys and investigators.</span></span></li>
+              <li class="vc__item" data-stage="2" tabindex="0"><span class="vc__item-n">03</span><span class="vc__item-body"><b>Overwhelming caseloads</b><span>Fewer attorneys must handle more cases simultaneously.</span></span></li>
+              <li class="vc__item" data-stage="3" tabindex="0"><span class="vc__item-n">04</span><span class="vc__item-body"><b>Time-consuming investigations</b><span>Attorneys spend valuable hours manually reviewing fragmented documents, footage, testimonies, and forensic records.</span></span></li>
+              <li class="vc__item" data-stage="4" tabindex="0"><span class="vc__item-n">05</span><span class="vc__item-body"><b>Burnout and exhaustion</b><span>Constant pressure and emotional strain can contribute to declining morale and attorney turnover.</span></span></li>
+              <li class="vc__item" data-stage="5" tabindex="0"><span class="vc__item-n">06</span><span class="vc__item-body"><b>Reduced capacity for thorough defense</b><span>Fewer resources and less time increase the risk of critical evidence being overlooked.</span></span></li>
+            </ol>
           </div>
 
-          <ol class="yr__notes reveal">
-            <li id="yrNote1"><span>1</span>1973 National Advisory Commission on Criminal Justice Standards and Goals: no more than 150 felony cases per attorney per year. It is shown as a historical benchmark, not today's standard.</li>
-            <li id="yrNote2"><span>2</span>National Public Defense Workload Study (2023), from RAND, NCSC, ABA SCLAID and partners: 35 recommended attorney hours per low-level felony, on a 2,080-hour working year, which works out to 59 cases. Both figures are recommended maximums, not measured caseloads. <a href="https://dids.nv.gov/uploadedFiles/didsnvgov/content/Meetings/2023/NAPD%20Understanding%20the%20National%20Workload%20Study-%20ADA%20Compliant(1).pdf" target="_blank" rel="noopener">NAPD summary<svg class="ico ico--xs" aria-hidden="true"><use href="#i-ext"/></svg></a> · <a href="https://www.rand.org/pubs/research_reports/RRA2559-1.html" target="_blank" rel="noopener">RAND<svg class="ico ico--xs" aria-hidden="true"><use href="#i-ext"/></svg></a></li>
-          </ol>
+          <div class="vc__turn" id="vcTurn">
+            <p class="vc__turn-k"><span class="vc__turn-dot"></span>Stage 4 · Where technology can help</p>
+            <p class="vc__turn-line">We cannot give public defenders more hours in a day. <em>But we can help them make every hour count.</em></p>
+            <h3 class="vc__meet">Meet Lexora.</h3>
+            <p class="vc__meet-lede">Lexora brings a case's fragmented evidence into one place, so attorneys spend less of their limited time hunting through it and more of it on their clients.</p>
+            <ul class="vc__does">
+              <li><b>Unifies fragmented evidence</b><span>Reports, footage, transcripts and filings, side by side.</span></li>
+              <li><b>Reconstructs timelines</b><span>Every source placed on one timeline of what happened.</span></li>
+              <li><b>Flags potential inconsistencies</b><span>Where accounts may diverge, marked for review, not decided.</span></li>
+              <li><b>Source-backed findings</b><span>Each finding links to its page or moment so the attorney can check it.</span></li>
+            </ul>
+            <p class="vc__fine">Lexora is a tool for attorneys, not a replacement for them, and it does not fix underfunding. It helps the time they have go further.</p>
+          </div>
         </div>
 
         <!-- 2 · The workload gap -->

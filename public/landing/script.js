@@ -814,6 +814,71 @@
     new IntersectionObserver(([en], ob) => { if (en.isIntersecting) { ob.disconnect(); play(); } }, { threshold: 0.2 }).observe(wrap);
   }
 
+
+  /* ------------------------------------------------------------------------
+     PROBLEM · THE VICIOUS CYCLE — stages light up one by one as the section
+     scrolls in, a pulse travels the loop while it is on screen, hover/focus
+     explains a stage, and stage 4 then turns blue for the intervention.
+     ------------------------------------------------------------------------ */
+  function initCycle() {
+    const root = $("#vc");
+    if (!root) return;
+    const svg = $(".vc__svg", root);
+    const nodes = $$(".vc__node", root), labels = $$(".vc__label", root), items = $$(".vc__item", root);
+    const arcs = $$(".vc__arc", root), pulses = $$(".vc__pulse", root);
+    const detail = $("#vcDetail"), core = $(".vc__core", root), blue = $(".vc__blue", root);
+    const STAGES = items.map(li => [li.querySelector("b").textContent, li.querySelector(".vc__item-body > span").textContent]);
+    const restDetail = detail.innerHTML;
+    [...arcs, ...pulses, blue].forEach(p => p.style.setProperty("--len", p.getTotalLength().toFixed(1)));
+    pulses.forEach(p => { const L = p.getTotalLength(); p.style.strokeDasharray = `14 ${L + 20}`; });
+
+    // Hover or focus on a stage (in the diagram or the list): light it, its outgoing arrow and its entry.
+    const focus = (i) => {
+      nodes.forEach((n, k) => n.classList.toggle("is-hot", k === i));
+      labels.forEach((n, k) => n.classList.toggle("is-hot", k === i));
+      items.forEach((n, k) => n.classList.toggle("is-hot", k === i));
+      arcs.forEach((a, k) => a.classList.toggle("is-hot", k === i));
+      detail.innerHTML = i === null ? restDetail
+        : `<span class="vc__detail-k">${String(i + 1).padStart(2, "0")} · ${STAGES[i][0]}.</span> <span class="vc__detail-v">${STAGES[i][1]}</span>`;
+    };
+    [...nodes, ...items].forEach(el => {
+      const i = Number(el.dataset.stage);
+      el.addEventListener("pointerenter", () => focus(i));
+      el.addEventListener("pointerleave", () => focus(null));
+      el.addEventListener("focus", () => focus(i));
+      el.addEventListener("blur", () => focus(null));
+    });
+
+    const showAll = () => { [...nodes, ...labels, ...arcs, core].forEach(el => el.classList.add("is-lit")); root.classList.add("is-turned"); };
+    if (prefersReducedMotion.matches) { showAll(); return; }
+
+    // Reveal: each stage lights up, then its arrow draws; the core; then the turn at stage 4.
+    root.classList.add("js-anim");
+    let pulseTimer = null, onScreen = false, step = 0;
+    const runPulse = () => {
+      if (!onScreen) { pulseTimer = null; return; }
+      const p = pulses[step % pulses.length];
+      p.classList.remove("is-run"); void p.getBoundingClientRect(); p.classList.add("is-run");
+      step++;
+      pulseTimer = setTimeout(runPulse, 1250);
+    };
+    const reveal = () => {
+      const STEP = 520;
+      nodes.forEach((n, i) => {
+        setTimeout(() => { n.classList.add("is-lit"); labels[i].classList.add("is-lit"); }, i * STEP);
+        setTimeout(() => arcs[i].classList.add("is-lit"), i * STEP + 260);
+      });
+      setTimeout(() => core.classList.add("is-lit"), 6 * STEP);
+      setTimeout(() => { root.classList.add("is-turned"); if (!pulseTimer) runPulse(); }, 6 * STEP + 900);
+    };
+    new IntersectionObserver(([en], ob) => { if (en.isIntersecting) { ob.disconnect(); reveal(); } }, { threshold: 0.3 }).observe(svg);
+    // The pulse only runs while the cycle is on screen.
+    new IntersectionObserver(([en]) => {
+      onScreen = en.isIntersecting;
+      if (onScreen && root.classList.contains("is-turned") && !pulseTimer) runPulse();
+    }).observe(svg);
+  }
+
   /* ------------------------------------------------------------------------
      9. HERO FOCUS LENS — blurred document texture sharpened under the cursor
      ------------------------------------------------------------------------ */
@@ -1292,6 +1357,7 @@
     initEvidence();
     initHeroLens();
     initEvidenceBoard();
+    initCycle();
     initNav();
     initSplit();        // must precede reveal so split titles get observed
     initReveal();
