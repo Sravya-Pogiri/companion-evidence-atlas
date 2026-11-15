@@ -16,20 +16,18 @@ describe("static landing page", () => {
     expect(html).toContain('src="casebook.js"');
   });
 
-  it("has buttons into the app: nav, mobile menu and hero", () => {
-    // "Open the app" (nav and mobile menu) and "Explore Real Cases" open Investigate; "Try the
-    // live case" replays the Live Case demo.
-    expect(html.match(/href="\/investigate"/g)?.length).toBeGreaterThanOrEqual(3);
+  it("has buttons into the app in the hero", () => {
+    // "Explore Real Cases" opens Investigate; "Try the live case" replays the Live Case demo.
+    expect(html.match(/href="\/investigate"/g)?.length).toBeGreaterThanOrEqual(1);
     expect(html).toContain('href="/live?demo=1"');
-    expect(html).toContain("Open the app");
     expect(html).toContain("Try the live case");
   });
 
   it("opens each case in the app: on its card and in its popup", () => {
     const script = readFileSync(`${dir}/script.js`, "utf8");
-    // Case 1 and case 2 open Investigate on the app's first and second case.
-    expect(script).toContain('rosales: "/investigate?case=rosales"');
-    expect(script).toContain('btk: "/investigate?case=btk"');
+    // Case 1 and case 2 open the Live Case page on Rosales v. Terrell and State v. Rader.
+    expect(script).toContain('rosales: "/live?case=rosales"');
+    expect(script).toContain('btk: "/live?case=btk"');
     expect(script).toContain('href="${appLink(c)}"');
     expect(script).toContain("modalOpenApp\").href = appLink(c)");
     expect(html).toContain('id="modalOpenApp"');

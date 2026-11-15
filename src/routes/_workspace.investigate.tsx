@@ -4,7 +4,7 @@ import { ACTIVE_CASE, switchCase } from "@/lib/active-case";
 import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_workspace/investigate")({
-  head: () => seo("Investigate", "Test a claim with a team of evidence agents built on LangChain Deep Agents."),
+  head: () => seo("Investigate", "Test a Claim with a team of evidence agents built on LangChain Deep Agents."),
   component: Investigate,
 });
 
@@ -14,7 +14,7 @@ function Investigate() {
   if (ACTIVE_CASE !== "btk" && ACTIVE_CASE !== "rosales")
     return (
       <div className="mx-auto max-w-2xl rounded-xl border bg-card p-6">
-        <h1 className="font-serif text-2xl font-medium">Test a claim</h1>
+        <h1 className="font-serif text-2xl font-medium">Test a Claim</h1>
         <p className="mt-2 text-muted-foreground">
           Claim investigations read a case&apos;s stored evidence: the filings, transcripts and records of Rosales v. Terrell
           and State v. Rader. This case is summarized from public sources, so it is not available here.

@@ -146,7 +146,7 @@ export function InvestigationStudio({ caseId, caseName }: { caseId: string; case
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-gold">Investigation studio</p>
-          <h1 className="mt-1 font-serif text-[1.9rem] font-medium leading-tight">Test a claim</h1>
+          <h1 className="mt-1 font-serif text-[1.9rem] font-medium leading-tight">Test a Claim</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {caseName} · a lead investigator and two subagents built with LangChain Deep Agents research the stored records
             {caseId === "rosales" ? " (filings, bodycam transcript, checked video frames)" : ""}; every quote is checked against them.

@@ -973,7 +973,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgba
 .cb-card__focus { margin-top: 4.5cqw; padding-left: 3.4cqw; border-left: 2px solid #B8924C; }
 .cb-card__focus p:first-child { font-family: var(--font-mono); font-size: max(9.5px, 2.4cqw); letter-spacing: .1em; text-transform: uppercase; color: #94650E; }
 .cb-card__focus p:last-child { margin-top: 1cqw; font-size: max(13px, 3.9cqw); line-height: 1.35; color: var(--navy); }
-.cb-card__actions { margin-top: auto; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; }
+.cb-card__actions { margin-top: auto; display: flex; align-items: center; flex-wrap: nowrap; gap: 18px; white-space: nowrap; }
 .cb-card__actions .btn--primary { background: var(--navy); color: var(--ivory); border-color: var(--navy); }
 .cb-card__actions .btn--primary:hover { background: #14243A; }
 .cb-card__src { display: inline-flex; align-items: center; font-size: max(12px, 3.2cqw); color: #23408F; border-bottom: 1px solid rgba(35, 64, 143, .3); }

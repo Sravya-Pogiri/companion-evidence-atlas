@@ -542,10 +542,10 @@
     btk: "Tracing a digital lead through dated records to the court record."
   };
   const ARCHIVE = Object.keys(ARCHIVE_FOCUS).map(id => CASES.find(c => c.id === id));
-  // "Open in the app": case 1 opens the app's Investigate page on its first case (Rosales v.
-  // Terrell), case 2 on its second (State v. Rader). The app's case dropdown still switches to any
+  // "Open in the app": case 1 opens the app's Live Case page on Rosales v. Terrell, case 2 on
+  // State v. Rader. The app's case dropdown still switches to any
   // case. Any other case opens its own page in the app.
-  const APP_LINK = { rosales: "/investigate?case=rosales", btk: "/investigate?case=btk" };
+  const APP_LINK = { rosales: "/live?case=rosales", btk: "/live?case=btk" };
   const appLink = (c) => APP_LINK[c.id] || `/live?case=${c.id}`;
   const firstSentence = (t) => (t.match(/^.*?[.!?](\s|$)/) || [t])[0].trim();
 
@@ -566,11 +566,9 @@
           </div>
           <div class="cb-card__actions">
             <button class="btn btn--primary btn--sm" data-open-case="${i}" aria-haspopup="dialog">View Case ${icon("arrow")}</button>
-            ${ext(c.primarySource.url, "Original source", "cb-card__src")}
             <a class="cb-card__src cb-card__app" href="${appLink(c)}">Open in the app ${icon("arrow")}</a>
           </div>
         </div>
-        <span class="cb-card__illus">Illustrative photo</span>
       </article>`).join("");
 
     root.addEventListener("click", (e) => {
