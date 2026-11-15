@@ -1,6 +1,6 @@
 {
  "caseId": "rosales",
- "generatedAt": "2026-11-15T02:34:05.587Z",
+ "generatedAt": "2026-11-15T03:34:43.488Z",
  "models": {
   "text": "auto",
   "vision": "auto",
@@ -10,10 +10,10 @@
   "transcription": 0,
   "frame description": 0,
   "claim extraction": 0,
-  "claim verification": 0.5,
+  "claim verification": 0.3,
   "cross-check": 0,
-  "total": 0.5,
-  "signal check": 10.7
+  "time check": 0,
+  "total": 0.3
  },
  "sources": [
   {
@@ -53,14 +53,16 @@
   {
    "id": "complaint-001",
    "origin": "document",
-   "claim": "While Officer Lewis was allegedly questioning Gracie, Officer Terrell appears to have been questioning Mario, who reportedly asked if Officer Terrell had his phone.",
-   "actor": "Officer Terrell",
+   "claim": "Mario Rosales and Gracie Lasyone were driving southwest on Jackson Street when they were stopped by police officers.",
+   "eventTime": "5 p.m. on June 15, 2022",
+   "actor": "Mario Rosales, Gracie Lasyone",
+   "location": "Jackson Street, Alexandria, Louisiana",
    "at": {
     "source": "complaint",
-    "page": 24,
-    "paragraph": 205
+    "page": 6,
+    "paragraph": 25
    },
-   "exactQuote": "While Officer Lewis was interrogating Gracie, Officer Terrell was interrogating Mario. But before Officer Terrell began asking Mario questions, Mario asked Officer Terrell if he had Mario’s phone.",
+   "exactQuote": "At about 5 p.m. on June 15, 2022, Mario Rosales and Gracie Lasyone left work in Alexandria, Louisiana. They were in Mario’s 2007 red Mustang, with Mario driving.",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
@@ -69,7 +71,318 @@
   {
    "id": "complaint-002",
    "origin": "document",
-   "claim": "Officer Terrell reportedly claimed at first that he did not have the phone, but later indicated that it was in the police vehicle.",
+   "claim": "Mario Rosales signaled and made a left turn at a green light before being stopped by officers.",
+   "actor": "Mario Rosales",
+   "location": "intersection of Jackson Street and Dorchester Drive",
+   "at": {
+    "source": "complaint",
+    "page": 2,
+    "paragraph": 2
+   },
+   "exactQuote": "Two Alexandria police officers stopped and interrogated a motorist, Mario Rosales, and his passenger, Gracie Lasyone, without legal justification after Mario signaled and made a legal left turn",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-003",
+   "origin": "document",
+   "claim": "The officers activated their lights and pulled the vehicle over while it was in the middle of the intersection.",
+   "actor": "Alexandria Police officers",
+   "location": "intersection of Jackson Street and Dorchester Drive",
+   "at": {
+    "source": "complaint",
+    "page": 8,
+    "paragraph": 30
+   },
+   "exactQuote": "With his left turn signal blinking, Mario legally turned left through the intersection, onto Dorchester Drive. The police SUV followed. While the SUV was in the middle of the",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-004",
+   "origin": "document",
+   "claim": "The officers claimed they stopped the vehicle for a failure to signal, which the complaint alleges is contradicted by video evidence.",
+   "actor": "Alexandria Police officers",
+   "at": {
+    "source": "complaint",
+    "page": 8,
+    "paragraph": 31
+   },
+   "exactQuote": "Contradicted by clear video evidence, the officers would later claim to have pulled the car over for failure to signal.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-005",
+   "origin": "document",
+   "claim": "Officer Terrell instructed Mario Rosales to exit his vehicle and approach him.",
+   "actor": "Officer Samuel Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 8,
+    "paragraph": 33
+   },
+   "exactQuote": "Officer Samuel Terrell got out of the SUV and stood at the front of the police vehicle. He told Mario to get out of the car and come to him.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-006",
+   "origin": "document",
+   "claim": "Mario Rosales provided his driver's license to Officer Terrell upon exiting the vehicle.",
+   "actor": "Mario Rosales, Officer Samuel Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 8,
+    "paragraph": 34
+   },
+   "exactQuote": "Mario calmly got out of the car and gave Officer Terrell his driver’s license.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-007",
+   "origin": "document",
+   "claim": "Officer Terrell frisked Mario Rosales after instructing him to place his phone on the hood of the police vehicle.",
+   "actor": "Officer Samuel Terrell, Mario Rosales",
+   "location": "hood of the police SUV",
+   "at": {
+    "source": "complaint",
+    "page": 10,
+    "paragraph": 52
+   },
+   "exactQuote": "Officer Terrell said, “I tell you what. Set your phone down right here. Put your hands on the bumper, just real quick. Real quick.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-008",
+   "origin": "document",
+   "claim": "Officer Lewis asked Gracie Lasyone to exit the vehicle and wait at the front of the police vehicle.",
+   "actor": "Officer Jim Lewis, Gracie Lasyone",
+   "location": "front of the police vehicle",
+   "at": {
+    "source": "complaint",
+    "page": 11,
+    "paragraph": 63
+   },
+   "exactQuote": "Officer Lewis told Gracie to unbuckle and step out of the vehicle. She complied. He told her, “You can leave everything right there and just step out for me,",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-009",
+   "origin": "document",
+   "claim": "Officer Lewis provided Miranda warnings to Mario Rosales during the stop.",
+   "actor": "Officer Jim Lewis, Mario Rosales",
+   "at": {
+    "source": "complaint",
+    "page": 12,
+    "paragraph": 72
+   },
+   "exactQuote": "Officer Lewis said to Mario, “Hey, listen I don’t know if my partner has done this or not, but I’m going to do it, okay,” and he gave Mario Miranda warnings.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-010",
+   "origin": "document",
+   "claim": "Officer Lewis asked Mario Rosales to empty his pockets onto the hood of the police vehicle.",
+   "actor": "Officer Jim Lewis, Mario Rosales",
+   "location": "hood of the police vehicle",
+   "at": {
+    "source": "complaint",
+    "page": 13,
+    "paragraph": 81
+   },
+   "exactQuote": "“I gotcha,” Officer Lewis said. “Do you mind emptying your pockets for me on the hood of my car?”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-011",
+   "origin": "document",
+   "claim": "Mario Rosales requested that Gracie Lasyone be allowed to record the stop with her phone.",
+   "actor": "Mario Rosales",
+   "at": {
+    "source": "complaint",
+    "page": 14,
+    "paragraph": 93
+   },
+   "exactQuote": "Mario continued, “I mean, I would feel a lot safer if she [Gracie] had her phone and she was able to record while you check me.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-012",
+   "origin": "document",
+   "claim": "Officers Lewis and Terrell informed Mario Rosales that the stop was being recorded by their body cameras.",
+   "actor": "Officer Jim Lewis, Officer Samuel Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 15,
+    "paragraph": 94
+   },
+   "exactQuote": "“Yeah, yeah, I’m recording,” said Officer Lewis, pointing to his body camera. “Body camera,” he specified. Officer Terrell likewise said, “It’s being recorded right now, sir.”",
+   "verification": {
+    "status": "failed",
+    "method": "quote-on-page",
+    "note": "quote not found in the extracted text"
+   }
+  },
+  {
+   "id": "complaint-013",
+   "origin": "document",
+   "claim": "Officer Lewis did not permit Mario Rosales or Gracie Lasyone to record the stop.",
+   "actor": "Officer Jim Lewis",
+   "at": {
+    "source": "complaint",
+    "page": 15,
+    "paragraph": 99
+   },
+   "exactQuote": "Despite Mario’s explanation for why he wanted Gracie to be allowed to record the stop, Officer Lewis did not allow Mario or Gracie to record anything.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-014",
+   "origin": "document",
+   "claim": "Officer Lewis interrogated Mario Rosales regarding potential drug possession.",
+   "actor": "Officer Jim Lewis, Mario Rosales",
+   "at": {
+    "source": "complaint",
+    "page": 16
+   },
+   "exactQuote": "Officer Lewis asked Mario a series of questions about drugs.",
+   "verification": {
+    "status": "fixed",
+    "method": "quote-on-page",
+    "note": "quote is on p.16, not p.17"
+   }
+  },
+  {
+   "id": "complaint-015",
+   "origin": "document",
+   "claim": "Officer Terrell provided Miranda warnings to Gracie Lasyone while she stood near the police SUV.",
+   "actor": "Officer Samuel Terrell, Gracie Lasyone",
+   "location": "near the police SUV",
+   "at": {
+    "source": "complaint",
+    "page": 19,
+    "paragraph": 145
+   },
+   "exactQuote": "Officer Terrell gave Gracie Miranda warnings. While he did so, Gracie stood calmly with her hands at her sides, looking at Officer Terrell while squinting and blinking into",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-016",
+   "origin": "document",
+   "claim": "Officer Terrell stated that he pulled the vehicle over because the driver failed to signal.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 21,
+    "paragraph": 168
+   },
+   "exactQuote": "Well, I mean, you … he failed to signal, so that’s why I pulled you over, and then once we started talking I got curious.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-017",
+   "origin": "document",
+   "claim": "Officer Terrell did not permit Gracie to record the encounter with her phone.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "complaint",
+    "page": 21,
+    "paragraph": 173
+   },
+   "exactQuote": "Officer Terrell did not allow her to get her phone to record and promised that the officers were recording the detention themselves.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-018",
+   "origin": "document",
+   "claim": "Officer Lewis informed Mario that the traffic stop was a legal detainment.",
+   "actor": "Officer Lewis",
+   "at": {
+    "source": "complaint",
+    "page": 22,
+    "paragraph": 176
+   },
+   "exactQuote": "Officer Lewis then said to Mario, “You know a traffic stop is a legal detainment, right. You were detained on a traffic stop.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-019",
+   "origin": "document",
+   "claim": "Officer Lewis questioned Gracie about her criminal history and whether she was carrying anything prohibited.",
+   "actor": "Officer Lewis",
+   "at": {
+    "source": "complaint",
+    "page": 22,
+    "paragraph": 182
+   },
+   "exactQuote": "Officer Lewis started with, “You ever been arrested for anything?” 183. Gracie: “No sir.” 184. Officer Lewis then asked where she and Mario were coming from.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-020",
+   "origin": "document",
+   "claim": "Officer Lewis asked Gracie a series of questions regarding her use of various illegal substances.",
+   "actor": "Officer Lewis",
+   "at": {
+    "source": "complaint",
+    "page": 23,
+    "paragraph": 187
+   },
+   "exactQuote": "Officer Lewis then asked Gracie a nearly identical set of questions to those they had asked Mario. 188. Officer Lewis: “Do you smoke marijuana?” 189. Gracie: “No.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-021",
+   "origin": "document",
+   "claim": "Officer Terrell initially denied having Mario's phone but later acknowledged it was in the police vehicle.",
    "actor": "Officer Terrell",
    "location": "police vehicle",
    "at": {
@@ -84,179 +397,586 @@
    }
   },
   {
-   "id": "complaint-003",
+   "id": "complaint-022",
    "origin": "document",
-   "claim": "Mario appears to have asked Officer Terrell to explain why he was being stopped.",
-   "actor": "Mario",
-   "at": {
-    "source": "complaint",
-    "page": 24,
-    "paragraph": 207
-   },
-   "exactQuote": "Mario then asked, “So, can you be honest with me? Why am I being stopped?”",
-   "verification": {
-    "status": "passed",
-    "method": "quote-on-page"
-   }
-  },
-  {
-   "id": "complaint-004",
-   "origin": "document",
-   "claim": "Officer Terrell reportedly stated that the traffic stop occurred because of an alleged failure to signal.",
+   "claim": "Officer Terrell returned the phone to Mario but instructed him not to touch it.",
    "actor": "Officer Terrell",
+   "location": "police vehicle",
    "at": {
     "source": "complaint",
-    "page": 24,
-    "paragraph": 208
+    "page": 25,
+    "paragraph": 211
    },
-   "exactQuote": "Officer Terrell responded, “Failure to signal. That’s straight, pure and straight honest answer. You failed to signal, so we stopped you.",
+   "exactQuote": "Officer Terrell next walked to the passenger side of the police vehicle and told Mario, “Hey, here’s your phone,” and placed it on the hood of the SUV.",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "complaint-005",
+   "id": "complaint-023",
    "origin": "document",
-   "claim": "Officer Terrell appears to have asked Mario where he lived, and Mario reportedly repeated what he had previously told Officer Lewis.",
-   "actor": "Officer Terrell",
-   "at": {
-    "source": "complaint",
-    "page": 24,
-    "paragraph": 209
-   },
-   "exactQuote": "Officer Terrell asked Mario about where he lives. Mario reiterated what he had told Officer Lewis.",
-   "verification": {
-    "status": "passed",
-    "method": "quote-on-page"
-   }
-  },
-  {
-   "id": "complaint-006",
-   "origin": "document",
-   "claim": "Officer Lewis appears to have looked into Mario's vehicle again.",
+   "claim": "Officer Lewis denied requests from Gracie to retrieve her phone and from Mario for Gracie to leave.",
    "actor": "Officer Lewis",
-   "location": "Mario’s car",
    "at": {
     "source": "complaint",
-    "page": 24,
-    "paragraph": 210
+    "page": 25,
+    "paragraph": 217
    },
-   "exactQuote": "Meanwhile, Officer Lewis was once again peering into Mario’s car:",
+   "exactQuote": "Officer Lewis answered no to both questions.",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-007",
+   "id": "complaint-024",
    "origin": "document",
-   "claim": "Officers may have alleged that Rosales failed to use his left turn signal for a lane change and a left turn at least one hundred feet prior to turning.",
-   "actor": "Rosales",
+   "claim": "Officer Terrell requested historical information checks on Mario and Gracie from dispatch.",
+   "actor": "Officer Terrell",
    "at": {
-    "source": "opinion",
-    "page": 10
+    "source": "complaint",
+    "page": 26,
+    "paragraph": 221
    },
-   "exactQuote": "Rosales failed to use his left turn signal to indicate a lane change and a left turn at least one hundred feet before turning.",
+   "exactQuote": "Officer Terrell then called dispatch and requested historical information about Mario and Gracie—a “70 check” and a “32 check.”",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-008",
+   "id": "complaint-025",
    "origin": "document",
-   "claim": "The video recording appears to show that Rosales changed lanes prior to being pulled over.",
-   "actor": "Rosales",
+   "claim": "Officer Lewis suggested that Officer Terrell cite Mario for failure to update his license and registration.",
+   "actor": "Officer Lewis",
    "at": {
-    "source": "opinion",
-    "page": 10
+    "source": "complaint",
+    "page": 26,
+    "paragraph": 226
    },
-   "exactQuote": "video evidence clearly demonstrates that Rosales changed lanes before being pulled over",
+   "exactQuote": "Officer Lewis soon advised Officer Terrell, “So yeah I would do the PC to stop and there’s also um, failure to update his ID, and you can go ahead",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-009",
+   "id": "complaint-026",
    "origin": "document",
-   "claim": "It does not appear clear from the video whether the turn signal on the Mustang was activated in compliance with state law.",
-   "actor": "Rosales",
+   "claim": "Dispatch reported that the results of the history checks for Mario and Gracie were negative.",
+   "actor": "Dispatch",
    "at": {
-    "source": "opinion",
-    "page": 10
+    "source": "complaint",
+    "page": 26,
+    "paragraph": 227
    },
-   "exactQuote": "whether the Mustang’s left turn signal was activated in accordance with Louisiana law is not apparent from the video.",
+   "exactQuote": "Dispatch soon radioed the officers to give them the results of the history checks: “Negative all around on both.”",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-010",
+   "id": "complaint-027",
    "origin": "document",
-   "claim": "The complaint reportedly alleges that officers issued Rosales a traffic ticket after fabricating an infraction.",
-   "actor": "Officers",
+   "claim": "Officer Terrell issued Mario a ticket for failure to signal and registration-related violations.",
+   "actor": "Officer Terrell",
    "at": {
-    "source": "opinion",
-    "page": 11
+    "source": "complaint",
+    "page": 28,
+    "paragraph": 237
    },
-   "exactQuote": "asserts that Officers “concoct[ed] a baseless traffic infraction after the fact to support their actions,” and issued Rosales an “invalid traffic ticket.”",
+   "exactQuote": "Officer Terrell issued Mario a ticket for three violations: (1) failure to signal, La. Rev. Stat. 32:104; (2) failure to register a vehicle, La. Rev. Stat. 47:501",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-011",
+   "id": "complaint-028",
    "origin": "document",
-   "claim": "Appellees allege that Rosales activated his turn signal and executed a left turn at an intersection.",
+   "claim": "The traffic charges issued to Mario were subsequently dismissed.",
+   "at": {
+    "source": "complaint",
+    "page": 28,
+    "paragraph": 238
+   },
+   "exactQuote": "All three charges were dismissed.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "complaint-029",
+   "origin": "document",
+   "claim": "The document asserts that video evidence shows Mario did signal his turn.",
+   "at": {
+    "source": "complaint",
+    "page": 31,
+    "paragraph": 250
+   },
+   "exactQuote": "although Officers Lewis and Terrell alleged that their basis for stopping Mario was his failure to signal his turn, indisputable video evidence proves that Mario did signal",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-030",
+   "origin": "document",
+   "claim": "Rosales appears to have been driving a Mustang with New Mexico license plates when he changed lanes and stopped at a red light.",
+   "eventTime": "Around 5:00 P.M. in June 2022",
    "actor": "Rosales",
    "location": "an intersection",
    "at": {
     "source": "opinion",
-    "page": 11
+    "page": 2
    },
-   "exactQuote": "Appellees allege that Rosales used his blinker to indicate a left turn and “legally turned left” at an intersection.",
+   "exactQuote": "Around 5:00 P.M. in June 2022, Rosales was driving his Mustang, which had New Mexico license plates. He changed lanes, approached a red light at an intersection",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-012",
+   "id": "opinion-031",
    "origin": "document",
-   "claim": "The video appears to depict officers pulling behind the Mustang near an intersection while its left turn signal was already activated.",
-   "actor": "Officers",
+   "claim": "Rosales appears to have activated his left turn signal before stopping at the light.",
+   "eventTime": "Around 5:00 P.M. in June 2022",
+   "actor": "Rosales",
    "location": "an intersection",
    "at": {
     "source": "opinion",
-    "page": 11
+    "page": 2
    },
-   "exactQuote": "shows Officers pull behind the Mustang as it approached an intersection, and the left turn signal was already activated as the Mustang’s lights come into view.",
+   "exactQuote": "activated the Mustang’s left turn signal, and stopped at the light. An Alexandria Police Department vehicle stopped behind the Mustang and, after the light changed",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "opinion-013",
+   "id": "opinion-032",
    "origin": "document",
-   "claim": "The timing of when Rosales activated the turn signal relative to the turn does not appear clear from the video.",
+   "claim": "Officers appear to have pulled the Mustang over after it turned left.",
+   "actor": "Alexandria Police Department",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "An Alexandria Police Department vehicle stopped behind the Mustang and, after the light changed and the Mustang turned left, pulled it over.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-033",
+   "origin": "document",
+   "claim": "Officer Terrell appears to have instructed Rosales to step out of the vehicle, which he did.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "Officer Terrell approached the Mustang and told Rosales to step out, and he did. Rosales handed over his driver’s license and car registration and began pulling",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-034",
+   "origin": "document",
+   "claim": "Rosales appears to have told Officer Terrell that he was getting agitated and asked why he was pulled over.",
    "actor": "Rosales",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "Rosales calmly told Officer Terrell that he was “getting agitated” and asked why he was pulled over. Officer Terrell said he would “tell [Rosales] in a second.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-035",
+   "origin": "document",
+   "claim": "Officer Lewis appears to have stated that he saw ammunition in the open glove box.",
+   "actor": "Officer Lewis",
+   "location": "Mustang",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "Officer Lewis stated that he saw ammunition in the open glove box. He then asked the passenger, Lasyone, for her identification, which she provided.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-036",
+   "origin": "document",
+   "claim": "Rosales appears to have informed the officers that he had a gun in a bag in the back seat.",
+   "actor": "Rosales",
+   "location": "Mustang",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "Rosales said he had a gun in a bag in the back seat of the Mustang. He denied having a gun on his person.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-037",
+   "origin": "document",
+   "claim": "Officer Terrell appears to have instructed Rosales to place his phone on the police car hood and his hands on the bumper.",
+   "actor": "Officer Terrell",
+   "location": "police car",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "Officer Terrell told Rosales to put his phone on the hood of the police car and his hands on the bumper, and he did.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-038",
+   "origin": "document",
+   "claim": "Officer Lewis appears to have asked for permission to retrieve the gun from the Mustang, which Rosales denied.",
+   "actor": "Officer Lewis",
+   "location": "Mustang",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "While Officer Terrell frisked Rosales, Officer Lewis asked if he could get the gun from the Mustang. Rosales denied him permission.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-039",
+   "origin": "document",
+   "claim": "Officer Lewis appears to have instructed Lasyone to leave everything in the Mustang and step out.",
+   "actor": "Officer Lewis",
+   "location": "Mustang",
+   "at": {
+    "source": "opinion",
+    "page": 2
+   },
+   "exactQuote": "Officer Lewis then instructed Lasyone to “leave everything” in the Mustang and step out of the vehicle. He asked if she had any guns “on [her,]”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-040",
+   "origin": "document",
+   "claim": "Officer Lewis appears to have provided Miranda warnings to Rosales.",
+   "actor": "Officer Lewis",
+   "at": {
+    "source": "opinion",
+    "page": 3
+   },
+   "exactQuote": "Officer Lewis gave Rosales Miranda2 warnings. He asked how long Rosales had been in Louisiana; Rosales said that “he had been there off and on;",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-041",
+   "origin": "document",
+   "claim": "Rosales appears to have requested that Lasyone be allowed to record the interaction on her phone.",
+   "actor": "Rosales",
+   "at": {
+    "source": "opinion",
+    "page": 3
+   },
+   "exactQuote": "Rosales responded he did not have anything on him, and he would “feel a lot safer if [Lasyone] had her phone and she was able to record",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-042",
+   "origin": "document",
+   "claim": "Officers appear to have denied Lasyone permission to retrieve her phone from the Mustang.",
+   "actor": "Officers",
+   "location": "Mustang",
+   "at": {
+    "source": "opinion",
+    "page": 3
+   },
+   "exactQuote": "Lasyone requested and was denied permission to get her phone from the Mustang while the officers watched. Ultimately, Officer Lewis did not “check” or pat down",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-043",
+   "origin": "document",
+   "claim": "Officer Terrell appears to have stated that he pulled the vehicle over because Rosales failed to signal.",
+   "actor": "Officer Terrell",
+   "at": {
+    "source": "opinion",
+    "page": 4
+   },
+   "exactQuote": "Lasyone asked if he “pull[s] people over because [he is] curious,” and he responded that he pulled them over because Rosales “failed to signal.”",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-044",
+   "origin": "document",
+   "claim": "Officer Terrell appears to have retrieved Rosales's phone and placed it on the police car hood, instructing him not to touch it.",
+   "actor": "Officer Terrell",
+   "location": "police car",
+   "at": {
+    "source": "opinion",
+    "page": 4
+   },
+   "exactQuote": "Officer Terrell retrieved Rosales’s phone, put it on the hood of the police car, and told Rosales not to touch it.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-045",
+   "origin": "document",
+   "claim": "The court notes that the video evidence appears to show the Mustang's left turn signal was already activated as it came into view.",
    "at": {
     "source": "opinion",
     "page": 11
    },
-   "exactQuote": "not clear from the video when Rosales activated the signal—i.e., whether it was activated at least one hundred feet before the turn.",
+   "exactQuote": "It shows Officers pull behind the Mustang as it approached an intersection, and the left turn signal was already activated as the Mustang’s lights come into view.",
    "verification": {
     "status": "passed",
     "method": "quote-on-page"
    }
   },
   {
-   "id": "dashcam-014",
+   "id": "opinion-046",
+   "origin": "document",
+   "claim": "The court notes that it is not clear from the video when Rosales activated the signal.",
+   "at": {
+    "source": "opinion",
+    "page": 11
+   },
+   "exactQuote": "It is not clear from the video when Rosales activated the signal—i.e., whether it was activated at least one hundred feet before the turn.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-047",
+   "origin": "document",
+   "claim": "Officers appear to have cited Rosales for failure to signal, failure to register a vehicle, and a vehicle registration violation.",
+   "actor": "Officers",
+   "at": {
+    "source": "opinion",
+    "page": 5
+   },
+   "exactQuote": "After several minutes, they cited Rosales for failure to signal under La. Rev. Stat. § 32:104, failure to register a vehicle under La. Rev. Stat. § 47:501",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-048",
+   "origin": "document",
+   "claim": "The court notes that approximately twenty-one minutes elapsed from the time of the stop.",
+   "eventTime": "twenty-one minutes",
+   "at": {
+    "source": "opinion",
+    "page": 5
+   },
+   "exactQuote": "About twenty-one minutes had elapsed from the time the officers stopped the Mustang. All citations were ultimately dismissed.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-049",
+   "origin": "document",
+   "claim": "The district court noted that the video evidence is not objectively clear.",
+   "actor": "district court",
+   "at": {
+    "source": "opinion",
+    "page": 6
+   },
+   "exactQuote": "Over Officers’ objections, the district court adopted the recommendation in full, noting that the parties had “conflicting factual accounts” and that “the video evidence . . . is not",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-050",
+   "origin": "document",
+   "claim": "It appears that Officer Lewis searched the pockets of Rosales after Officer Terrell had already conducted a pat-down that did not reveal any weapons.",
+   "actor": "Officer Lewis",
+   "at": {
+    "source": "opinion",
+    "page": 21
+   },
+   "exactQuote": "Officer Lewis searched Rosales’s pockets after he observed Officer Terrell conduct a pat-down that revealed no weapons. Under Dickerson, Officer Lewis’s “continued exploration” of Rosales’s pockets exceeded",
+   "verification": {
+    "status": "passed",
+    "method": "quote-on-page"
+   }
+  },
+  {
+   "id": "opinion-051",
+   "origin": "document",
+   "claim": "It appears that the officers prohibited the individuals from using their cell phones to record the traffic stop.",
+   "actor": "Officers",
+   "at": {
+    "source": "opinion",
+    "page": 22
+   },
+   "exactQuote": "they assert that Appellees did not meet their burden to show it was clearly established that they had a “First Amendment right to film their own detention",
+   "verification": {
+    "status": "failed",
+    "method": "quote-on-page",
+    "note": "quote not found in the extracted text"
+   }
+  },
+  {
+   "id": "bodycam-audio-052",
+   "origin": "transcript",
+   "claim": "A speaker appears to state the reason for the traffic stop was a failure to signal.",
+   "actor": "Speaker 1",
+   "at": {
+    "source": "bodycam",
+    "t": 520
+   },
+   "exactQuote": "Straight pure straight honest answer: you failed to signal, so we stopped you.",
+   "verification": {
+    "status": "failed",
+    "method": "quote-in-transcript",
+    "note": "time check: 20% of the quoted words heard in 8:20-9:00; the time is not confirmed"
+   }
+  },
+  {
+   "id": "bodycam-audio-053",
+   "origin": "transcript",
+   "claim": "A speaker appears to confirm that the interaction is being recorded.",
+   "actor": "Speaker 1",
+   "at": {
+    "source": "bodycam",
+    "t": 300
+   },
+   "exactQuote": "It's being recorded right now, sir.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-in-transcript",
+    "note": "matches the machine transcript; not checked against the audio by a person"
+   }
+  },
+  {
+   "id": "bodycam-audio-054",
+   "origin": "transcript",
+   "claim": "A speaker appears to inform the individual that they are legally detained.",
+   "actor": "Speaker 1",
+   "at": {
+    "source": "bodycam",
+    "t": 645
+   },
+   "exactQuote": "Right now, you're legally detained, so we're not doing anything extra.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-in-transcript",
+    "note": "matches the machine transcript; not checked against the audio by a person"
+   }
+  },
+  {
+   "id": "bodycam-audio-055",
+   "origin": "transcript",
+   "claim": "A speaker appears to advise the individual of their rights, including the right to remain silent and the right to an attorney.",
+   "actor": "Speaker 3",
+   "at": {
+    "source": "bodycam",
+    "t": 331
+   },
+   "exactQuote": "So you do have the right to remain silent, anything you say can and will be used against you in a court of law. You have the right to an attorney. Can't afford an attorney, one will be appointed to you at no cost.",
+   "verification": {
+    "status": "failed",
+    "method": "quote-in-transcript",
+    "note": "time check: 17% of the quoted words heard in 5:11-5:51; the time is not confirmed"
+   }
+  },
+  {
+   "id": "bodycam-audio-056",
+   "origin": "transcript",
+   "claim": "A speaker appears to state that the individual can decline to answer questions by saying 'pass'.",
+   "actor": "Speaker 1",
+   "at": {
+    "source": "bodycam",
+    "t": 158
+   },
+   "exactQuote": "So anytime you're not comfortable with one of my questions, you can say pass.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-in-transcript",
+    "note": "matches the machine transcript; not checked against the audio by a person"
+   }
+  },
+  {
+   "id": "bodycam-audio-057",
+   "origin": "transcript",
+   "claim": "A speaker appears to confirm they have the individual's registration.",
+   "actor": "Speaker 1",
+   "at": {
+    "source": "bodycam",
+    "t": 470
+   },
+   "exactQuote": "I do have your registration.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-in-transcript",
+    "note": "matches the machine transcript; not checked against the audio by a person"
+   }
+  },
+  {
+   "id": "bodycam-audio-058",
+   "origin": "transcript",
+   "claim": "A speaker appears to state that they do not do phone calls during traffic stops.",
+   "actor": "Speaker 2",
+   "at": {
+    "source": "bodycam",
+    "t": 860
+   },
+   "exactQuote": "I don't do phone calls on traffic stops.",
+   "verification": {
+    "status": "passed",
+    "method": "quote-in-transcript",
+    "note": "matches the machine transcript; not checked against the audio by a person"
+   }
+  },
+  {
+   "id": "dashcam-059",
    "origin": "video",
    "claim": "A red car and a white vehicle appear in the traffic lanes ahead as the camera vehicle proceeds.",
    "at": {
@@ -271,7 +991,7 @@
    "frameRef": "/frames/analysis/dashcam-0040.jpg"
   },
   {
-   "id": "dashcam-015",
+   "id": "dashcam-060",
    "origin": "video",
    "claim": "The camera vehicle appears to approach behind a red car and a dark SUV.",
    "at": {
@@ -285,7 +1005,7 @@
    }
   },
   {
-   "id": "dashcam-016",
+   "id": "dashcam-061",
    "origin": "video",
    "claim": "A red car and a dark sedan appear visible stopped or moving slowly ahead.",
    "at": {
@@ -300,7 +1020,7 @@
    "frameRef": "/frames/analysis/dashcam-0048.jpg"
   },
   {
-   "id": "dashcam-017",
+   "id": "dashcam-062",
    "origin": "video",
    "claim": "The camera vehicle appears positioned on the roadway behind a red car.",
    "at": {
@@ -315,7 +1035,7 @@
    "frameRef": "/frames/analysis/dashcam-0064.jpg"
   },
   {
-   "id": "dashcam-018",
+   "id": "dashcam-063",
    "origin": "video",
    "claim": "An individual appearing to wear a dark uniform is visible on the right side of the frame.",
    "at": {
@@ -323,13 +1043,13 @@
     "t": 78
    },
    "verification": {
-    "status": "unchecked",
-    "method": "none",
-    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "does-not-hold: There is no individual visible on the right side of the frame, only a parking lot, a utility pole, and a building."
    }
   },
   {
-   "id": "dashcam-019",
+   "id": "dashcam-064",
    "origin": "video",
    "claim": "The driver-side door of the red car appears to open while an individual wearing a dark uniform stands on the right.",
    "at": {
@@ -337,23 +1057,221 @@
     "t": 94
    },
    "verification": {
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "The driver-side door of the red vehicle is visible in an open position, and an individual wearing a dark uniform with 'ALEXANDRIA POLICE' on the back is standing to the right of the vehicle."
+   },
+   "frameRef": "/frames/analysis/dashcam-0094.jpg"
+  },
+  {
+   "id": "bodycam-065",
+   "origin": "video",
+   "claim": "A person in a black shirt stands near a red vehicle holding a white object.",
+   "at": {
+    "source": "bodycam",
+    "t": 0
+   },
+   "verification": {
+    "status": "passed",
+    "method": "second-vision-check",
+    "note": "A person wearing a black shirt is visible standing next to a red vehicle, and they appear to be holding a small white object in their hand."
+   },
+   "frameRef": "/frames/analysis/bodycam-0000.jpg"
+  },
+  {
+   "id": "bodycam-066",
+   "origin": "video",
+   "claim": "The person in the black shirt appears to hand a white document to the camera operator.",
+   "at": {
+    "source": "bodycam",
+    "t": 4
+   },
+   "verification": {
+    "status": "failed",
+    "method": "second-vision-check",
+    "note": "unclear: While the person in the black shirt is holding a white object in their hands, the frame does not show them extending their hands toward the camera operator or completing a transfer."
+   }
+  },
+  {
+   "id": "bodycam-067",
+   "origin": "video",
+   "claim": "A person in a dark uniform appears in the background near the red vehicle.",
+   "at": {
+    "source": "bodycam",
+    "t": 22
+   },
+   "verification": {
     "status": "unchecked",
     "method": "none",
     "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
    }
   },
   {
-   "id": "dashcam-signal-001",
+   "id": "bodycam-068",
    "origin": "video",
-   "claim": "The red car's rear lamps from about 0:44 to 0:46 could not be read reliably enough to say whether a turn signal is flashing.",
+   "claim": "The camera operator appears to hand a white document back to the person in the black shirt.",
    "at": {
-    "source": "dashcam",
-    "t": 44
+    "source": "bodycam",
+    "t": 30
    },
    "verification": {
-    "status": "failed",
-    "method": "frame-sequence-check",
-    "note": "Not visible enough: measurement and vision read agree on only left 7/12, right 12/12 (or no regular on/off pattern)."
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-069",
+   "origin": "video",
+   "claim": "An individual in a dark shirt stands near a white vehicle with a uniformed person in the background.",
+   "at": {
+    "source": "bodycam",
+    "t": 32
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-070",
+   "origin": "video",
+   "claim": "The camera is oriented toward the front grill and hood of the white vehicle.",
+   "at": {
+    "source": "bodycam",
+    "t": 46
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-071",
+   "origin": "video",
+   "claim": "A cell phone is visible being held in the foreground near the individual standing by the hood.",
+   "at": {
+    "source": "bodycam",
+    "t": 50
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-072",
+   "origin": "video",
+   "claim": "A piece of paper appears to be held out between the camera wearer and the individual.",
+   "at": {
+    "source": "bodycam",
+    "t": 54
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-073",
+   "origin": "video",
+   "claim": "The individual stands in front of the vehicle hood looking down at a mobile phone.",
+   "at": {
+    "source": "bodycam",
+    "t": 56
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-074",
+   "origin": "video",
+   "claim": "A uniformed officer appears standing in the background near a building.",
+   "at": {
+    "source": "bodycam",
+    "t": 68
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-075",
+   "origin": "video",
+   "claim": "The camera turns toward a white SUV parked along a paved drive near a grassy area.",
+   "at": {
+    "source": "bodycam",
+    "t": 80
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-076",
+   "origin": "video",
+   "claim": "The camera view shows the interior panel and dashboard of a vehicle.",
+   "at": {
+    "source": "bodycam",
+    "t": 84
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-077",
+   "origin": "video",
+   "claim": "A person in a black shirt stands near the front of a white vehicle with a red car parked nearby.",
+   "at": {
+    "source": "bodycam",
+    "t": 96
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-078",
+   "origin": "video",
+   "claim": "A person in a police uniform appears to be standing near the person in the black shirt.",
+   "at": {
+    "source": "bodycam",
+    "t": 100
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
+   }
+  },
+  {
+   "id": "bodycam-079",
+   "origin": "video",
+   "claim": "Three individuals appear to be standing in a line near the front of the white vehicle.",
+   "at": {
+    "source": "bodycam",
+    "t": 114
+   },
+   "verification": {
+    "status": "unchecked",
+    "method": "none",
+    "note": "not checked in this run (over the --max-vchecks limit); not used in any finding"
    }
   }
  ],
@@ -361,48 +1279,99 @@
   {
    "id": "finding-1",
    "kind": "agrees",
-   "title": "Stated reason for the traffic stop",
-   "explanation": "Officer Terrell's reported statement during the stop that the vehicle failed to signal appears to align with the officers' position described in the court opinion.",
+   "title": "Reason for traffic stop",
+   "explanation": "Multiple sources, including the complaint, the court opinion, and bodycam audio, agree that the officers stated the reason for the traffic stop was a failure to signal. The bodycam audio quote cited for this was left out: its time could not be confirmed.",
    "claimIds": [
     "complaint-004",
-    "opinion-007"
+    "complaint-016",
+    "opinion-043"
    ],
    "status": "verified"
   },
   {
    "id": "finding-2",
    "kind": "agrees",
-   "title": "Officer positioning behind the suspect vehicle",
-   "explanation": "The dashcam footage depicting the camera vehicle positioned behind a red car appears consistent with the court opinion's description of officers pulling behind the Mustang.",
+   "title": "Miranda warnings provided",
+   "explanation": "The complaint and the court opinion both indicate that Officer Lewis provided Miranda warnings to Mario Rosales during the stop. The bodycam audio quote cited for this was left out: its time could not be confirmed.",
    "claimIds": [
-    "dashcam-017",
-    "opinion-012"
+    "complaint-009",
+    "opinion-040"
    ],
    "status": "verified"
   },
   {
    "id": "finding-3",
+   "kind": "agrees",
+   "title": "Dismissal of traffic charges",
+   "explanation": "Both the complaint and the court opinion confirm that the traffic charges issued to Mario Rosales were subsequently dismissed.",
+   "claimIds": [
+    "complaint-028",
+    "opinion-048"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-4",
+   "kind": "conflict",
+   "title": "Clarity of video evidence regarding signal",
+   "explanation": "The complaint asserts that video evidence clearly shows Mario signaled, whereas the court opinion notes that the video is not objectively clear regarding when the signal was activated.",
+   "claimIds": [
+    "complaint-029",
+    "opinion-046",
+    "opinion-049"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-5",
    "kind": "missing",
    "title": "Dispatch audio recording",
-   "explanation": "An audio recording from dispatch, which typically logs traffic stops, appears to be missing from the evidence record.",
+   "explanation": "While the complaint references dispatch radioing results of history checks, no actual dispatch audio recording appears to be included in the provided evidence.",
    "claimIds": [
+    "complaint-026",
     "dispatch"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-6",
+   "kind": "agrees",
+   "title": "Denial of request to record",
+   "explanation": "The complaint and the court opinion agree that the officers did not permit the individuals to record the stop with their phones.",
+   "claimIds": [
+    "complaint-013",
+    "complaint-017",
+    "opinion-042"
+   ],
+   "status": "verified"
+  },
+  {
+   "id": "finding-7",
+   "kind": "agrees",
+   "title": "Instruction to exit vehicle",
+   "explanation": "The complaint, court opinion, and dashcam footage all support the sequence where the driver was instructed to exit the vehicle.",
+   "claimIds": [
+    "complaint-005",
+    "opinion-033",
+    "dashcam-064"
    ],
    "status": "verified"
   }
  ],
  "log": [
   "analyze rosales",
-  "  transcription skipped (--skip-audio)",
+  "  dashcam: no speech above the energy gate, nothing sent for transcription",
+  "  bodycam: whole audio in 3 pieces of 420s",
+  "  bodycam chunk-420-00000-420.mp3: 32 lines left out (time outside the piece)",
+  "  bodycam chunk-420-00420-420.mp3: 17 lines left out (time outside the piece)",
+  "  bodycam chunk-420-00840-440.mp3: 35 lines left out (time outside the piece)",
   "  transcription: 0s",
   "  frame description: 0s",
   "  claim extraction: 0s",
-  "  claim verification: 0.5s",
+  "  claim verification: 0.3s",
   "  cross-check: 0s",
-  "signal check: 12 consecutive frames 44.17-46s of dashcam",
-  "  measured left: off on on off off on on on off off on on | right steady: true | left transitions: 5 | period ~0.75s",
-  "  vision left:   lit lit lit lit lit lit lit lit lit lit lit lit",
-  "  agreement with measurement: left 7/12, right 12/12",
-  "  no finding: lamps not visible enough to tell"
+  "  bodycam-audio-052 at 8:40: time check: 20% of the quoted words heard in 8:20-9:00",
+  "  bodycam-audio-055 at 5:31: time check: 17% of the quoted words heard in 5:11-5:51",
+  "  time check: 0s"
  ]
 }

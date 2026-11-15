@@ -20,6 +20,8 @@ export interface Seed {
   conversation: ChatMessage[];
   /** Per item: the claims it rests on, for citation chips and document highlights. */
   claimsByItem: Record<string, Claim[]>;
+  /** Verified findings between documents only: there is no video moment to place them at. */
+  docFindings: { id: string; kind: Finding["kind"]; title: string; explanation: string; claims: Claim[] }[];
 }
 
 const VIDEO_LANES: Record<string, Lane> = { dashcam: "dashcam", bodycam: "bodycam" };
@@ -67,6 +69,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
   const items = new Map<string, TimelineItem>();
   const claimsByItem: Record<string, Claim[]> = {};
   const conversation: ChatMessage[] = [];
+  const docFindings: Seed["docFindings"] = [];
   let m = 0;
   const say = (msg: Omit<ChatMessage, "id">) =>
     conversation.push({ ...msg, ...(msg.from === "agent" ? { text: `AI finding: ${msg.text}` } : {}), id: `a${++m}` });
@@ -140,6 +143,7 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
     if (anchor === undefined) {
       // Documents only: no moment to place on the time axis, so it is reported in the conversation.
       const cites = cited.map((c) => sourceLabel(a, c)).join("; ");
+      docFindings.push({ id: f.id, kind: f.kind, title: f.title, explanation: f.explanation, claims: cited });
       say({ from: "agent", text: `${f.kind === "conflict" ? "Possible conflict" : "Documents agree"} (no video time): ${f.explanation} Sources: ${cites}.` });
       continue;
     }
@@ -164,6 +168,6 @@ export function seedFromAnalysis(a: CaseAnalysis, axisEnd: number): Seed | null 
     }
   }
 
-  if (items.size === 0) return null;
-  return { items: [...items.values()], conversation, claimsByItem };
+  if (items.size === 0 && docFindings.length === 0) return null;
+  return { items: [...items.values()], conversation, claimsByItem, docFindings };
 }

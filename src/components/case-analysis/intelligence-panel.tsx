@@ -4,8 +4,8 @@ import { ArrowRight, MessageSquare } from "lucide-react";
 import { ConflictDialog } from "@/components/caselens/conflict-dialog";
 import { useCase } from "@/lib/case-store";
 import { CASE_LINE } from "@/lib/config";
-import type { TimelineItem } from "@/lib/sample-case";
-import { ENTITIES, SOURCES, type EntityType } from "@/lib/sources";
+import { DOC_FINDINGS, FLAG_LABEL, type TimelineItem } from "@/lib/sample-case";
+import { DOC_FINDING_CITATIONS, ENTITIES, SOURCES, type EntityType } from "@/lib/sources";
 import { cn } from "@/lib/utils";
 import { useWorkspace, type View } from "./context";
 import { EvidenceTimeline } from "./evidence-timeline";
@@ -211,7 +211,7 @@ function FindingsView({
   const findings = items
     .filter((i) => i.flag !== "agrees" || i.relatedId)
     .sort((a, b) => (RANK[a.flag] ?? 9) - (RANK[b.flag] ?? 9) || a.start - b.start);
-  if (findings.length === 0)
+  if (findings.length === 0 && DOC_FINDINGS.length === 0)
     return (
       <p className="text-[15px] text-muted-foreground">No conflicts or gaps are flagged yet.</p>
     );
@@ -222,6 +222,24 @@ function FindingsView({
       </p>
       {findings.map((i) => (
         <FindingCard key={i.id} item={i} onCompare={onCompare} />
+      ))}
+      {DOC_FINDINGS.map((f) => (
+        <article key={f.id} className="lx-fade rounded-xl border border-border bg-white p-5">
+          <div className="flex items-center justify-between gap-3">
+            <p
+              className={cn(
+                "font-mono text-[12px] uppercase tracking-[0.08em]",
+                f.kind === "conflict" ? "text-[#b4232a]" : "text-[#1f7a4d]",
+              )}
+            >
+              {FLAG_LABEL[f.kind]} · documents only
+            </p>
+            <span className="text-[13px] text-muted-foreground">No video time</span>
+          </div>
+          <h3 className="mt-2 font-serif text-[24px] leading-tight">{f.title}</h3>
+          <p className="mt-2 text-[15px] leading-relaxed text-[#38425c]">AI finding: {f.explanation}</p>
+          <Citations cites={DOC_FINDING_CITATIONS[f.id] ?? []} className="mt-3" />
+        </article>
       ))}
     </div>
   );

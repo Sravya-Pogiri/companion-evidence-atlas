@@ -56,7 +56,6 @@ export interface ChatMessage {
   itemId?: string;
 }
 
-export const AXIS_END = 90;
 
 /** The BTK case, when it is the open case (see active-case.ts). */
 export const BTK = ACTIVE_CASE === "btk" ? buildBtkCase() : null;
@@ -76,12 +75,22 @@ export const VIDEOS = {
   dashcam: { id: "xqvFJ8yzDfw", label: "Dashcam" },
 } as const;
 
+const ANALYSIS_AXIS_END = 120;
+
 // The case the app opens with: verified findings from the evidence analysis when there are any
 // (scripts/evidence/analyze.ts -> src/data/rosales/analysis.json), else the hand-written sample.
 const SEED = (() => {
   const analysis = loadAnalysis("rosales");
-  return analysis ? seedFromAnalysis(analysis, 90) : null;
+  return analysis ? seedFromAnalysis(analysis, ANALYSIS_AXIS_END) : null;
 })();
+/**
+ * Length of the shared axis. The video case follows the dashcam clock: 0:00-1:30 for the
+ * hand-written sample, 0:00-2:00 for the analysis (its findings reach 1:34). The BTK case uses
+ * 0-90 as evenly spaced slots.
+ */
+export const AXIS_END = BTK ? 90 : SEED ? ANALYSIS_AXIS_END : 90;
+/** Tick spacing on the axis. */
+export const TICK_STEP = AXIS_END > 90 ? 20 : 10;
 export const FROM_ANALYSIS = SEED !== null;
 // The first verified video moment, where the Live Case opens (else the approach at 0:45).
 const FIRST_VIDEO = SEED?.items
@@ -254,3 +263,5 @@ export function findItem(items: TimelineItem[], id: string | undefined): Timelin
 export const ITEMS: TimelineItem[] = BTK?.items ?? SEED?.items ?? SAMPLE_ITEMS;
 export const CONVERSATION: ChatMessage[] = BTK?.conversation ?? SEED?.conversation ?? SAMPLE_CONVERSATION;
 export const ANALYSIS_CLAIMS = BTK ? {} : (SEED?.claimsByItem ?? {});
+/** Verified findings between documents only (no video moment), shown in the Flag step. */
+export const DOC_FINDINGS = BTK ? [] : (SEED?.docFindings ?? []);

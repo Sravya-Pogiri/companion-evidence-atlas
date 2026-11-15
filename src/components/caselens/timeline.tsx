@@ -5,6 +5,7 @@ import { mediaFor } from "@/lib/media";
 import {
   AXIS_END,
   LANES,
+  TICK_STEP,
   findItem,
   formatTick,
   formatTime,
@@ -20,7 +21,7 @@ const LANE_PAD = 8;
 const TICK_H = 34;
 const GAP = 6;
 const MAX_W = 280;
-const TICKS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+const TICKS = Array.from({ length: Math.floor(AXIS_END / TICK_STEP) + 1 }, (_, i) => i * TICK_STEP);
 const BAND_S = 1.6; // half-width of the conflict band, in seconds
 
 const pct = (t: number) => `${(t / AXIS_END) * 100}%`;

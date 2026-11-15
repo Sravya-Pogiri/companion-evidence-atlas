@@ -1,7 +1,8 @@
 import { sourceLinks } from "@/lib/case-data";
 import { normalizeText } from "@/lib/evidence/verify";
 import type { VideoId } from "@/lib/media";
-import { ANALYSIS_CLAIMS, BTK, ITEMS } from "@/lib/sample-case";
+import { ANALYSIS_CLAIMS, BTK, DOC_FINDINGS, ITEMS } from "@/lib/sample-case";
+import type { Claim } from "@/lib/evidence/types";
 
 // The sources of the public sample case and the text the workspace shows for them.
 // Document text is copied from the public PDFs (complaint page 24; opinion pages 1 and 11),
@@ -270,6 +271,46 @@ function analysisCitations(): Record<string, Citation[]> {
   return out;
 }
 
+/**
+ * Verified quotes from the analysis that the hand-copied pages above do not include: each is
+ * added to its document as its own passage under "Page N", so every citation can open it.
+ * Complaint passages keep their paragraph number; opinion passages are labelled by page.
+ */
+function addVerifiedQuotes(claims: Claim[]): void {
+  for (const c of claims) {
+    if (!("page" in c.at) || !c.exactQuote) continue;
+    const src = ROSALES_SOURCES.find((s) => s.id === c.at.source);
+    if (!src?.blocks) continue;
+    const all = src.blocks.flatMap((b) => b.paragraphs);
+    if (all.some((p) => normalizeText(p.text).includes(normalizeText(c.exactQuote!)))) continue;
+    const page = c.at.page;
+    const para = c.at.paragraph;
+    const id = src.id === "complaint" && para && !all.some((p) => p.id === String(para)) ? String(para) : `p${page}-${c.id}`;
+    if (all.some((p) => p.id === id)) continue;
+    const heading = `Page ${page} (verified quote)`;
+    let block = src.blocks.find((b) => b.heading === heading);
+    if (!block) {
+      block = { heading, paragraphs: [], note: "A passage the analysis quoted and found on this page. The rest of the page is in the original." };
+      src.blocks.push(block);
+    }
+    block.paragraphs.push({ id, label: src.id === "complaint" && para ? `¶${para}` : `p.${page}`, text: c.exactQuote });
+  }
+}
+if (!BTK) addVerifiedQuotes([...Object.values(ANALYSIS_CLAIMS).flat(), ...DOC_FINDINGS.flatMap((f) => f.claims)]);
+
+/** Where each document-only finding's claims are, for clickable citation chips. */
+export const DOC_FINDING_CITATIONS: Record<string, Citation[]> = Object.fromEntries(
+  DOC_FINDINGS.map((f) => [
+    f.id,
+    f.claims.map((c): Citation => {
+      const paragraphs = ROSALES_SOURCES.find((s) => s.id === c.at.source)?.blocks?.flatMap((b) => b.paragraphs) ?? [];
+      const hit = c.exactQuote ? paragraphs.find((p) => normalizeText(p.text).includes(normalizeText(c.exactQuote!))) : undefined;
+      if (hit && c.exactQuote && hit.text.includes(c.exactQuote)) hit.marks = [...(hit.marks ?? []).filter((m) => m.phrase !== c.exactQuote), { phrase: c.exactQuote, itemId: `finding:${f.id}` }];
+      return hit ? { source: c.at.source, para: hit.id } : { source: c.at.source };
+    }),
+  ]),
+);
+
 /** The open case's sources (see active-case.ts). */
 export const SOURCES: Source[] = BTK?.sources ?? ROSALES_SOURCES;
 
@@ -384,7 +425,7 @@ export function citationLabel(c: Citation): string {
   if ("para" in c) {
     const p = findParagraph(c.source, c.para);
     if (!p) return c.para;
-    if (c.source === "opinion") return `p.${c.para.split("-")[0]!.slice(1)} ${p.label}`;
+    if (c.source === "opinion") return p.label.startsWith("p.") ? p.label : `p.${c.para.split("-")[0]!.slice(1)} ${p.label}`;
     return p.label;
   }
   if (source && !source.available) return "ref";

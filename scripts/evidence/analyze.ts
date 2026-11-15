@@ -33,7 +33,7 @@ import type {
   Locator,
   SourceMeta,
 } from "../../src/lib/evidence/types";
-import { checkQuote, inTranscript, type PageText } from "../../src/lib/evidence/verify";
+import { checkQuote, inTranscript, normalizeText, type PageText } from "../../src/lib/evidence/verify";
 
 // ---------- setup ----------
 
@@ -59,6 +59,10 @@ const modelOpt = (m: string) => (m === "auto" ? {} : { model: m });
 //   --videos dashcam                     only these videos
 //   --skip-audio                         no transcription
 //   --max-vchecks 4                      at most N second-pass frame checks
+//   --doc-chunk 20                       PDF pages per claims request (default 6)
+//   --audio-chunk 420                    transcribe the whole audio in pieces of N seconds cut
+//                                        from the original video (needs --media), instead of one
+//                                        request per speech segment
 function ranges(spec: string): Map<string, Set<number>> {
   const out = new Map<string, Set<number>>();
   for (const part of spec.split(",").filter(Boolean)) {
@@ -75,6 +79,8 @@ const SHEETS = ranges(opt("--sheets", ""));
 const ONLY_VIDEOS = opt("--videos", "").split(",").filter(Boolean);
 const SKIP_AUDIO = flag("--skip-audio");
 const MAX_VCHECKS = Number(opt("--max-vchecks", "1000"));
+const DOC_CHUNK = Math.max(1, Number(opt("--doc-chunk", "6")));
+const AUDIO_CHUNK = Number(opt("--audio-chunk", "0"));
 const FFMPEG = process.env["FFMPEG"] ?? "ffmpeg";
 
 interface CaseFile {
@@ -175,18 +181,83 @@ async function transcribe(sourceId: string): Promise<Line[]> {
     say(`  ${sourceId}: no speech above the energy gate, nothing sent for transcription`);
     return [];
   }
-  const parts = await pool(speech.segments, async (seg) => {
+  const segments = AUDIO_CHUNK > 0 ? audioChunks(sourceId, audioDir) : speech.segments;
+  const parts = await pool(segments, async (seg) => {
     const b64 = readFileSync(join(audioDir, seg.file)).toString("base64");
     const res = await cached(`transcribe:${AUDIO_MODEL}:${sourceId}:${seg.file}:${b64.length}`, { lines: [] }, () =>
       transcribeAudio(TRANSCRIBE_SYSTEM, TRANSCRIBE_TASK, b64, "mp3", modelOpt(AUDIO_MODEL)),
     );
-    return asArray<Line>(res, "lines")
-      .filter((l) => typeof l.text === "string" && l.text.trim() && Number.isFinite(Number(l.t)))
-      .map((l) => ({ t: Math.round((seg.start + Number(l.t)) * 10) / 10, speaker: String(l.speaker ?? ""), text: l.text.trim() }));
+    const rows = asArray<Line>(res, "lines").filter((l) => typeof l.text === "string" && l.text.trim() && Number.isFinite(num(l.t)));
+    // A time past the end of its own audio piece means the model does not know when the line
+    // was said; such lines are left out rather than placed at a guessed time.
+    const inPiece = rows.filter((l) => num(l.t) >= 0 && num(l.t) <= seg.end - seg.start + 2);
+    if (inPiece.length < rows.length) say(`  ${sourceId} ${seg.file}: ${rows.length - inPiece.length} lines left out (time outside the piece)`);
+    return inPiece.map((l) => ({ t: Math.round((seg.start + num(l.t)) * 10) / 10, speaker: String(l.speaker ?? ""), text: l.text.trim() }));
   });
   const lines = parts.flat().sort((a, b) => a.t - b.t);
   writeFileSync(join(CACHE, sourceId, "transcript.json"), JSON.stringify(lines, null, 1));
   return lines;
+}
+
+/** Cut the whole audio track into AUDIO_CHUNK-second mono MP3 pieces (cached on disk). */
+function audioChunks(sourceId: string, audioDir: string): { file: string; start: number; end: number }[] {
+  const src = caseFile.sources.find((s) => s.id === sourceId);
+  const duration = manifest.sources[sourceId]?.duration ?? 0;
+  if (!src || !MEDIA || !duration) throw new Error(`--audio-chunk needs --media and a video duration for ${sourceId}`);
+  const out: { file: string; start: number; end: number }[] = [];
+  for (let start = 0; start < duration; start += AUDIO_CHUNK) {
+    // A short remainder (under a minute) goes with the piece before it.
+    const end = duration - (start + AUDIO_CHUNK) < 60 ? duration : start + AUDIO_CHUNK;
+    const file = `chunk-${AUDIO_CHUNK}-${String(start).padStart(5, "0")}-${Math.round(end - start)}.mp3`;
+    const path = join(audioDir, file);
+    if (!existsSync(path)) {
+      execFileSync(FFMPEG, ["-v", "error", "-y", "-ss", String(start), "-t", String(end - start), "-i", join(MEDIA, src.file), "-vn", "-ac", "1", "-ar", "16000", "-b:a", "32k", path]);
+    }
+    out.push({ file, start, end });
+    if (end === duration) break;
+  }
+  say(`  ${sourceId}: whole audio in ${out.length} pieces of ${AUDIO_CHUNK}s`);
+  return out;
+}
+
+/**
+ * Transcript times come from the model and can drift within a long audio piece. For each spoken
+ * claim that a finding cites, cut 40 seconds of audio around its time and transcribe that clip
+ * again; the time holds only if most of the quoted words are heard there. Otherwise the claim
+ * fails and is taken out of its findings, which keep their other sources.
+ */
+async function timeCheck(findings: Finding[], claims: Claim[]): Promise<void> {
+  const cited = new Set(findings.flatMap((f) => f.claimIds));
+  const words = (s: string) => normalizeText(s).replace(/[^a-z0-9' ]/g, " ").split(/\s+/).filter((w) => w.length >= 3);
+  for (const c of claims) {
+    if (c.origin !== "transcript" || !cited.has(c.id) || !("t" in c.at) || c.verification.status !== "passed") continue;
+    const src = caseFile.sources.find((s) => s.id === c.at.source);
+    if (!src || !MEDIA) continue;
+    const start = Math.max(0, c.at.t - 20);
+    const clip = join(CACHE, c.at.source, "audio", `check-${Math.round(start)}-40.mp3`);
+    if (!existsSync(clip)) execFileSync(FFMPEG, ["-v", "error", "-y", "-ss", String(start), "-t", "40", "-i", join(MEDIA, src.file), "-vn", "-ac", "1", "-ar", "16000", "-b:a", "32k", clip]);
+    const b64 = readFileSync(clip).toString("base64");
+    const res = await cached(`timecheck:${AUDIO_MODEL}:${c.at.source}:${Math.round(start)}:${b64.length}`, { lines: [] }, () =>
+      transcribeAudio(TRANSCRIBE_SYSTEM, TRANSCRIBE_TASK, b64, "mp3", modelOpt(AUDIO_MODEL)),
+    );
+    const heard = new Set(words(asArray<Line>(res, "lines").map((l) => String(l.text ?? "")).join(" ")));
+    const want = words(c.exactQuote ?? "");
+    const share = want.length ? want.filter((w) => heard.has(w)).length / want.length : 0;
+    const note = `time check: ${Math.round(share * 100)}% of the quoted words heard in ${mmss(start)}-${mmss(start + 40)}`;
+    if (share >= 0.6) c.verification = { ...c.verification, note: [c.verification.note, note].filter(Boolean).join("; ") };
+    else {
+      c.verification = { status: "failed", method: c.verification.method, note: `${note}; the time is not confirmed` };
+      // The words may still be in the recording; only their time is unknown. Take this claim out
+      // of its findings, which then stand or fall on their other sources.
+      for (const f of findings)
+        if (f.claimIds.includes(c.id)) {
+          f.claimIds = f.claimIds.filter((id) => id !== c.id);
+          const note = `The ${c.at.source} audio quote cited for this was left out: its time could not be confirmed.`;
+          if (!f.explanation.includes(note)) f.explanation = `${f.explanation} ${note}`;
+        }
+    }
+    say(`  ${c.id} at ${mmss(c.at.t)}: ${note}`);
+  }
 }
 
 interface Observation {
@@ -217,9 +288,9 @@ Return {"observations":[{"t": seconds, "text": "what is visible, hedged"}]}.`,
     const r = await cached(`observe:${VISION_MODEL}:${sourceId}:${sheet.file}:${manifest.sources[sourceId]?.sha256}`, { observations: [] }, () =>
       askJsonParts(VISION_SYSTEM, parts, { ...modelOpt(VISION_MODEL), timeoutMs: 90_000 }),
     );
-    return asArray<Observation>(r, "observations").filter((o) => sheet.times.includes(Number(o.t)) && o.text);
+    return asArray<Observation>(r, "observations").filter((o) => sheet.times.includes(num(o.t)) && o.text);
   });
-  const all = res.flat().map((o) => ({ t: Number(o.t), text: String(o.text) }));
+  const all = res.flat().map((o) => ({ t: num(o.t), text: String(o.text) }));
   writeFileSync(join(CACHE, sourceId, "observations.json"), JSON.stringify(all, null, 1));
   return all;
 }
@@ -238,12 +309,21 @@ interface RawClaim {
 let nextClaim = 0;
 const newId = (p: string) => `${p}-${String(++nextClaim).padStart(3, "0")}`;
 const clean = (v: unknown) => (typeof v === "string" && v.trim() && v !== "null" ? v.trim() : undefined);
+/** A number the model may write as 520, "520s", "8:40", "p. 24" or "¶208"; NaN when absent. */
+export function num(v: unknown): number {
+  if (typeof v === "number") return v;
+  if (typeof v !== "string" || !v.trim()) return NaN;
+  const mmss = v.match(/^\s*(\d+):(\d{1,2}(?:\.\d+)?)\s*$/);
+  if (mmss) return Number(mmss[1]) * 60 + Number(mmss[2]);
+  const m = v.match(/-?\d+(?:\.\d+)?/);
+  return m ? Number(m[0]) : NaN;
+}
 
 async function documentClaims(sourceId: string, pages: PageText[]): Promise<Claim[]> {
   const chunks: PageText[][] = [];
   const wantedPages = PAGES.get(sourceId);
   const use = wantedPages ? pages.filter((p) => wantedPages.has(p.page)) : pages;
-  for (let i = 0; i < use.length; i += 6) chunks.push(use.slice(i, i + 6));
+  for (let i = 0; i < use.length; i += DOC_CHUNK) chunks.push(use.slice(i, i + DOC_CHUNK));
   const res = await pool(chunks, async (chunk) => {
     const text = chunk.map((p) => `[PAGE ${p.page}]\n${p.text}`).join("\n\n");
     const r = await cached(`claims:${TEXT_MODEL}:${sourceId}:${createHash("sha256").update(text).digest("hex")}`, { claims: [] }, () =>
@@ -261,7 +341,7 @@ async function documentClaims(sourceId: string, pages: PageText[]): Promise<Clai
     ...(clean(c.eventTime) ? { eventTime: clean(c.eventTime)! } : {}),
     ...(clean(c.actor) ? { actor: clean(c.actor)! } : {}),
     ...(clean(c.location) ? { location: clean(c.location)! } : {}),
-    at: { source: sourceId, page: Number(c.page), ...(Number.isFinite(Number(c.paragraph)) && c.paragraph !== null ? { paragraph: Number(c.paragraph) } : {}) },
+    at: { source: sourceId, page: num(c.page), ...(Number.isFinite(num(c.paragraph)) && c.paragraph !== null ? { paragraph: num(c.paragraph) } : {}) },
     exactQuote: c.exactQuote!.trim(),
     verification: { status: "unchecked", method: "none" },
   }));
@@ -284,12 +364,12 @@ Return {"claims":[...]}. At most 20.\n\n${text}`,
       { ...modelOpt(TEXT_MODEL), timeoutMs: 120_000 },
     ),
   );
-  return asArray<RawClaim>(r, "claims").filter((c) => clean(c.claim) && clean(c.exactQuote) && Number.isFinite(Number(c.t))).map((c) => ({
+  return asArray<RawClaim>(r, "claims").filter((c) => clean(c.claim) && clean(c.exactQuote) && Number.isFinite(num(c.t))).map((c) => ({
     id: newId(`${sourceId}-audio`),
     origin: "transcript" as const,
     claim: c.claim.trim(),
     ...(clean(c.actor) ? { actor: clean(c.actor)! } : {}),
-    at: { source: sourceId, t: Number(c.t) },
+    at: { source: sourceId, t: num(c.t) },
     exactQuote: c.exactQuote!.trim(),
     verification: { status: "unchecked", method: "none" },
   }));
@@ -312,11 +392,11 @@ For each: claim (only what is visible, hedged), t (seconds, one of the given tim
     ),
   );
   const times = new Set(obs.map((o) => o.t));
-  return asArray<RawClaim>(r, "claims").filter((c) => clean(c.claim) && times.has(Number(c.t))).map((c) => ({
+  return asArray<RawClaim>(r, "claims").filter((c) => clean(c.claim) && times.has(num(c.t))).map((c) => ({
     id: newId(sourceId),
     origin: "video" as const,
     claim: c.claim.trim(),
-    at: { source: sourceId, t: Number(c.t) },
+    at: { source: sourceId, t: num(c.t) },
     verification: { status: "unchecked", method: "none" },
   }));
 }
@@ -493,6 +573,7 @@ async function main() {
   });
   await timed("claim verification", () => verifyClaims(claims, pagesBySource, transcripts));
   const findings = await timed("cross-check", () => crossCheck(claims.filter((c) => c.verification.status === "passed" || c.verification.status === "fixed")));
+  await timed("time check", () => timeCheck(findings, claims));
   verifyFindings(findings, claims);
   timings["total"] = Math.round((Date.now() - t0) / 100) / 10;
 
