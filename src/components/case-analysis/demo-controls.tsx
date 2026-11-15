@@ -15,7 +15,7 @@ export function DemoControls() {
         onClick={playing ? pauseDemo : playDemo}
         aria-keyshortcuts="D"
         title={`${playing ? "Pause" : demo === "paused" ? "Resume" : "Play"} the scripted demo (D)`}
-        className="inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+        className="inline-flex h-7 items-center gap-1.5 rounded-md border border-border bg-white px-2.5 text-[13px] font-medium text-foreground transition-colors hover:bg-muted"
       >
         {playing ? (
           <Pause className="size-3 fill-current" />
@@ -30,7 +30,7 @@ export function DemoControls() {
           onClick={resetDemo}
           aria-label="Reset demo"
           title="Reset demo"
-          className="lx-fade grid size-7 place-items-center rounded-md border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="lx-fade grid size-7 place-items-center rounded-md border border-border bg-white text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <RotateCcw className="size-3.5" />
         </button>
