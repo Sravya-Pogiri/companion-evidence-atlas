@@ -27,7 +27,11 @@ describe("static landing page", () => {
 
   it("opens each case in the app: on its card and in its popup", () => {
     const script = readFileSync(`${dir}/script.js`, "utf8");
-    expect(script).toContain("/live?case=${c.id}");
+    // Case 1 and case 2 open Investigate on the app's first and second case.
+    expect(script).toContain('rosales: "/investigate?case=rosales"');
+    expect(script).toContain('btk: "/investigate?case=btk"');
+    expect(script).toContain('href="${appLink(c)}"');
+    expect(script).toContain("modalOpenApp\").href = appLink(c)");
     expect(html).toContain('id="modalOpenApp"');
     expect(script).toContain("modalOpenApp");
   });

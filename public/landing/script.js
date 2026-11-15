@@ -24,10 +24,166 @@
     nre: { label: "National Registry of Exonerations — search the Registry", url: "https://exonerationregistry.org/" },
     ejiMcMillian: { label: "Equal Justice Initiative — Walter McMillian", url: "https://eji.org/cases/walter-mcmillian/" },
     ejiHinton: { label: "Equal Justice Initiative — Anthony Ray Hinton", url: "https://eji.org/cases/anthony-ray-hinton/" },
-    scotusHinton: { label: "Hinton v. Alabama, 571 U.S. 263 (2014) — Justia", url: "https://supreme.justia.com/cases/federal/us/571/263/" }
+    scotusHinton: { label: "Hinton v. Alabama, 571 U.S. 263 (2014) — Justia", url: "https://supreme.justia.com/cases/federal/us/571/263/" },
+    rosalesOpinion: { label: "Rosales v. Lewis, No. 25-30650 (5th Cir.) — opinion", url: "https://www.govinfo.gov/content/pkg/USCOURTS-ca5-25-30650/pdf/USCOURTS-ca5-25-30650-0.pdf" },
+    rosalesComplaint: { label: "Complaint, No. 1:22-cv-5838 (W.D. La.) — Institute for Justice", url: "https://ij.org/wp-content/uploads/2022/10/LA-Rosales-Traffic-Stop-Complaint.pdf" },
+    rosalesDashcam: { label: "Patrol dashcam video (public)", url: "https://www.youtube.com/watch?v=xqvFJ8yzDfw" },
+    rosalesBodycam: { label: "Officer bodycam video (public)", url: "https://www.youtube.com/watch?v=Z6z35SUVpdQ" },
+    btkState: { label: "State's Summary of the Evidence, State v. Rader (2005)", url: "https://murderpedia.org/male.R/images/rader_dennis/docs/doc-46.pdf" },
+    btkRcfl: { label: "FBI RCFL Annual Report, FY2005", url: "https://www.rcfl.gov/file-repository/rcfl_nat_annual05.pdf" },
+    btkPlea: { label: "Transcript of pleas of guilty, 05 CR 498", url: "https://murderpedia.org/male.R/images/rader_dennis/rader-testimony.pdf" },
+    btkChurch: { label: "Christ Lutheran Church page, archived Feb 6, 2005 — Internet Archive", url: "https://web.archive.org/web/20050206044729/http://www.christ-lutheran.org/people/" },
+    btkValadez: { label: "Valadez v. Emmis Communications, No. 99139 (Kan.)", url: "https://kscourts.gov/KSCourts/media/KsCourts/Opinions/99139.pdf?ext=.pdf" }
   };
 
   const CASES = [
+    // The two cases the app investigates (case 1 and case 2 in the book). Facts come from the
+    // public filings, videos and evidence packet the app analyzes.
+    {
+      id: "rosales",
+      name: "Rosales v. Terrell",
+      category: "Traffic Stop · Video & Filings",
+      location: "Alexandria, Louisiana",
+      type: "Civil rights (traffic stop)",
+      art: "video",
+      overview:
+        "In June 2022, Alexandria police pulled over Mario Rosales's Mustang after a left turn. The officers gave failure to signal as the reason; the complaint says the video shows he signaled, and the Fifth Circuit says the video does not make clear when the signal came on.",
+      focus: "The stated reason for the stop versus the video and the filings.",
+      capability: "Video, transcript and filings on one timeline, with contradiction checks",
+      primarySource: SRC.rosalesOpinion,
+      summary:
+        "Mario Rosales and Gracie Lasyone sued Officers Jim Lewis and Samuel Terrell and the City of Alexandria over the stop (W.D. La. No. 1:22-cv-5838). The officers appealed the denial of their motion for judgment on the pleadings to the Fifth Circuit, asserting qualified immunity (No. 25-30650). Public dashcam and bodycam video of the stop are linked.",
+      facts: [
+        ["Stop", "June 2022, around 5:00 p.m."],
+        ["Place", "Alexandria, Louisiana"],
+        ["District court", "W.D. La. No. 1:22-cv-5838"],
+        ["Appeal", "5th Cir. No. 25-30650"],
+        ["Stated reason", "Failure to signal"],
+        ["Video", "Public dashcam and bodycam"]
+      ],
+      issues: [
+        "Whether the left turn signal was on before the turn, and for how long.",
+        "The officers' stated reason for the stop against what the video shows.",
+        "The passenger's request to record the stop."
+      ],
+      timeline: [
+        { date: "Jun 2022", text: "Rosales signals left and stops at a red light; a police vehicle stops behind him and pulls the Mustang over after the turn (opinion, p.2)." },
+        { date: "Dashcam 1:34", text: "An officer stands at the Mustang's open driver-side door." },
+        { date: "Bodycam 5:30", text: "An officer gives failure to signal as the reason for the stop." },
+        { date: "Bodycam 8:00", text: "“That's straight pure straight honest answer. He failed the signal, so we stopped you.”" },
+        { date: "Bodycam 18:46", text: "The officer issues citations for failure to signal and registration." },
+        { date: "2022", text: "Rosales and Lasyone file a civil-rights complaint in the Western District of Louisiana." },
+        { date: "Later", text: "The traffic citations are dismissed (complaint ¶238; opinion, p.5)." },
+        { date: "Appeal", text: "The officers appeal the denial of their motion for judgment on the pleadings to the Fifth Circuit." }
+      ],
+      timelineSource: SRC.rosalesOpinion,
+      evidence: [
+        { icon: "video", name: "Patrol dashcam", desc: "The approach, the turn and the stop, on the dashcam's own clock." },
+        { icon: "video", name: "Officer bodycam", desc: "The roadside stop after the turn, about 21 minutes." },
+        { icon: "mic", name: "Bodycam transcript", desc: "What the officers said, with the times of cited lines re-checked." },
+        { icon: "file", name: "Complaint", desc: "The plaintiffs' account, paragraph by paragraph (40 pages)." },
+        { icon: "file", name: "Fifth Circuit opinion", desc: "The court's description of the stop and the video (24 pages)." },
+        { icon: "search", name: "Dispatch audio", desc: "Dispatch radioed history-check results, but no recording is in the record." }
+      ],
+      questions: [
+        "When was the left turn signal activated, and was it on for the distance the law requires before the turn?",
+        "Where does the officer's stated reason sit against what the dashcam shows?",
+        "What does the bodycam show about the passenger's request to record?",
+        "Is there a dispatch recording of the stop, and what time does it give?",
+        "The two videos run on separate clocks: what links a dashcam moment to a bodycam moment?"
+      ],
+      demo: {
+        type: "contradiction",
+        title: "Cross-source contradiction detection",
+        pairs: [
+          {
+            a: { k: "Officer, bodycam 8:00", v: "“He failed the signal, so we stopped you.”", cite: "Bodycam transcript" },
+            b: { k: "Fifth Circuit, p.11", v: "The video shows the officers pull behind the Mustang as it approached the intersection, with the left turn signal appearing already on.", cite: "Opinion p.11" },
+            flag: "<b>Possible conflict: the stated reason.</b> The reason given on the recording and the court's description of the video point different ways. Flagged for attorney review."
+          },
+          {
+            a: { k: "Complaint ¶250", v: "Says the video shows Rosales signaled his turn.", cite: "Complaint p.31" },
+            b: { k: "Fifth Circuit, p.11", v: "“It is not clear from the video when Rosales activated the signal.”", cite: "Opinion p.11" },
+            flag: "<b>Possible conflict: what the video settles.</b> The complaint and the court describe the same video differently."
+          }
+        ],
+        note: "In the app, each finding links to its page or video moment, and every quote is checked against the stored record."
+      },
+      sources: [SRC.rosalesOpinion, SRC.rosalesComplaint, SRC.rosalesDashcam, SRC.rosalesBodycam]
+    },
+    {
+      id: "btk",
+      name: "State v. Rader (BTK)",
+      category: "Digital Forensics & Public Record",
+      location: "Sedgwick County, Kansas",
+      type: "Homicide (ten counts)",
+      art: "network",
+      overview:
+        "A floppy disk mailed to a Wichita TV station in February 2005 carried the words “Dennis” and “Christ Lutheran Church” in its file properties, a lead that pointed investigators to Dennis Rader. DNA comparisons followed, and he pleaded guilty to ten counts in June 2005.",
+      focus: "Tracing a digital lead through dated records to the court record.",
+      capability: "Dated records, verified quotes and an attribution test without the disk lead",
+      primarySource: SRC.btkState,
+      summary:
+        "In State of Kansas v. Dennis L. Rader (05 CR 498, Sedgwick County), the prosecution's evidence summary describes how a diskette mailed to KSAS-TV led to a church listing naming Rader, followed by DNA comparisons, an arrest and a recorded interview. The court accepted his guilty pleas on June 27, 2005 and imposed ten consecutive life sentences.",
+      facts: [
+        ["Case", "05 CR 498, Sedgwick County"],
+        ["Church page archived", "Feb 6, 2005"],
+        ["Disk received by KSAS", "Feb 16, 2005"],
+        ["Arrest", "Feb 25, 2005"],
+        ["Pleas accepted", "Jun 27, 2005"],
+        ["Sentence", "Ten consecutive life terms"]
+      ],
+      issues: [
+        "How the disk information was found: document properties, or a deleted file?",
+        "Which DNA comparison answered which question: case links, a family reference, or Rader's own swabs.",
+        "Records not in the public packet: the disk image, signed lab reports, custody logs."
+      ],
+      timeline: [
+        { date: "Mar 19, 2004", text: "The Wichita Eagle passes renewed correspondence to police." },
+        { date: "Dec 6, 2004", text: "An FBI Lab report finds no detectable DNA on the tested flap of envelope Q184." },
+        { date: "Feb 6, 2005", text: "The Internet Archive captures the church page listing Dennis Rader as congregation president." },
+        { date: "Feb 16, 2005", text: "KSAS-TV receives a padded envelope with a purple computer disk." },
+        { date: "Feb 22, 2005", text: "KBI receives a court-authorized family reference sample." },
+        { date: "Feb 25, 2005", text: "Rader is arrested; police collect oral swabs and begin a recorded interview." },
+        { date: "Feb 26, 2005", text: "Police announce the arrest at a press conference." },
+        { date: "Jun 27, 2005", text: "The court accepts guilty pleas on all ten counts." },
+        { date: "Aug 18, 2005", text: "The court imposes ten consecutive life sentences." }
+      ],
+      timelineSource: SRC.btkState,
+      evidence: [
+        { icon: "search", name: "Floppy disk and its file", desc: "One file, “Test A.RTF”, whose properties named “Dennis” and “Christ Lutheran Church”." },
+        { icon: "list", name: "Archived church page", desc: "Internet Archive capture of Feb 6, 2005 listing the congregation council officers." },
+        { icon: "flask", name: "DNA comparisons", desc: "County, KBI and FBI laboratory work as described in the State's filing and the FBI release." },
+        { icon: "video", name: "Store surveillance", desc: "A dark SUV; the person was reported unidentifiable." },
+        { icon: "mic", name: "Recorded interview", desc: "Described in the State's filing; a published excerpt exists." },
+        { icon: "file", name: "Court record", desc: "Complaint, plea transcript, judgment and evidence order." }
+      ],
+      questions: [
+        "Where on the disk did the words come from: the document's properties, or a deleted file?",
+        "Which links to Rader remain if the disk lead is set aside?",
+        "Which records would let the digital examination be repeated: the disk image, the file's bytes, the examiner's notes?",
+        "What did each DNA comparison test, and are the signed lab reports available?",
+        "Did the store video identify the driver, or only a type of vehicle?"
+      ],
+      demo: {
+        type: "contradiction",
+        title: "Cross-source comparison",
+        pairs: [
+          {
+            a: { k: "State's Summary, p.42", v: "Found “Dennis” and “Christ Lutheran Church” in the properties section of the document.", cite: "State filing p.42" },
+            b: { k: "FBI RCFL report, p.13", v: "Examination of the disk properties revealed the words “Dennis” and “Christ Lutheran Church”.", cite: "RCFL p.13" },
+            flag: "<b>Sources agree, worded differently.</b> Both name the same words; one says document properties, the other disk properties."
+          },
+          {
+            a: { k: "TV report (KSN)", v: "The police chief himself took part in the arrest.", cite: "As recorded by the Kansas Supreme Court" },
+            b: { k: "Kansas Supreme Court, p.5", v: "“The police chief was not, in fact, at the scene of the arrest.”", cite: "Valadez opinion p.5" },
+            flag: "<b>A report contradicted by the record.</b> The State's list of the arrest team does not name him either."
+          }
+        ],
+        note: "In the app, every quote is checked against the stored page of the record it cites."
+      },
+      sources: [SRC.btkState, SRC.btkRcfl, SRC.btkPlea, SRC.btkChurch, SRC.btkValadez]
+    },
     {
       id: "benitez",
       name: "Ricardo Benitez",
@@ -382,10 +538,15 @@
 
   // The case archive on the landing page shows exactly these two cases, in this order.
   const ARCHIVE_FOCUS = {
-    benitez: "Eyewitness identification versus surveillance evidence.",
-    mcmillian: "Conflicting witness accounts and disclosure."
+    rosales: "The stated reason for the stop versus the video and the filings.",
+    btk: "Tracing a digital lead through dated records to the court record."
   };
   const ARCHIVE = Object.keys(ARCHIVE_FOCUS).map(id => CASES.find(c => c.id === id));
+  // "Open in the app": case 1 opens the app's Investigate page on its first case (Rosales v.
+  // Terrell), case 2 on its second (State v. Rader). The app's case dropdown still switches to any
+  // case. Any other case opens its own page in the app.
+  const APP_LINK = { rosales: "/investigate?case=rosales", btk: "/investigate?case=btk" };
+  const appLink = (c) => APP_LINK[c.id] || `/live?case=${c.id}`;
   const firstSentence = (t) => (t.match(/^.*?[.!?](\s|$)/) || [t])[0].trim();
 
   function renderCases() {
@@ -406,7 +567,7 @@
           <div class="cb-card__actions">
             <button class="btn btn--primary btn--sm" data-open-case="${i}" aria-haspopup="dialog">View Case ${icon("arrow")}</button>
             ${ext(c.primarySource.url, "Original source", "cb-card__src")}
-            <a class="cb-card__src cb-card__app" href="/live?case=${c.id}">Open in the app ${icon("arrow")}</a>
+            <a class="cb-card__src cb-card__app" href="${appLink(c)}">Open in the app ${icon("arrow")}</a>
           </div>
         </div>
         <span class="cb-card__illus">Illustrative photo</span>
@@ -492,7 +653,7 @@
       $("#modalEyebrow").textContent = `Case 0${this.index + 1} of 0${ARCHIVE.length} · ${c.category}`;
       $("#modalTitle").textContent = c.name;
       $("#modalMeta").textContent = `${c.location} · ${c.type}`;
-      $("#modalOpenApp").href = `/live?case=${c.id}`;
+      $("#modalOpenApp").href = appLink(c);
       this.tabsEl.innerHTML = TABS.map(t => `
         <button role="tab" class="modal-tab" id="mtab-${t.id}" data-tab="${t.id}"
           aria-controls="mpanel" aria-selected="${t.id === this.tab}" tabindex="${t.id === this.tab ? 0 : -1}">${t.label}</button>`).join("");
@@ -575,9 +736,11 @@
           <div class="checklist">${d.checklist.map((item, i) => `<label><input type="checkbox" id="chk-${c.id}-${i}" /><span>${item}</span></label>`).join("")}</div>
           <p class="checklist__progress" aria-live="polite"></p>` : "";
         return `
-          <div class="mp-head"><h3>${d.title}</h3><span class="tag tag--illus">Illustrative demonstration</span></div>
+          <div class="mp-head"><h3>${d.title}</h3><span class="tag tag--illus">${APP_LINK[c.id] ? "From Lexora's analysis" : "Illustrative demonstration"}</span></div>
           <div class="demo">
-            <p class="demo__intro">This is a mock-up of how Lexora is designed to present findings, built only from the public case summary. It is not output from processing the original evidence.</p>
+            <p class="demo__intro">${APP_LINK[c.id]
+              ? "These comparisons come from Lexora's analysis of the original public records: the filings, the transcript and the case packet. Open the case in the app to see each source, with its quoted passage checked against the record."
+              : "This is a mock-up of how Lexora is designed to present findings, built only from the public case summary. It is not output from processing the original evidence."}</p>
             <p class="demo__cap">Capability: ${c.capability}</p>
             ${pairs}${rows}${list}
           </div>
